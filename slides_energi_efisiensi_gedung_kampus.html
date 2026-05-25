@@ -188,9 +188,10 @@
     }
 
     .metric strong {
+      display: block;
       color: var(--text);
       font-size: clamp(28px, 4vw, 48px);
-      line-height: 1;
+      line-height: 1.08;
     }
 
     .metric span, .card span, .tag {
@@ -255,6 +256,10 @@
       grid-template-columns: repeat(5, minmax(0, 1fr));
       gap: 10px;
       align-items: stretch;
+    }
+
+    .split .process {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     .step {
@@ -337,6 +342,100 @@
       font-size: 11px;
       color: #75879c;
       line-height: 1.35;
+    }
+
+    .dense-info {
+      padding-top: 34px;
+      padding-bottom: 34px;
+      gap: 16px;
+    }
+
+    .dense-info .content {
+      gap: 16px;
+    }
+
+    .dense-info h2 {
+      font-size: clamp(28px, 3.2vw, 42px);
+      max-width: 1120px;
+    }
+
+    .dense-info .card {
+      padding: 14px;
+      min-height: 168px;
+    }
+
+    .dense-info h3 {
+      font-size: 16px;
+    }
+
+    .dense-info li,
+    .dense-info .matrix div {
+      font-size: 13.5px;
+      line-height: 1.28;
+    }
+
+    .dense-info .matrix div {
+      padding: 9px 11px;
+    }
+
+    .compact-slide {
+      padding-top: 36px;
+      padding-bottom: 36px;
+      gap: 18px;
+    }
+
+    .compact-slide .content {
+      gap: 18px;
+    }
+
+    .compact-slide h2 {
+      font-size: clamp(28px, 3.3vw, 44px);
+      max-width: 1120px;
+    }
+
+    .compact-slide .card {
+      padding: 15px;
+      min-height: 150px;
+    }
+
+    .compact-slide li,
+    .compact-slide p,
+    .compact-slide .matrix div {
+      font-size: 14px;
+      line-height: 1.32;
+    }
+
+    .compact-slide .matrix div {
+      padding: 9px 11px;
+    }
+
+    .dataset-slide {
+      padding-top: 30px;
+      padding-bottom: 30px;
+      gap: 14px;
+    }
+
+    .dataset-slide .content {
+      gap: 14px;
+    }
+
+    .dataset-slide h2 {
+      font-size: clamp(26px, 3vw, 38px);
+    }
+
+    .dataset-slide .metric {
+      min-height: 96px;
+      padding: 14px;
+    }
+
+    .dataset-slide .metric strong {
+      font-size: clamp(24px, 3vw, 38px);
+    }
+
+    .dataset-slide .matrix div {
+      padding: 7px 10px;
+      font-size: 12.8px;
+      line-height: 1.24;
     }
 
     .title-meta {
@@ -425,24 +524,44 @@
       <div class="footer"><span>Dataset utama: HKUST campus-level smart meter database</span><span>Obtain phase</span></div>
     </section>
 
-    <section class="slide">
+    <section class="slide dense-info">
       <div class="topbar">
         <div class="kicker">Konteks Masalah</div>
         <div class="slide-no">02</div>
       </div>
-      <div class="content split">
-        <div>
-          <h2>Energi kampus besar sulit dikelola tanpa visibilitas granular.</h2>
-          <p style="margin-top: 18px;">Gedung akademik, laboratorium, asrama, kantor, area makan, pencahayaan, HVAC, dan fasilitas umum memiliki karakter konsumsi berbeda. Beban tinggi tidak selalu berarti boros, tetapi tanpa data sulit membedakan kebutuhan operasional dari pemborosan.</p>
+      <div class="content">
+        <h2>Energi kampus besar sulit dikelola tanpa visibilitas granular.</h2>
+        <div class="grid-3">
+          <div class="card">
+            <h3>Driver konsumsi</h3>
+            <ul style="margin-top: 12px;">
+              <li>Laboratorium dan equipment beroperasi panjang.</li>
+              <li>HVAC, pencahayaan, server, dan fasilitas umum membentuk beban dasar.</li>
+              <li>Asrama, perpustakaan, area makan, dan kelas punya pola jam puncak berbeda.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Risiko tanpa analitik</h3>
+            <ul style="margin-top: 12px;">
+              <li>Beban tinggi di luar jam aktif tidak cepat terlihat.</li>
+              <li>Gedung boros sulit dipisahkan dari gedung yang memang padat aktivitas.</li>
+              <li>Prioritas efisiensi menjadi subjektif dan reaktif.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Kebutuhan keputusan</h3>
+            <ul style="margin-top: 12px;">
+              <li>Menentukan area prioritas berdasarkan data meter.</li>
+              <li>Membandingkan konsumsi antar gedung/zona secara konsisten.</li>
+              <li>Mengubah pola historis menjadi rekomendasi operasional.</li>
+            </ul>
+          </div>
         </div>
-        <div class="card">
-          <h3>Masalah operasional yang ingin dijawab</h3>
-          <ul class="dense-list" style="margin-top: 16px;">
-            <li>Kapan beban listrik mencapai puncak?</li>
-            <li>Area mana yang konsumsinya paling tinggi?</li>
-            <li>Apakah ada konsumsi besar di luar jam aktif?</li>
-            <li>Bagaimana prioritas efisiensi ditentukan?</li>
-          </ul>
+        <div class="matrix">
+          <div class="head">Pertanyaan manajemen</div><div class="head">Sinyal data yang dibutuhkan</div><div class="head">Output analitik</div>
+          <div>Kapan konsumsi paling tinggi?</div><div>Pola jam, hari, bulan, weekday/weekend</div><div>Heatmap dan tren beban</div>
+          <div>Area mana yang perlu diprioritaskan?</div><div>Total konsumsi per gedung/zona dan ranking meter</div><div>Daftar prioritas efisiensi</div>
+          <div>Ada beban tidak wajar?</div><div>Lonjakan, outlier, dan konsumsi tinggi di luar jam aktif</div><div>Flag anomali awal</div>
         </div>
       </div>
       <div class="footer"><span>Analitik energi sebagai dasar keputusan</span><span>Problem framing</span></div>
@@ -467,22 +586,45 @@
       <div class="footer"><span>Fokus pada pola, perbandingan, dan anomali</span><span>Research questions</span></div>
     </section>
 
-    <section class="slide">
+    <section class="slide compact-slide">
       <div class="topbar">
         <div class="kicker">Tujuan Analitik</div>
         <div class="slide-no">04</div>
       </div>
-      <div class="content split">
-        <div>
-          <h2>Tujuan proyek: memetakan konsumsi, menemukan prioritas, dan menyajikan insight yang bisa ditindaklanjuti.</h2>
-          <div class="callout" style="margin-top: 22px;">Output tidak berhenti pada grafik. Hasil akhir diarahkan menjadi rekomendasi efisiensi dan rancangan dashboard pemantauan energi.</div>
+      <div class="content">
+        <h2>Tujuannya sederhana: tahu kapan energi dipakai, di mana bebannya besar, dan apa yang perlu diprioritaskan.</h2>
+        <div class="grid-3">
+          <div class="card">
+            <h3>Baca pola konsumsi</h3>
+            <ul style="margin-top: 12px;">
+              <li>Meringkas konsumsi per jam, hari, bulan, dan weekday/weekend.</li>
+              <li>Melihat perbedaan pola antara gedung akademik, fasilitas, dan area hunian.</li>
+              <li>Menandai jam puncak dan beban dasar yang terus muncul.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Bandingkan area</h3>
+            <ul style="margin-top: 12px;">
+              <li>Mengurutkan gedung/zona berdasarkan total konsumsi.</li>
+              <li>Membandingkan area yang punya fungsi mirip agar evaluasinya adil.</li>
+              <li>Menemukan kandidat area yang perlu dicek lebih lanjut.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Temukan sinyal anomali</h3>
+            <ul style="margin-top: 12px;">
+              <li>Mencari lonjakan konsumsi yang tidak mengikuti pola historis.</li>
+              <li>Menandai konsumsi tinggi di malam hari atau akhir pekan.</li>
+              <li>Membedakan alarm awal dari variasi operasional normal.</li>
+            </ul>
+          </div>
         </div>
-        <div class="process">
-          <div class="step"><b>1</b><h3>Identifikasi</h3><p>Pola beban berdasarkan waktu dan area.</p></div>
-          <div class="step"><b>2</b><h3>Bandingkan</h3><p>Konsumsi antar gedung atau zona.</p></div>
-          <div class="step"><b>3</b><h3>Deteksi</h3><p>Anomali yang berpotensi pemborosan.</p></div>
-          <div class="step"><b>4</b><h3>Rumuskan</h3><p>Insight dan rekomendasi efisiensi.</p></div>
-          <div class="step"><b>5</b><h3>Visualkan</h3><p>Dashboard ringkas untuk monitoring.</p></div>
+        <div class="matrix">
+          <div class="head">Tujuan</div><div class="head">Ukuran yang dilihat</div><div class="head">Bentuk output</div>
+          <div>Pola waktu</div><div>kWh per jam/hari/bulan, peak load, base load</div><div>Tren, heatmap, dan ringkasan jam sibuk</div>
+          <div>Efisiensi relatif</div><div>Ranking konsumsi per gedung/zona dan per kelompok fungsi</div><div>Daftar prioritas area yang perlu ditinjau</div>
+          <div>Anomali awal</div><div>Outlier, lonjakan, dan beban tinggi di luar jam aktif</div><div>Flag anomali dan catatan kemungkinan penyebab</div>
+          <div>Komunikasi insight</div><div>Temuan utama, rekomendasi, dan dampak operasional</div><div>Dashboard dan narasi presentasi</div>
         </div>
       </div>
       <div class="footer"><span>Goal: insight berbasis smart meter</span><span>Objective</span></div>
@@ -559,25 +701,29 @@
       <div class="footer"><span>Obtain = sumber, akses, format, batasan awal</span><span>Data acquisition</span></div>
     </section>
 
-    <section class="slide">
+    <section class="slide compact-slide dataset-slide">
       <div class="topbar">
         <div class="kicker">Profil Dataset HKUST</div>
         <div class="slide-no">08</div>
       </div>
       <div class="content">
-        <h2>Dataset kampus nyata dengan cakupan meter, gedung, zona, dan equipment.</h2>
+        <h2>Dataset HKUST memberi gambaran pemakaian listrik kampus dari level meter sampai zona dan equipment.</h2>
         <div class="grid-4">
           <div class="metric"><strong>1.400+</strong><span>meter listrik pada lingkungan kampus</span></div>
           <div class="metric"><strong>20+</strong><span>gedung dengan fungsi berbeda</span></div>
           <div class="metric"><strong>104</strong><span>energy zones dalam kampus</span></div>
           <div class="metric"><strong>1,43 GB</strong><span>ukuran paket dataset di Dryad</span></div>
         </div>
+        <div class="callout">
+          Dataset ini penting karena memberi data konsumsi listrik kampus yang nyata, cukup panjang, dan terhubung dengan metadata meter, gedung, zona, serta equipment. Dengan cakupan tersebut, analisis tidak hanya berhenti pada total pemakaian listrik, tetapi bisa diarahkan ke pola beban, perbandingan antar area, deteksi anomali awal, demand response, dan forecasting dengan subset yang tetap realistis untuk proyek kelompok.
+        </div>
         <div class="matrix">
-          <div class="head">Komponen</div><div class="head">Detail</div><div class="head">Relevansi Analitik</div>
-          <div>Periode</div><div>2022-01-01 sampai 2024-05-27</div><div>Memungkinkan tren dan pola musiman</div>
-          <div>Format</div><div>`.xlsx` untuk time-series; `.ttl` untuk metadata Brick Schema</div><div>Basis konsumsi listrik dan relasi meter/lokasi/equipment</div>
-          <div>Jenis data</div><div>Konsumsi listrik, metadata meter, metadata lokasi/gedung/equipment</div><div>Siap untuk segmentasi gedung dan zona</div>
-          <div>Interval clean</div><div>15 menit, 30 menit, 1 jam, 1 hari setelah resampling</div><div>Fleksibel untuk eksplorasi dan dashboard</div>
+          <div class="head">Aspek</div><div class="head">Isi dataset</div><div class="head">Catatan penggunaan</div>
+          <div>Sumber</div><div>Dryad DOI 10.5061/dryad.k3j9kd5h6; artikel Scientific Data DOI 10.1038/s41597-024-04106-1</div><div>Sumber terbuka dengan publikasi pendukung</div>
+          <div>Periode</div><div>2022-01-01 sampai 2024-05-27, sekitar 2,5 tahun</div><div>Cukup untuk tren dan pola operasi</div>
+          <div>Format</div><div>`.xlsx` untuk time-series; `.ttl` untuk metadata Brick Schema</div><div>Perlu join data konsumsi dan metadata</div>
+          <div>Interval clean</div><div>15 menit, 30 menit, 1 jam, dan 1 hari setelah resampling</div><div>T60/T1440 cocok untuk analisis awal</div>
+          <div>Jenis data</div><div>Konsumsi listrik, metadata meter, lokasi/gedung, zona, dan equipment</div><div>Gunakan subset gedung/periode agar ringan</div>
         </div>
       </div>
       <div class="footer"><span>Format utama: .xlsx dan .ttl</span><span>Dataset profile</span></div>
