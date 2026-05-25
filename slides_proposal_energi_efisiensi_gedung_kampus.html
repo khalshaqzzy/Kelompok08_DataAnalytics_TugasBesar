@@ -238,7 +238,7 @@
 
     .flow {
       display: grid;
-      grid-template-columns: 1fr .72fr 1fr .72fr 1fr;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
       gap: 10px;
       align-items: stretch;
     }
@@ -253,21 +253,6 @@
 
     .flow .step {
       min-height: 156px;
-    }
-
-    .join {
-      display: grid;
-      place-items: center;
-      min-height: 156px;
-      border: 1px dashed rgba(39,215,255,.45);
-      border-radius: 8px;
-      background: rgba(39,215,255,.055);
-      color: var(--cyan);
-      text-align: center;
-      padding: 12px;
-      font-weight: 850;
-      font-size: 13px;
-      line-height: 1.25;
     }
 
     .step b {
@@ -412,11 +397,11 @@
       <div class="content">
         <h2>Strategi pipeline: data energi menjadi inti analisis, data cuaca dipakai sebagai konteks untuk membaca perubahan beban.</h2>
         <div class="flow">
-          <div class="step"><b>1</b><h3>HKUST energy raw</h3><p>Ambil time-series smart meter dari Dryad, pilih subset 3-5 gedung/zona, lalu gunakan interval T60/T1440 agar proses ringan.</p></div>
-          <div class="join">Key utama<br>waktu + lokasi meter</div>
-          <div class="step"><b>2</b><h3>HKO weather raw</h3><p>Ambil suhu, kelembapan, hujan, dan indikator cuaca lain dari HKO sesuai periode subset HKUST.</p></div>
-          <div class="join">Integrasi<br>tanggal/jam</div>
-          <div class="step"><b>3</b><h3>Analytic dataset</h3><p>Gabungkan energi dan cuaca, buat fitur jam, hari, weekday/weekend, bulan, suhu, hujan, peak load, dan outlier flag.</p></div>
+          <div class="step"><b>1</b><h3>Ambil data energi</h3><p>Unduh HKUST dari Dryad, simpan raw data, baca metadata `.ttl`, dan catat sumber, periode, format, serta batasan awal.</p></div>
+          <div class="step"><b>2</b><h3>Pilih subset energi</h3><p>Gunakan 3-5 gedung/zona, periode 3-6 bulan atau 1 tahun, dan interval T60/T1440 agar proses analisis tetap ringan.</p></div>
+          <div class="step"><b>3</b><h3>Ambil data cuaca</h3><p>Ambil suhu, kelembapan, hujan, dan indikator cuaca lain dari Hong Kong Observatory sesuai periode subset energi.</p></div>
+          <div class="step"><b>4</b><h3>Gabungkan data</h3><p>Selaraskan tanggal/jam, samakan granularitas, lalu bentuk dataset analitik berisi konsumsi listrik dan konteks cuaca.</p></div>
+          <div class="step"><b>5</b><h3>Siapkan fitur</h3><p>Buat fitur jam, hari, weekday/weekend, bulan, suhu, hujan, peak load, base load, dan outlier flag untuk tahap EDA/model.</p></div>
         </div>
         <div class="grid-3">
           <div class="card">
