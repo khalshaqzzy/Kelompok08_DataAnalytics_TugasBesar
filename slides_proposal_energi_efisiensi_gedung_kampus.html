@@ -223,10 +223,24 @@
       font-weight: 850;
     }
 
+    .matrix-4 {
+      grid-template-columns: .9fr 1.15fr 1fr 1.05fr;
+    }
+
+    .matrix-4 div:nth-child(3n) { border-right: 1px solid var(--line); }
+    .matrix-4 div:nth-child(4n) { border-right: 0; }
+
     .agenda {
       display: grid;
       grid-template-columns: repeat(5, minmax(0, 1fr));
       gap: 8px;
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: 1fr .72fr 1fr .72fr 1fr;
+      gap: 10px;
+      align-items: stretch;
     }
 
     .step {
@@ -235,6 +249,25 @@
       padding: 12px;
       min-height: 110px;
       background: var(--panel2);
+    }
+
+    .flow .step {
+      min-height: 156px;
+    }
+
+    .join {
+      display: grid;
+      place-items: center;
+      min-height: 156px;
+      border: 1px dashed rgba(39,215,255,.45);
+      border-radius: 8px;
+      background: rgba(39,215,255,.055);
+      color: var(--cyan);
+      text-align: center;
+      padding: 12px;
+      font-weight: 850;
+      font-size: 13px;
+      line-height: 1.25;
     }
 
     .step b {
@@ -271,7 +304,7 @@
     @media (max-width: 900px) {
       .slide { padding: 28px 22px; }
       .slide::before { inset: 10px; }
-      .split, .grid-2, .grid-3, .grid-4, .agenda, .matrix {
+      .split, .grid-2, .grid-3, .grid-4, .agenda, .flow, .matrix {
         grid-template-columns: 1fr;
       }
       .matrix div, .matrix div:nth-child(3n) { border-right: 0; }
@@ -352,17 +385,20 @@
         <div class="slide-no">03/05</div>
       </div>
       <div class="content">
-        <h2>Proposal memakai satu dataset utama untuk konsumsi energi dan satu dataset pendukung untuk konteks cuaca.</h2>
-        <div class="matrix">
-          <div class="head">Dataset</div><div class="head">Sumber, periode, format</div><div class="head">Peran dalam analisis</div>
-          <div>Utama: A 2.5-year campus-level smart meter database with equipment data for energy analytics</div><div>Dryad DOI 10.5061/dryad.k3j9kd5h6; Scientific Data DOI 10.1038/s41597-024-04106-1; periode 2022-01-01 sampai 2024-05-27; format `.xlsx` dan metadata `.ttl` Brick Schema</div><div>Menjawab masalah inti: pola konsumsi, perbandingan gedung/zona, efisiensi relatif, anomali beban, dan rancangan dashboard</div>
-          <div>Pendukung: Hong Kong Observatory Open Data</div><div>HKO Open Data/API; variabel cuaca seperti suhu, kelembapan, hujan, dan indikator iklim yang tersedia; periode diselaraskan dengan subset HKUST; format API/CSV/JSON sesuai endpoint</div><div>Memperkaya interpretasi, terutama untuk melihat apakah perubahan cuaca ikut menjelaskan variasi beban listrik kampus</div>
+        <h2>Dua sumber data dipakai agar analisis energi tidak hanya melihat angka meter, tetapi juga konteks lingkungan.</h2>
+        <div class="matrix matrix-4">
+          <div class="head">Dataset</div><div class="head">Sumber & format</div><div class="head">Cakupan</div><div class="head">Peran analitik</div>
+          <div>Utama: HKUST smart meter database</div><div>Dryad DOI 10.5061/dryad.k3j9kd5h6; artikel Scientific Data DOI 10.1038/s41597-024-04106-1; `.xlsx` untuk time-series dan `.ttl` Brick Schema untuk metadata</div><div>2022-01-01 sampai 2024-05-27; lebih dari 1.400 meter; lebih dari 20 gedung; interval 15 menit, 30 menit, 1 jam, dan 1 hari</div><div>Menjawab inti proyek: pola konsumsi, ranking gedung/zona, efisiensi relatif, anomali beban, dan rancangan dashboard energi</div>
+          <div>Pendukung: Hong Kong Observatory Open Data</div><div>Portal/API resmi HKO; format API/CSV/JSON sesuai endpoint; periode diselaraskan dengan subset data HKUST</div><div>Variabel cuaca: suhu, kelembapan, curah hujan, dan indikator iklim lain yang tersedia untuk wilayah Hong Kong</div><div>Memberi konteks interpretasi: membantu membaca pengaruh kondisi cuaca terhadap variasi beban listrik, terutama kebutuhan pendinginan ruangan</div>
         </div>
         <div class="grid-4">
           <div class="metric"><strong>1.400+</strong><span>meter listrik dari kampus HKUST</span></div>
           <div class="metric"><strong>20+</strong><span>gedung dan banyak zona/equipment</span></div>
           <div class="metric"><strong>1,43 GB</strong><span>ukuran dataset utama terkompresi</span></div>
           <div class="metric"><strong>15m-1d</strong><span>interval setelah resampling: 15 menit, 30 menit, 1 jam, 1 hari</span></div>
+        </div>
+        <div class="callout">
+          Catatan obtain: data mentah energi dan cuaca disimpan terpisah, lalu subset T60/T1440 dipakai untuk menjaga proses cleaning, integrasi, eksplorasi, dan pemodelan tetap realistis.
         </div>
       </div>
       <div class="footer"><span>Sesuai panduan: minimal 1 dataset utama + 1 pendukung</span><span>Data inventory</span></div>
@@ -374,38 +410,37 @@
         <div class="slide-no">04/05</div>
       </div>
       <div class="content">
-        <h2>Data diambil, dicatat, dan dipisahkan sejak awal agar pipeline bisa ditelusuri ulang.</h2>
-        <div class="agenda">
-          <div class="step"><b>1</b><h3>Ambil raw data</h3><p>Unduh HKUST dari Dryad dan ambil data cuaca HKO dari portal/API resmi.</p></div>
-          <div class="step"><b>2</b><h3>Catat metadata</h3><p>Nama, sumber, periode, format, level data, variabel, dan legalitas penggunaan.</p></div>
-          <div class="step"><b>3</b><h3>Pilih subset</h3><p>Gunakan 3-5 gedung/zona, periode 3-6 bulan atau 1 tahun, interval T60/T1440.</p></div>
-          <div class="step"><b>4</b><h3>Simpan terpisah</h3><p>Raw data tetap terpisah dari clean dataset dan hasil feature engineering.</p></div>
-          <div class="step"><b>5</b><h3>Siapkan Scrub</h3><p>Petakan missing value, duplikasi, tipe tanggal, outlier, dan kunci integrasi.</p></div>
+        <h2>Strategi pipeline: data energi menjadi inti analisis, data cuaca dipakai sebagai konteks untuk membaca perubahan beban.</h2>
+        <div class="flow">
+          <div class="step"><b>1</b><h3>HKUST energy raw</h3><p>Ambil time-series smart meter dari Dryad, pilih subset 3-5 gedung/zona, lalu gunakan interval T60/T1440 agar proses ringan.</p></div>
+          <div class="join">Key utama<br>waktu + lokasi meter</div>
+          <div class="step"><b>2</b><h3>HKO weather raw</h3><p>Ambil suhu, kelembapan, hujan, dan indikator cuaca lain dari HKO sesuai periode subset HKUST.</p></div>
+          <div class="join">Integrasi<br>tanggal/jam</div>
+          <div class="step"><b>3</b><h3>Analytic dataset</h3><p>Gabungkan energi dan cuaca, buat fitur jam, hari, weekday/weekend, bulan, suhu, hujan, peak load, dan outlier flag.</p></div>
         </div>
         <div class="grid-3">
           <div class="card">
-            <h3>Alasan pemilihan</h3>
+            <h3>Output pipeline</h3>
             <ul>
-              <li>HKUST adalah data kampus nyata, bukan simulasi.</li>
-              <li>Skala meter dan gedung cukup kuat untuk OSEMN.</li>
-              <li>Cuaca relevan karena beban listrik kampus dipengaruhi kondisi lingkungan.</li>
+              <li>Raw data energi dan cuaca tetap disimpan terpisah.</li>
+              <li>Clean dataset berisi konsumsi listrik + konteks cuaca.</li>
+              <li>Dataset analitik siap untuk EDA, anomaly detection, dan dashboard.</li>
             </ul>
           </div>
           <div class="card">
-            <h3>Keterbatasan awal</h3>
+            <h3>Cleaning & validasi</h3>
             <ul>
-              <li>Ukuran data besar dan metadata `.ttl` perlu dipahami.</li>
-              <li>Kualitas tiap meter bisa berbeda dan mungkin ada missing value.</li>
-              <li>Konteks Hong Kong tidak otomatis sama dengan kampus Indonesia.</li>
+              <li>Cek missing value, duplikasi, tipe tanggal, data nol, dan lonjakan ekstrem.</li>
+              <li>Samakan timezone, granularitas waktu, dan agregasi energi/cuaca.</li>
+              <li>Catat meter/gedung yang dikeluarkan dari subset beserta alasannya.</li>
             </ul>
           </div>
           <div class="card">
-            <h3>Checklist panduan</h3>
+            <h3>Kenapa 2 dataset dipakai</h3>
             <ul>
-              <li>Minimal 2 sumber data: terpenuhi.</li>
-              <li>Ada dimensi waktu: terpenuhi.</li>
-              <li>Raw dan clean dataset dipisah: direncanakan.</li>
-              <li>Legalitas dan etika data: memakai sumber publik resmi.</li>
+              <li>HKUST menjawab apa, kapan, dan di gedung mana listrik dipakai.</li>
+              <li>HKO membantu menjelaskan apakah cuaca ikut mendorong perubahan beban.</li>
+              <li>Keduanya memenuhi syarat minimal 2 sumber data pada panduan.</li>
             </ul>
           </div>
         </div>
