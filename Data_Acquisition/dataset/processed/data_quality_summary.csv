@@ -1,0 +1,12 @@
+summary_group,metric,value,notes
+meter_quality_flag,active,18,Count of T1440 meters by quality flag.
+meter_quality_flag,near_zero_low_signal,3,Count of T1440 meters by quality flag.
+meter_quality_flag,short_coverage,1,Count of T1440 meters by quality flag.
+meter_quality_flag,zero_constant,4,Count of T1440 meters by quality flag.
+selection_decision,comparison_or_secondary,4,Count of T1440 meters by selection decision.
+selection_decision,exclude_from_main_model,10,Count of T1440 meters by selection decision.
+selection_decision,selected_main_subset,12,Count of T1440 meters by selection decision.
+weather_missing_days,rainfall_mm,5,Missing HKO rainfall days in project period.
+weather_missing_days,global_solar_radiation_mj_m2,1,Missing HKO solar radiation days in project period.
+fact_rows,fact_energy_weather_daily,10524,Rows in final Date x Entity fact table.
+model_eligible_rows,fact_energy_weather_daily,10524,Rows eligible for downstream anomaly modelling.

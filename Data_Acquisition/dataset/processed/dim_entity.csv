@@ -1,0 +1,27 @@
+entity_id,meter_id,meter_name,entity_type,building,floor,room_or_equipment,usage_type,mapping_status,meter_quality_flag,selection_decision,is_selected_main_subset,is_model_eligible_entity,coverage_ratio,total_consumption,rank_total_consumption
+D0858,D0858,Meter_D0858,Deionization_Plant,Cheng_Yu_Tung_Building,Cheng_Yu_Tung_Building_RF,DI_Plant_AN0,Deionization_Plant,mapped,active,comparison_or_secondary,0,0,1.0,65673.0,14
+D0859,D0859,Meter_D0859,Elevator,Cheng_Yu_Tung_Building,Unknown,Lift_35_AN1; Lift_36_AN1,Elevator,mapped,active,comparison_or_secondary,0,0,1.0,57947.0,15
+D0845,D0845,Meter_D0845,meter,Cheng_Yu_Tung_Building,Cheng_Yu_Tung_Building_UGF,Escalator_E2_AN0,meter,mapped,active,comparison_or_secondary,0,0,1.0,36719.0,16
+D0855,D0855,Meter_D0855,Elevator,Cheng_Yu_Tung_Building,Unknown,Fire_Services_Installation_Lift_37_AN0,Elevator,mapped,active,comparison_or_secondary,0,0,1.0,19684.2,18
+D0816,D0816,Meter_D0816,Riser,Academic_Building,Academic_Building_7F_TO_RF,Lab_Equipment_Riser_AN1,Riser,mapped,short_coverage,exclude_from_main_model,0,0,0.2061503416856492,350410.0,11
+D0837,D0837,Meter_D0837,Room,Student_Hall_07_UG8_9,Student_Hall_07_UG8_9_4F,Apartment; Bedroom,Room,mapped,active,exclude_from_main_model,0,0,1.0,30771.29999999999,17
+D0856,D0856,Meter_D0856,meter,LSK_Business_Buildings,LSK_Business_Buildings_7F,Non_Fire_Services_Installation_AN0,meter,mapped,active,exclude_from_main_model,0,0,1.0,4289.599999999999,19
+D0863,D0863,Meter_D0863,Switch,Cheng_Yu_Tung_Building,Unknown,Essential_Right_Automatic_Changeover_Switch_AN0,Switch,mapped,near_zero_low_signal,exclude_from_main_model,0,0,1.0,50.39999999999998,20
+D0864,D0864,Meter_D0864,meter,Cheng_Yu_Tung_Building,Unknown,Automatic_Changeover_from_Genset_AN0,meter,mapped,near_zero_low_signal,exclude_from_main_model,0,0,1.0,9.199999999999996,21
+D0846,D0846,Meter_D0846,meter,Cheng_Yu_Tung_Building,Cheng_Yu_Tung_Building_UGF,Escalator_E1_AN0,meter,mapped,near_zero_low_signal,exclude_from_main_model,0,0,1.0,1.990456,22
+D0821,D0821,Meter_D0821,Riser,Academic_Building,Academic_Building_7F_TO_RF,Air_Conditioning_Equipment_Riser_AN0,Riser,mapped,zero_constant,exclude_from_main_model,0,0,1.0,0.0,23
+D0823,D0823,Meter_D0823,Spare,Academic_Building,Academic_Building_4F,Spare_AN8,Spare,mapped,zero_constant,exclude_from_main_model,0,0,1.0,0.0,23
+D0844,D0844,Meter_D0844,meter,Student_Hall_07_UG8_9,Unknown,Genset_AN1,meter,mapped,zero_constant,exclude_from_main_model,0,0,1.0,0.0,23
+D0847,D0847,Meter_D0847,Spare,Cheng_Yu_Tung_Building,Unknown,Spare_AN6,Spare,mapped,zero_constant,exclude_from_main_model,0,0,1.0,0.0,23
+D0849,D0849,Meter_D0849,Riser,Cheng_Yu_Tung_Building,Cheng_Yu_Tung_Building_UGF,Normal_MVAC_Equipment_Riser_AN0,Riser,mapped,active,selected_main_subset,1,1,1.0,2822400.0,1
+D0848,D0848,Meter_D0848,Lighting; Riser,Cheng_Yu_Tung_Building,Cheng_Yu_Tung_Building_UGF,Normal_Lighting_AN55; Power_Riser_AN5,Lighting; Riser,mapped,active,selected_main_subset,1,1,1.0,2053420.0,2
+D0854,D0854,Meter_D0854,Riser,Cheng_Yu_Tung_Building,Cheng_Yu_Tung_Building_UGF,Normal_Lab_Equipment_Riser_AN0,Riser,mapped,active,selected_main_subset,1,1,1.0,1866900.0,3
+D0853,D0853,Meter_D0853,Switch,Cheng_Yu_Tung_Building,Unknown,Normal_Non_Fire_Services_Installation_of_Automatic_Changeover_Switch_No_8B_AN0,Switch,mapped,active,selected_main_subset,1,1,1.0,1774050.0,4
+D0862,D0862,Meter_D0862,Switch,Cheng_Yu_Tung_Building,Unknown,Normal_Left_Automatic_Changeover_Switch_AN0,Switch,mapped,active,selected_main_subset,1,1,1.0,898620.0,5
+D0857,D0857,Meter_D0857,Riser,Cheng_Yu_Tung_Building,Cheng_Yu_Tung_Building_UGF,Load_Riser_AN0,Riser,mapped,active,selected_main_subset,1,1,1.0,877200.0,6
+D0851,D0851,Meter_D0851,Switch,Cheng_Yu_Tung_Building,Unknown,Normal_Fire_Services_Installation_of_Automatic_Changeover_Switch_No_5B_AN0,Switch,mapped,active,selected_main_subset,1,1,1.0,855730.0,7
+D0861,D0861,Meter_D0861,Fan,Cheng_Yu_Tung_Building,Cheng_Yu_Tung_Building_RF,Virtual_Stack_Fan_SEAF_R_8_9_10_AN0,Fan,mapped,active,selected_main_subset,1,1,1.0,760510.0,8
+D0852,D0852,Meter_D0852,Equipment,Cheng_Yu_Tung_Building,Cheng_Yu_Tung_Building_RF,MVAC_AN0; Plumbing_Drainage_Equipment_AN0,Equipment,mapped,active,selected_main_subset,1,1,1.0,679530.0,9
+D0860,D0860,Meter_D0860,Exhaust_Fan,Cheng_Yu_Tung_Building,Cheng_Yu_Tung_Building_RF,Virtual_Stack_Fan_SEAF_R_5_6_7_AN0,Exhaust_Fan,mapped,active,selected_main_subset,1,1,1.0,607590.0,10
+D0850,D0850,Meter_D0850,meter,Cheng_Yu_Tung_Building,Cheng_Yu_Tung_Building_GF,A_C_Plant_AN0,meter,mapped,active,selected_main_subset,1,1,1.0,314270.0,12
+D0865,D0865,Meter_D0865,Riser,Cheng_Yu_Tung_Building,Cheng_Yu_Tung_Building_UGF,Essential_Lab_Power_AN0; MVAC_Riser_AN0,Riser,mapped,active,selected_main_subset,1,1,1.0,176469.0,13

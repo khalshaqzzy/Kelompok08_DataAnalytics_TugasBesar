@@ -1,27 +1,27 @@
 meter_id,meter_name,ttl_meter_declared,ttl_timeseries_ref,building,floor,room_or_equipment,entity_type,n_metered_entities,mapping_status
-D0816,Meter_D0816,TRUE,D0816.xlsx,Academic_Building,Academic_Building_3F,Lab_Equipment_Riser_AN1,Riser,1,mapped
-D0821,Meter_D0821,TRUE,D0821.xlsx,Academic_Building,Academic_Building_3F,Air_Conditioning_Equipment_Riser_AN0,Riser,1,mapped
-D0823,Meter_D0823,TRUE,D0823.xlsx,Academic_Building,Academic_Building_4F,Spare_AN8,Spare,1,mapped
-D0837,Meter_D0837,TRUE,D0837.xlsx,Student_Hall_07_UG8_9,Student_Hall_07_UG8_9_5F,Apartment; Bedroom,Room,2,mapped
-D0844,Meter_D0844,TRUE,D0844.xlsx,Student_Hall_07_UG8_9,,Genset_AN1,meter,1,mapped
-D0845,Meter_D0845,TRUE,D0845.xlsx,Cheng_Yu_Tung_Building,Cheng_Yu_Tung_Building_UGF,Escalator_E2_AN0,meter,1,mapped
-D0846,Meter_D0846,TRUE,D0846.xlsx,Cheng_Yu_Tung_Building,Cheng_Yu_Tung_Building_UGF,Escalator_E1_AN0,meter,1,mapped
-D0847,Meter_D0847,TRUE,D0847.xlsx,Cheng_Yu_Tung_Building,,Spare_AN6,Spare,1,mapped
-D0848,Meter_D0848,TRUE,D0848.xlsx,Cheng_Yu_Tung_Building,Cheng_Yu_Tung_Building_UGF,Normal_Lighting_AN55; Power_Riser_AN5,Lighting; Riser,2,mapped
-D0849,Meter_D0849,TRUE,D0849.xlsx,Cheng_Yu_Tung_Building,Cheng_Yu_Tung_Building_UGF,Normal_MVAC_Equipment_Riser_AN0,Riser,1,mapped
-D0850,Meter_D0850,TRUE,D0850.xlsx,Cheng_Yu_Tung_Building,Cheng_Yu_Tung_Building_GF,A_C_Plant_AN0,meter,1,mapped
-D0851,Meter_D0851,TRUE,D0851.xlsx,Cheng_Yu_Tung_Building,,Normal_Fire_Services_Installation_of_Automatic_Changeover_Switch_No_5B_AN0,Switch,1,mapped
-D0852,Meter_D0852,TRUE,D0852.xlsx,Cheng_Yu_Tung_Building,Cheng_Yu_Tung_Building_RF,MVAC_AN0; Plumbing_Drainage_Equipment_AN0,Equipment,2,mapped
-D0853,Meter_D0853,TRUE,D0853.xlsx,Cheng_Yu_Tung_Building,,Normal_Non_Fire_Services_Installation_of_Automatic_Changeover_Switch_No_8B_AN0,Switch,1,mapped
-D0854,Meter_D0854,TRUE,D0854.xlsx,Cheng_Yu_Tung_Building,Cheng_Yu_Tung_Building_UGF,Normal_Lab_Equipment_Riser_AN0,Riser,1,mapped
-D0855,Meter_D0855,TRUE,D0855.xlsx,Cheng_Yu_Tung_Building,,Fire_Services_Installation_Lift_37_AN0,Elevator,1,mapped
-D0856,Meter_D0856,TRUE,D0856.xlsx,Cheng_Yu_Tung_Building,LSK_Business_Buildings_GF,Non_Fire_Services_Installation_AN0,meter,1,mapped
-D0857,Meter_D0857,TRUE,D0857.xlsx,Cheng_Yu_Tung_Building,Cheng_Yu_Tung_Building_UGF,Load_Riser_AN0,Riser,1,mapped
-D0858,Meter_D0858,TRUE,D0858.xlsx,Cheng_Yu_Tung_Building,Cheng_Yu_Tung_Building_RF,DI_Plant_AN0,Deionization_Plant,1,mapped
-D0859,Meter_D0859,TRUE,D0859.xlsx,Cheng_Yu_Tung_Building,,Lift_35_AN1; Lift_36_AN1,Elevator,2,mapped
-D0860,Meter_D0860,TRUE,D0860.xlsx,Cheng_Yu_Tung_Building,Cheng_Yu_Tung_Building_RF,Virtual_Stack_Fan_SEAF_R_5_6_7_AN0,Exhaust_Fan,1,mapped
-D0861,Meter_D0861,TRUE,D0861.xlsx,Cheng_Yu_Tung_Building,Cheng_Yu_Tung_Building_RF,Virtual_Stack_Fan_SEAF_R_8_9_10_AN0,Fan,1,mapped
-D0862,Meter_D0862,TRUE,D0862.xlsx,Cheng_Yu_Tung_Building,,Normal_Left_Automatic_Changeover_Switch_AN0,Switch,1,mapped
-D0863,Meter_D0863,TRUE,D0863.xlsx,Cheng_Yu_Tung_Building,,Essential_Right_Automatic_Changeover_Switch_AN0,Switch,1,mapped
-D0864,Meter_D0864,TRUE,D0864.xlsx,Cheng_Yu_Tung_Building,,Automatic_Changeover_from_Genset_AN0,meter,1,mapped
-D0865,Meter_D0865,TRUE,D0865.xlsx,Cheng_Yu_Tung_Building,Cheng_Yu_Tung_Building_UGF,Essential_Lab_Power_AN0; MVAC_Riser_AN0,Riser,2,mapped
+D0816,Meter_D0816,True,D0816.xlsx,Academic_Building,Academic_Building_7F_TO_RF,Lab_Equipment_Riser_AN1,Riser,1,mapped
+D0821,Meter_D0821,True,D0821.xlsx,Academic_Building,Academic_Building_7F_TO_RF,Air_Conditioning_Equipment_Riser_AN0,Riser,1,mapped
+D0823,Meter_D0823,True,D0823.xlsx,Academic_Building,Academic_Building_4F,Spare_AN8,Spare,1,mapped
+D0837,Meter_D0837,True,D0837.xlsx,Student_Hall_07_UG8_9,Student_Hall_07_UG8_9_4F,Apartment; Bedroom,Room,2,mapped
+D0844,Meter_D0844,True,D0844.xlsx,Student_Hall_07_UG8_9,,Genset_AN1,meter,1,mapped
+D0845,Meter_D0845,True,D0845.xlsx,Cheng_Yu_Tung_Building,Cheng_Yu_Tung_Building_UGF,Escalator_E2_AN0,meter,1,mapped
+D0846,Meter_D0846,True,D0846.xlsx,Cheng_Yu_Tung_Building,Cheng_Yu_Tung_Building_UGF,Escalator_E1_AN0,meter,1,mapped
+D0847,Meter_D0847,True,D0847.xlsx,Cheng_Yu_Tung_Building,,Spare_AN6,Spare,1,mapped
+D0848,Meter_D0848,True,D0848.xlsx,Cheng_Yu_Tung_Building,Cheng_Yu_Tung_Building_UGF,Normal_Lighting_AN55; Power_Riser_AN5,Lighting; Riser,2,mapped
+D0849,Meter_D0849,True,D0849.xlsx,Cheng_Yu_Tung_Building,Cheng_Yu_Tung_Building_UGF,Normal_MVAC_Equipment_Riser_AN0,Riser,1,mapped
+D0850,Meter_D0850,True,D0850.xlsx,Cheng_Yu_Tung_Building,Cheng_Yu_Tung_Building_GF,A_C_Plant_AN0,meter,1,mapped
+D0851,Meter_D0851,True,D0851.xlsx,Cheng_Yu_Tung_Building,,Normal_Fire_Services_Installation_of_Automatic_Changeover_Switch_No_5B_AN0,Switch,1,mapped
+D0852,Meter_D0852,True,D0852.xlsx,Cheng_Yu_Tung_Building,Cheng_Yu_Tung_Building_RF,MVAC_AN0; Plumbing_Drainage_Equipment_AN0,Equipment,2,mapped
+D0853,Meter_D0853,True,D0853.xlsx,Cheng_Yu_Tung_Building,,Normal_Non_Fire_Services_Installation_of_Automatic_Changeover_Switch_No_8B_AN0,Switch,1,mapped
+D0854,Meter_D0854,True,D0854.xlsx,Cheng_Yu_Tung_Building,Cheng_Yu_Tung_Building_UGF,Normal_Lab_Equipment_Riser_AN0,Riser,1,mapped
+D0855,Meter_D0855,True,D0855.xlsx,Cheng_Yu_Tung_Building,,Fire_Services_Installation_Lift_37_AN0,Elevator,1,mapped
+D0856,Meter_D0856,True,D0856.xlsx,LSK_Business_Buildings,LSK_Business_Buildings_7F,Non_Fire_Services_Installation_AN0,meter,1,mapped
+D0857,Meter_D0857,True,D0857.xlsx,Cheng_Yu_Tung_Building,Cheng_Yu_Tung_Building_UGF,Load_Riser_AN0,Riser,1,mapped
+D0858,Meter_D0858,True,D0858.xlsx,Cheng_Yu_Tung_Building,Cheng_Yu_Tung_Building_RF,DI_Plant_AN0,Deionization_Plant,1,mapped
+D0859,Meter_D0859,True,D0859.xlsx,Cheng_Yu_Tung_Building,,Lift_35_AN1; Lift_36_AN1,Elevator,2,mapped
+D0860,Meter_D0860,True,D0860.xlsx,Cheng_Yu_Tung_Building,Cheng_Yu_Tung_Building_RF,Virtual_Stack_Fan_SEAF_R_5_6_7_AN0,Exhaust_Fan,1,mapped
+D0861,Meter_D0861,True,D0861.xlsx,Cheng_Yu_Tung_Building,Cheng_Yu_Tung_Building_RF,Virtual_Stack_Fan_SEAF_R_8_9_10_AN0,Fan,1,mapped
+D0862,Meter_D0862,True,D0862.xlsx,Cheng_Yu_Tung_Building,,Normal_Left_Automatic_Changeover_Switch_AN0,Switch,1,mapped
+D0863,Meter_D0863,True,D0863.xlsx,Cheng_Yu_Tung_Building,,Essential_Right_Automatic_Changeover_Switch_AN0,Switch,1,mapped
+D0864,Meter_D0864,True,D0864.xlsx,Cheng_Yu_Tung_Building,,Automatic_Changeover_from_Genset_AN0,meter,1,mapped
+D0865,Meter_D0865,True,D0865.xlsx,Cheng_Yu_Tung_Building,Cheng_Yu_Tung_Building_UGF,Essential_Lab_Power_AN0; MVAC_Riser_AN0,Riser,2,mapped

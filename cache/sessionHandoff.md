@@ -1,6 +1,61 @@
 # Session Handoff - Kelompok08 Data Analytics Tugas Besar
 
-Last updated: 2026-06-13, Asia/Jakarta
+Last updated: 2026-06-14, Asia/Jakarta
+
+Update 2026-06-14 - Power BI datamart foundation:
+
+- Branch kerja aktif: `feat-powerbi-datamart-foundation`.
+- Aturan branch/commit baru:
+  - nama branch dan commit message harus behavior-based;
+  - tidak boleh mengandung `/`;
+  - tidak boleh mereferensikan phase, milestone, sprint, atau nomor fase;
+  - commit message yang disiapkan untuk pekerjaan ini: `Build Power BI datamart foundation`.
+- Path canonical final dikunci ke `Data_Acquisition/dataset`; root `dataset/processed` hanya boleh dibaca sebagai artefak historis/kompatibilitas, bukan target output final.
+- Menambahkan `cache/ImplementationPhase.md` sebagai tracker implementasi utama. Setiap progress penting wajib memperbarui `sessionHandoff.md` dan `ImplementationPhase.md` pada turn yang sama.
+- Menambahkan script canonical:
+  - `scripts/config.py`
+  - `scripts/io_utils.py`
+  - `scripts/hko_weather.py`
+  - `scripts/hkust_t1440.py`
+  - `scripts/ttl_entity_mapping.py`
+  - `scripts/build_powerbi_datamart.py`
+  - `scripts/build_osemn_notebook.py`
+- Output Power BI datamart foundation baru:
+  - `Data_Acquisition/dataset/processed/dim_date.csv`
+  - `Data_Acquisition/dataset/processed/dim_entity.csv`
+  - `Data_Acquisition/dataset/processed/dim_scenario.csv`
+  - `Data_Acquisition/dataset/processed/fact_energy_weather_daily.csv`
+  - `Data_Acquisition/dataset/processed/data_quality_summary.csv`
+  - `Data_Acquisition/dataset/processed/data_dictionary_energy_dashboard.csv`
+  - `Data_Acquisition/dataset/profile_hkust_hko/final_data_sources.md`
+- Notebook aktif sekarang hanya satu di `/notebooks`: `notebooks/energy_analytics_osemn.ipynb`.
+- Notebook lama diarsipkan ke:
+  - `cache/archive/notebooks/eksplorasi_hkust_hko.ipynb`
+  - `cache/archive/notebooks/01_explore_and_select_subset.ipynb`
+- Notebook aktif ditulis dengan gaya laporan formal: O - Obtain, S - Scrub, E - Explore awal, Kesiapan Data Power BI, dan Catatan Keterbatasan. Notebook tidak memakai bahasa development seperti phase/backlog/plan dan tidak memaksakan bagian model/interpretasi final yang belum memiliki output.
+- Validasi yang sudah dilakukan:
+  - `python -m py_compile scripts\config.py scripts\io_utils.py scripts\hko_weather.py scripts\ttl_entity_mapping.py scripts\hkust_t1440.py scripts\build_powerbi_datamart.py scripts\build_osemn_notebook.py`
+  - `python scripts\hkust_t1440.py`
+  - `python scripts\hko_weather.py`
+  - `python scripts\build_powerbi_datamart.py`
+  - `python scripts\build_osemn_notebook.py --execute`
+- Hasil validasi datamart:
+  - `dim_date`: 878 baris, key `date` unik.
+  - `dim_entity`: 26 baris, key `entity_id` unik.
+  - `dim_scenario`: 3 baris, key `scenario` unik.
+  - `fact_energy_weather_daily`: 10.524 baris, 12 entity, key `date + entity_id` unik.
+  - Periode fact: 2022-01-02 sampai 2024-05-27.
+  - `rainfall_mm` missing tetap terdokumentasi 5 hari.
+  - `global_solar_radiation_mj_m2` missing tetap terdokumentasi 1 hari.
+  - `data_quality_flag`: 10.452 `valid`, 72 `weather_imputed`.
+- Backlog berikutnya:
+  - scenario-based Isolation Forest;
+  - `fact_anomaly_scenarios.csv`;
+  - `model_evaluation_summary.csv`;
+  - `anomaly_case_review.csv`;
+  - `entity_scorecard.csv`;
+  - final EDA plots;
+  - manual Power BI `.pbix` build.
 
 Update 2026-06-14:
 
@@ -34,6 +89,14 @@ File ini adalah sumber konteks utama untuk melanjutkan pekerjaan. **Setiap perub
 - keputusan modelling, preprocessing, feature engineering, atau evaluasi;
 - perubahan scope berdasarkan panduan tugas besar;
 - issue/blocker yang ditemukan.
+
+Aturan tambahan:
+
+- Setiap progress implementasi juga wajib memperbarui `cache/ImplementationPhase.md`.
+- Jika output/path/schema/keputusan modelling berubah, update `sessionHandoff.md` dan `ImplementationPhase.md` pada turn yang sama.
+- Sebelum melanjutkan implementasi, baca `sessionHandoff.md`, `ImplementationPhase.md`, `prd_energi_anomaly_powerbi.md`, dan `roadmap_improvement_energi_dashboard.md`.
+- Nama branch dan commit message harus behavior-based, tidak mengandung `/`, dan tidak mereferensikan phase, milestone, sprint, atau nomor fase.
+- Notebook aktif harus formal seperti laporan analitis, bukan catatan development. Jangan menulis bagian OSEMN yang belum punya output memadai.
 
 Jika melanjutkan sesi, baca file ini dulu, lalu cek status aktual repo dengan:
 
