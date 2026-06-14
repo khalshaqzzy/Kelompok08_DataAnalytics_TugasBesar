@@ -2,6 +2,28 @@
 
 Last updated: 2026-06-13, Asia/Jakarta
 
+Update 2026-06-14:
+
+- Menambahkan script `scripts/select_t1440_subset.py` untuk profiling semua file HKUST T1440, parsing metadata TTL, pemberian quality flag, dan pemilihan subset objektif.
+- Output baru:
+  - `dataset/profile_hkust_hko/t1440_meter_inventory_with_decision.csv`
+  - `dataset/profile_hkust_hko/t1440_subset_selection_justification.md`
+  - `dataset/processed/dim_entity_t1440.csv`
+  - `dataset/processed/selected_t1440_meters.csv`
+  - `dataset/processed/fact_energy_t1440_selected_long.csv`
+  - `outputs/subset_selection/t1440_total_consumption_by_meter.png`
+  - `outputs/subset_selection/t1440_quality_flag_counts.png`
+  - `outputs/subset_selection/t1440_meter_count_by_building.png`
+  - `outputs/subset_selection/selected_meters_daily_consumption.png`
+- Keputusan subset utama: fokus pada `Cheng_Yu_Tung_Building` dengan 12 meter aktif full-coverage: `D0849`, `D0848`, `D0854`, `D0853`, `D0862`, `D0857`, `D0851`, `D0861`, `D0852`, `D0860`, `D0850`, `D0865`.
+- Meter zero constant (`D0821`, `D0823`, `D0844`, `D0847`), near-zero/low-signal (`D0863`, `D0864`, `D0846`), dan short coverage (`D0816`) dicatat untuk data quality, bukan model utama.
+- Menambahkan script `scripts/build_energy_weather_master.py` untuk membangun tabel HKO harian dan join ke master energy berdasarkan `date`.
+- HKO harian berhasil diunduh ke `dataset/hko_open_data/raw/` menggunakan `scripts/download_hko_open_data.py`.
+- Output gabungan baru:
+  - `dataset/processed/hko_weather_daily.csv`
+  - `dataset/processed/master_energy_weather_t1440_selected_daily.csv`
+- Catatan kualitas HKO periode proyek: `rainfall_mm` missing 5 hari dan `global_solar_radiation_mj_m2` missing 1 hari.
+
 ## 0. Instruksi Wajib untuk Sesi Berikutnya
 
 File ini adalah sumber konteks utama untuk melanjutkan pekerjaan. **Setiap perubahan penting pada project harus memperbarui `sessionHandoff.md`**, terutama jika ada:
