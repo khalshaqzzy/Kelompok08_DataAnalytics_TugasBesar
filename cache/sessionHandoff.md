@@ -56,6 +56,13 @@ Update 2026-06-14 - Power BI datamart foundation:
   - `entity_scorecard.csv`;
   - final EDA plots;
   - manual Power BI `.pbix` build.
+- Backlog notebook aktif:
+  - setiap progress analisis berikutnya harus ikut memperbarui `notebooks/energy_analytics_osemn.ipynb`;
+  - notebook harus berkembang bertahap sampai mencakup seluruh OSEMN setelah outputnya benar-benar tersedia;
+  - bagian EDA harus diperluas secara lengkap seiring final EDA plots dan tabel ringkasan dibuat;
+  - bagian Model hanya ditambahkan setelah output anomaly detection final tersedia;
+  - bagian iNterpret hanya ditambahkan setelah `entity_scorecard.csv`, `anomaly_case_review.csv`, insight, dan rekomendasi berbasis data tersedia;
+  - notebook tetap harus formal seperti laporan analitis dan tidak memakai bahasa development seperti phase/backlog/plan di isi notebook.
 
 Update 2026-06-14:
 
@@ -97,6 +104,8 @@ Aturan tambahan:
 - Sebelum melanjutkan implementasi, baca `sessionHandoff.md`, `ImplementationPhase.md`, `prd_energi_anomaly_powerbi.md`, dan `roadmap_improvement_energi_dashboard.md`.
 - Nama branch dan commit message harus behavior-based, tidak mengandung `/`, dan tidak mereferensikan phase, milestone, sprint, atau nomor fase.
 - Notebook aktif harus formal seperti laporan analitis, bukan catatan development. Jangan menulis bagian OSEMN yang belum punya output memadai.
+- Setiap progress berikutnya harus mengevaluasi apakah notebook aktif perlu diperbarui. Jika ada output baru untuk Obtain, Scrub, Explore, Model, atau iNterpret, update notebook pada sesi yang sama.
+- EDA di notebook harus menjadi bagian yang lengkap secara bertahap: trend harian, tren bulanan, weekday/weekend, kontribusi/Pareto meter, konteks cuaca, kualitas data, dan interpretasi singkat per visual saat output tersebut sudah tersedia.
 
 Jika melanjutkan sesi, baca file ini dulu, lalu cek status aktual repo dengan:
 

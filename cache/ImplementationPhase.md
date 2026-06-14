@@ -63,6 +63,8 @@ Notebook scope note:
 - Notebook aktif `notebooks/energy_analytics_osemn.ipynb` saat ini berisi O - Obtain, S - Scrub, E - Explore awal, Kesiapan Data Power BI, dan Catatan Keterbatasan.
 - Notebook tidak memuat bagian Model dan iNterpret final karena output model final, anomaly case review, dan entity scorecard belum dibuat.
 - Notebook tidak boleh menyebut istilah development seperti phase, backlog, atau implementation plan.
+- Setiap progress analisis berikutnya harus mengevaluasi dan memperbarui notebook aktif jika ada output baru yang relevan untuk O, S, E, M, atau N.
+- EDA di notebook harus diperluas secara bertahap sampai lengkap: trend harian, tren bulanan, weekday/weekend, kontribusi/Pareto meter, konteks cuaca, kualitas data, dan interpretasi singkat per visual setelah output final tersedia.
 
 ---
 
@@ -1041,3 +1043,6 @@ Backlog after this branch:
 5. Generate `entity_scorecard.csv`.
 6. Generate final EDA plots under `outputs/eda/final`.
 7. Build manual Power BI `.pbix` from final CSV outputs.
+8. Update `notebooks/energy_analytics_osemn.ipynb` after each substantive analysis output.
+9. Expand notebook EDA into a complete report-style section as final EDA outputs become available.
+10. Add formal Model and iNterpret sections to notebook only after the corresponding final outputs exist.
