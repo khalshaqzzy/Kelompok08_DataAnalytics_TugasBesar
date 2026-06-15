@@ -2,6 +2,7 @@
 
 ## Daftar Isi
 
+- [Ringkasan Eksekutif](#ringkasan-eksekutif)
 1. [Pendahuluan](#1-pendahuluan)  
    1.1 [Latar Belakang](#11-latar-belakang)  
    1.2 [Rumusan Masalah](#12-rumusan-masalah)  
@@ -35,23 +36,35 @@
 8. [Lampiran](#8-lampiran)
    8.1 [Daftar Output Data Utama](#81-daftar-output-data-utama)  
    8.2 [Daftar Output Visual](#82-daftar-output-visual)  
-   8.3 [Daftar Placeholder Gambar Manual](#83-daftar-placeholder-gambar-manual)  
+   8.3 [Daftar Kebutuhan Gambar Manual](#83-daftar-kebutuhan-gambar-manual)
    8.4 [Ringkasan Sumber](#84-ringkasan-sumber)  
    8.5 [Catatan Penggunaan Laporan](#85-catatan-penggunaan-laporan)
+
+## Ringkasan Eksekutif
+
+Laporan ini menyajikan analisis konsumsi energi berbasis smart meter HKUST dengan pendekatan OSEMN, mulai dari akuisisi data, pembersihan, eksplorasi, pemodelan anomali, hingga interpretasi dan rancangan dashboard interaktif. Dataset utama berasal dari data smart meter HKUST pada interval harian T1440, sedangkan dataset pendukung berasal dari Hong Kong Observatory untuk memberikan konteks cuaca harian.
+
+Analisis difokuskan pada 12 meter aktif yang dipilih dari 26 meter T1440 berdasarkan kelayakan cakupan dan kualitas data. Fokus ini membuat hasil laporan lebih tepat dibaca sebagai studi kasus meter-level pada subset terpilih, bukan sebagai kesimpulan menyeluruh untuk seluruh kampus HKUST. Pada tahap Scrub, pipeline menghasilkan fact table `date x entity_id` sebanyak 10.524 baris, dengan 10.420 baris yang lengkap untuk kebutuhan pemodelan setelah fitur rolling dan lag diterapkan.
+
+Hasil eksplorasi menunjukkan bahwa konsumsi energi pada meter terpilih relatif stabil, tetapi tetap memiliki variasi harian dan bulanan yang relevan untuk ditinjau. Konsumsi weekday lebih tinggi daripada weekend dengan selisih rata-rata 169,973, sedangkan lima meter teratas menyumbang sekitar 68,79% konsumsi total subset. Temuan ini menunjukkan bahwa prioritas monitoring perlu memperhatikan kontribusi konsumsi, pola kalender, serta kualitas data agar interpretasi tidak bias.
+
+Pemodelan dilakukan menggunakan Isolation Forest karena dataset tidak menyediakan label anomali resmi. Tiga skenario digunakan untuk mengatur sensitivitas model: strict, balanced, dan sensitive. Skenario balanced menjadi default karena menghasilkan 521 kandidat anomali atau 5% dari 10.420 baris eligible, sesuai desain model. Hasil model diperlakukan sebagai daftar kandidat investigasi, bukan bukti final adanya gangguan operasional.
+
+Output akhir analisis disiapkan untuk dashboard Vite React yang membaca data statis dari `web/public/data/*.json`. Dashboard tersebut dirancang untuk membantu pengguna melihat tren konsumsi, menelusuri kandidat anomali, memahami konteks cuaca, membaca ranking meter, dan memeriksa kualitas data. Rekomendasi utama dari laporan ini adalah memulai investigasi dari entity D0849, menggunakan skenario balanced sebagai default dashboard, dan mempertahankan halaman Data Quality agar batas analisis tetap transparan.
 
 ## 1. Pendahuluan
 
 ### 1.1 Latar Belakang
 
-Konsumsi energi pada lingkungan kampus dipengaruhi oleh aktivitas akademik, operasional gedung, sistem pendingin, pencahayaan, laboratorium, lift, dan peralatan pendukung lainnya. Dalam lingkungan yang memiliki banyak titik pengukuran, data smart meter menjadi sumber penting untuk memahami pola konsumsi listrik dan menemukan kejadian yang tidak biasa.
+Konsumsi energi pada lingkungan kampus dipengaruhi oleh aktivitas akademik, operasional gedung, sistem pendingin, pencahayaan, laboratorium, lift, server, dan berbagai peralatan pendukung lain. Pola konsumsi tersebut tidak selalu konstan karena setiap gedung, ruang, dan fasilitas memiliki ritme penggunaan yang berbeda. Dalam konteks kampus yang memiliki banyak titik pengukuran, data smart meter menjadi sumber yang penting untuk memahami pola beban listrik, membaca perubahan perilaku konsumsi, dan menemukan kejadian yang menyimpang dari pola historis.
 
-Analisis ini menggunakan data smart meter kampus Hong Kong University of Science and Technology (HKUST) sebagai dataset utama dan data cuaca harian Hong Kong Observatory (HKO) sebagai dataset pendukung. Data energi digunakan untuk melihat pola konsumsi, kontribusi meter, dan kandidat anomali. Data cuaca digunakan sebagai konteks pembacaan, terutama suhu, kelembapan, curah hujan, radiasi matahari, dan kecepatan angin.
+Analisis ini menggunakan data smart meter kampus Hong Kong University of Science and Technology (HKUST) sebagai dataset utama dan data cuaca harian Hong Kong Observatory (HKO) sebagai dataset pendukung. Data energi digunakan untuk membaca tren konsumsi, kontribusi meter, kualitas data, serta kandidat anomali. Data cuaca digunakan sebagai konteks pembacaan, terutama suhu, kelembapan, curah hujan, radiasi matahari, dan kecepatan angin. Dengan demikian, analisis tidak hanya melihat nilai konsumsi secara terpisah, tetapi juga menempatkannya dalam konteks waktu dan kondisi lingkungan.
 
-Fokus analisis diarahkan pada data harian T1440 karena granularitas tersebut sesuai dengan data cuaca harian. Hasil akhir analisis bukan hanya ringkasan statistik, tetapi juga dataset analitis yang siap digunakan untuk dashboard Vite React dan deteksi anomali berbasis Isolation Forest.
+Fokus analisis diarahkan pada data harian T1440 karena granularitas tersebut sesuai dengan data cuaca harian HKO. Pilihan ini juga membuat hasil analisis lebih mudah dijelaskan kepada pengguna manajerial, seperti pengelola gedung, tim sarana prasarana, dan pihak yang membutuhkan ringkasan konsumsi energi secara periodik. Hasil akhir analisis bukan hanya ringkasan statistik, tetapi juga dataset analitis, output model anomali, dan dashboard Vite React yang dapat digunakan untuk eksplorasi interaktif.
 
-![Placeholder alur analisis OSEMN energi dan anomali](assets/laporan/gambar_01_alur_osemn_energi_anomali.png)
+![Alur analisis OSEMN energi dan anomali](assets/laporan/gambar_01_alur_osemn_energi_anomali.png)
 
-*Gambar 1. Placeholder alur analisis OSEMN dari akuisisi data, pembersihan, eksplorasi, pemodelan, interpretasi, hingga rancangan dashboard.*
+*Gambar 1. Alur analisis OSEMN dari akuisisi data, pembersihan, eksplorasi, pemodelan, interpretasi, hingga rancangan dashboard.*
 
 ### 1.2 Rumusan Masalah
 
@@ -76,7 +89,7 @@ Tujuan analisis ini adalah:
 
 ### 1.4 Ruang Lingkup dan Batasan
 
-Analisis ini merupakan studi kasus selected daily meter-level, bukan klaim cakupan seluruh kampus HKUST. Cakupan utama adalah 12 meter aktif yang terpilih dari inventory T1440 dan terutama terhubung dengan `Cheng_Yu_Tung_Building`.
+Analisis ini merupakan studi kasus selected daily meter-level, bukan klaim cakupan seluruh kampus HKUST. Cakupan utama adalah 12 meter aktif yang terpilih dari inventory T1440 dan terutama terhubung dengan `Cheng_Yu_Tung_Building`. Pembatasan ini penting karena kualitas dan cakupan data antar meter tidak seragam. Dengan memilih subset yang lebih layak, proses eksplorasi dan pemodelan dapat dilakukan secara lebih stabil, sementara meter yang bermasalah tetap dicatat pada bagian kualitas data agar tidak hilang dari dokumentasi.
 
 | Area | Ruang Lingkup |
 |---|---|
@@ -87,13 +100,15 @@ Analisis ini merupakan studi kasus selected daily meter-level, bukan klaim cakup
 | Model utama | Isolation Forest anomaly detection tanpa label |
 | Dashboard | Vite React dashboard di `web/` dengan data statis dari `web/public/data/*.json` |
 
-Batasan utama:
+Batasan utama yang perlu diperhatikan dalam membaca hasil laporan:
 
 1. Data T1440 hanya mencakup 26 meter harian, sehingga tidak mewakili seluruh meter HKUST.
 2. Subset model utama memakai 12 meter aktif dari satu konteks gedung utama.
 3. Data cuaca bersifat kontekstual, bukan bukti kausal tunggal terhadap konsumsi energi.
 4. Tidak tersedia label anomali resmi, sehingga evaluasi model dilakukan dengan pendekatan tanpa ground truth.
 5. Dashboard bersifat statis dan membaca prebuilt JSON; deployment produksi ke Vercel belum dilakukan dari CLI karena autentikasi Vercel lokal tidak valid.
+
+Dengan batasan tersebut, hasil laporan sebaiknya digunakan sebagai dasar penyaringan awal analitik, bukan sebagai pengganti audit teknis lapangan. Kandidat anomali yang ditemukan model tetap memerlukan validasi operasional dari pihak yang memahami fungsi meter, jadwal penggunaan ruang, dan karakteristik peralatan.
 
 ### 1.5 Pembagian Peran
 
@@ -108,7 +123,7 @@ Batasan utama:
 
 ### 2.1 Tujuan Tahap Obtain
 
-Tahap Obtain bertujuan memperoleh dataset yang relevan, memahami struktur sumber data, memilih granularitas analisis, dan memastikan data mentah tetap terpisah dari data hasil pemrosesan. Pada analisis ini, tahap Obtain juga mencakup seleksi meter karena dataset smart meter memiliki variasi kualitas dan cakupan.
+Tahap Obtain bertujuan memperoleh dataset yang relevan, memahami struktur sumber data, memilih granularitas analisis, dan memastikan data mentah tetap terpisah dari data hasil pemrosesan. Pada analisis ini, tahap Obtain juga mencakup seleksi meter karena dataset smart meter memiliki variasi kualitas, cakupan periode, dan sinyal konsumsi. Keputusan pada tahap ini menentukan batas analisis berikutnya, sehingga pemilihan sumber, periode, dan subset meter perlu dijelaskan secara eksplisit.
 
 ### 2.2 Sumber Data
 
@@ -118,11 +133,11 @@ Tahap Obtain bertujuan memperoleh dataset yang relevan, memahami struktur sumber
 | Metadata HKUST | File Turtle berbasis Brick Schema | `.ttl` | Menghubungkan meter dengan gedung, lantai, ruang, atau equipment |
 | HKO weather | Hong Kong Observatory Open Data | `.csv` | Dataset pendukung untuk konteks cuaca harian |
 
-Dataset HKUST menyediakan data meter dengan beberapa granularitas waktu, sedangkan HKO menyediakan variabel cuaca harian. Kombinasi kedua sumber data memenuhi kebutuhan minimal dua sumber data dan memiliki dimensi waktu yang jelas.
+Dataset HKUST menyediakan data meter dengan beberapa granularitas waktu, sedangkan HKO menyediakan variabel cuaca harian. Kombinasi kedua sumber data memenuhi kebutuhan minimal dua sumber data dan memiliki dimensi waktu yang jelas. HKUST berperan sebagai sumber utama konsumsi listrik, sementara HKO berperan sebagai konteks eksternal yang membantu membaca kondisi harian ketika konsumsi naik, turun, atau terdeteksi tidak biasa.
 
-![Placeholder ringkasan sumber data HKUST dan HKO](assets/laporan/gambar_02_sumber_data_hkust_hko.png)
+![Ringkasan sumber data HKUST dan HKO](assets/laporan/gambar_02_sumber_data_hkust_hko.png)
 
-*Gambar 2. Placeholder ringkasan dua sumber data utama, yaitu smart meter HKUST dan data cuaca HKO.*
+*Gambar 2. Ringkasan dua sumber data utama, yaitu smart meter HKUST dan data cuaca HKO.*
 
 ### 2.3 Struktur Folder Data
 
@@ -136,22 +151,22 @@ Struktur data analitis dipisahkan menjadi data mentah, data hasil profil, data p
 | `Data_Acquisition/dataset/processed` | Fact table, dimension table, output model, dan evidence table | Data siap analisis dan siap dashboard |
 | `outputs/eda/final` | Visual eksplorasi final | Bukti visual untuk laporan dan rancangan dashboard |
 
-Pemisahan ini penting agar alur analisis dapat ditelusuri dari sumber data ke output akhir tanpa mencampur data mentah dan hasil transformasi.
+Pemisahan ini penting agar alur analisis dapat ditelusuri dari sumber data ke output akhir tanpa mencampur data mentah dan hasil transformasi. Dengan struktur tersebut, setiap output dapat dirujuk kembali ke sumbernya, sedangkan proses transformasi dapat dijalankan ulang tanpa mengubah data mentah.
 
-![Placeholder struktur folder dan alur file data](assets/laporan/gambar_03_struktur_folder_data.png)
+![Struktur folder dan alur file data](assets/laporan/gambar_03_struktur_folder_data.png)
 
-*Gambar 3. Placeholder struktur folder data, mulai dari raw data, processed data, hingga output visual.*
+*Gambar 3. Struktur folder data, mulai dari raw data, processed data, hingga output visual.*
 
 ### 2.4 Pemilihan Interval T1440
 
-Interval T1440 dipilih sebagai basis utama karena merepresentasikan data harian. Pemilihan ini memiliki beberapa alasan:
+Interval T1440 dipilih sebagai basis utama karena merepresentasikan data harian. Pemilihan ini memiliki beberapa alasan analitis dan praktis:
 
 1. Data cuaca HKO tersedia pada granularitas harian, sehingga T1440 dapat diintegrasikan langsung berdasarkan tanggal.
 2. Analisis tugas besar berfokus pada pola konsumsi, anomali, dan dashboard, sehingga granularitas harian sudah memadai untuk ringkasan manajerial.
 3. Data T1440 lebih ringan untuk diproses dibandingkan interval yang lebih kecil.
 4. Deteksi anomali harian lebih mudah dijelaskan kepada pengguna non-teknis.
 
-Konsekuensi dari keputusan ini adalah analisis tidak menangkap pola intraday seperti jam puncak, beban malam, atau variasi jam operasional. Pola tersebut dapat menjadi pengembangan lanjutan jika menggunakan data T60 atau interval yang lebih kecil.
+Konsekuensi dari keputusan ini adalah analisis tidak menangkap pola intraday seperti jam puncak, beban malam, atau variasi jam operasional. Oleh karena itu, hasil analisis diarahkan untuk membaca pola harian dan kandidat anomali harian. Pola yang lebih detail, seperti beban di luar jam kerja atau perubahan per jam, dapat menjadi pengembangan lanjutan jika menggunakan data T60 atau interval yang lebih kecil.
 
 ### 2.5 Pemilihan Subset Meter
 
@@ -167,7 +182,7 @@ Inventory T1440 terdiri dari 26 meter. Dari jumlah tersebut, 12 meter dipilih se
 | Comparison or secondary | 4 | Meter aktif tetapi tidak masuk subset model utama |
 | Excluded from main model | 10 | Meter dikeluarkan dari model utama karena kualitas atau cakupan |
 
-Meter selected main subset:
+Meter subset utama terpilih:
 
 | Meter | Gedung | Peran Analitis |
 |---|---|---|
@@ -184,11 +199,11 @@ Meter selected main subset:
 | D0850 | Cheng_Yu_Tung_Building | Subset utama |
 | D0865 | Cheng_Yu_Tung_Building | Subset utama |
 
-Pemilihan subset ini menjaga kualitas analisis karena model tidak dilatih pada meter yang konstan nol, hampir nol, atau memiliki coverage pendek.
+Pemilihan subset ini menjaga kualitas analisis karena model tidak dilatih pada meter yang konstan nol, hampir nol, atau memiliki coverage pendek. Meter yang tidak masuk subset utama tetap disimpan dalam dimensi entity dan dibahas pada bagian kualitas data, sehingga keputusan eksklusi tetap transparan.
 
-![Placeholder seleksi subset meter T1440](assets/laporan/gambar_04_seleksi_subset_meter_t1440.png)
+![Seleksi subset meter T1440](assets/laporan/gambar_04_seleksi_subset_meter_t1440.png)
 
-*Gambar 4. Placeholder proses seleksi 26 meter T1440 menjadi 12 selected main subset.*
+*Gambar 4. Proses seleksi 26 meter T1440 menjadi 12 meter subset utama.*
 
 ### 2.6 Akuisisi Data Cuaca HKO
 
@@ -204,7 +219,7 @@ Data cuaca HKO digunakan untuk melengkapi pembacaan konsumsi energi. Variabel ya
 | Global solar radiation | Kau Sai Chau | Konteks radiasi matahari |
 | Mean wind speed | Sai Kung | Konteks kecepatan angin |
 
-Data HKO diproses menjadi satu tabel harian `hko_weather_daily.csv`. Missing value yang ditemukan pada periode proyek adalah 5 hari untuk rainfall dan 1 hari untuk global solar radiation.
+Data HKO diproses menjadi satu tabel harian `hko_weather_daily.csv`. Missing value yang ditemukan pada periode proyek adalah 5 hari untuk rainfall dan 1 hari untuk global solar radiation. Nilai tersebut tidak langsung dihapus karena cuaca digunakan sebagai konteks; penanganannya dilakukan pada tahap Scrub melalui field model-safe dan indikator imputasi.
 
 ### 2.7 Integrasi Awal Energi dan Cuaca
 
@@ -230,17 +245,17 @@ Tahapan integrasi:
 
 ### 2.9 Keterbatasan Tahap Obtain
 
-Keterbatasan utama pada tahap Obtain adalah cakupan T1440 yang terbatas pada 26 meter. Selain itu, data cuaca berasal dari stasiun HKO terdekat dan tidak mengukur kondisi mikro di dalam gedung. Oleh karena itu, hasil analisis harus dibaca sebagai studi kasus meter-level dengan konteks cuaca harian, bukan pengukuran lengkap seluruh kampus.
+Keterbatasan utama pada tahap Obtain adalah cakupan T1440 yang terbatas pada 26 meter. Selain itu, data cuaca berasal dari stasiun HKO terdekat dan tidak mengukur kondisi mikro di dalam gedung. Oleh karena itu, hasil analisis harus dibaca sebagai studi kasus meter-level dengan konteks cuaca harian, bukan pengukuran lengkap seluruh kampus. Keterbatasan ini tidak membatalkan analisis, tetapi menentukan cara interpretasi: hasilnya berguna untuk penyaringan dan prioritas awal, bukan untuk klaim kausal atau audit teknis final.
 
 ## 3. S - Scrub: Pembersihan, Validasi, dan Pembentukan Data Siap Analisis
 
 ### 3.1 Tujuan Tahap Scrub
 
-Tahap Scrub bertujuan membersihkan data, mengubah format menjadi konsisten, menangani missing value, menandai kualitas data, dan membentuk tabel analitis yang siap digunakan untuk eksplorasi, model, dan rancangan dashboard.
+Tahap Scrub bertujuan membersihkan data, mengubah format menjadi konsisten, menangani missing value, menandai kualitas data, dan membentuk tabel analitis yang siap digunakan untuk eksplorasi, model, dan rancangan dashboard. Pada tahap ini, data meter reading diubah menjadi konsumsi harian, data cuaca dinormalisasi ke format tanggal yang sama, dan setiap baris diberi indikator agar pembaca dapat membedakan data yang layak model dari data yang hanya digunakan sebagai konteks metodologi.
 
 ### 3.2 Status Tahap Scrub pada Dataset Analitis
 
-Tahap Scrub telah menghasilkan dataset analitis utama dengan grain `date x entity_id`. Dataset utama `fact_energy_weather_daily.csv` berisi 10.524 baris dan 62 kolom. Setiap baris merepresentasikan satu tanggal dan satu meter terpilih.
+Tahap Scrub telah menghasilkan dataset analitis utama dengan grain `date x entity_id`. Dataset utama `fact_energy_weather_daily.csv` berisi 10.524 baris dan 62 kolom. Setiap baris merepresentasikan satu tanggal dan satu meter terpilih, dilengkapi konsumsi harian, fitur kalender, konteks cuaca, quality flag, serta fitur turunan yang dibutuhkan untuk eksplorasi dan model.
 
 | Komponen | Status |
 |---|---|
@@ -264,11 +279,11 @@ Langkah transformasi:
 5. Menghapus atau menandai baris yang tidak layak, seperti pembacaan pertama yang belum memiliki nilai pembanding.
 6. Menambahkan metadata meter dari hasil pemetaan entity.
 
-Hasil akhir menunjukkan periode fact energi-cuaca dimulai pada 2022-01-02 karena tanggal pertama per meter tidak memiliki konsumsi hasil differencing.
+Hasil akhir menunjukkan periode fact energi-cuaca dimulai pada 2022-01-02 karena tanggal pertama per meter tidak memiliki konsumsi hasil differencing. Keputusan ini penting karena konsumsi harian tidak diambil langsung dari nilai meter reading, melainkan dari perubahan nilai antar hari. Dengan demikian, baris pertama setiap meter tidak dipaksakan menjadi konsumsi nol karena hal tersebut dapat menimbulkan bias.
 
-![Placeholder transformasi meter reading menjadi konsumsi harian](assets/laporan/gambar_05_transformasi_konsumsi_harian.png)
+![Transformasi meter reading menjadi konsumsi harian](assets/laporan/gambar_05_transformasi_konsumsi_harian.png)
 
-*Gambar 5. Placeholder transformasi data energi dari meter reading menjadi daily consumption.*
+*Gambar 5. Transformasi data energi dari meter reading menjadi daily consumption.*
 
 ### 3.4 Transformasi Data Cuaca
 
@@ -290,11 +305,11 @@ Transformasi utama:
    - `rainfall_mm_was_imputed`
    - `global_solar_radiation_mj_m2_was_imputed`
 
-Nilai rainfall yang hilang diisi dengan 0 pada field model-safe, sedangkan solar radiation yang hilang diisi menggunakan median bulanan. Nilai asli tetap dipertahankan untuk transparansi.
+Nilai rainfall yang hilang diisi dengan 0 pada field model-safe, sedangkan solar radiation yang hilang diisi menggunakan median bulanan. Nilai asli tetap dipertahankan untuk transparansi. Dengan pendekatan ini, model tetap dapat berjalan pada fitur numerik yang lengkap, sementara laporan dan dashboard tetap menunjukkan bahwa sebagian nilai cuaca merupakan hasil imputasi.
 
 ### 3.5 Pembentukan Star Schema untuk Analisis
 
-Dataset disiapkan dalam struktur star schema sederhana sebagai output analitis utama. Struktur CSV ini menjadi sumber kanonik yang kemudian dikemas menjadi JSON statis untuk dashboard Vite React.
+Dataset disiapkan dalam struktur star schema sederhana sebagai output analitis utama. Struktur CSV ini menjadi sumber kanonik yang kemudian dikemas menjadi JSON statis untuk dashboard Vite React. Pemisahan fact table dan dimension table membantu menjaga konsistensi filter, mempermudah agregasi, dan membuat setiap metrik dashboard dapat ditelusuri kembali ke tabel asal.
 
 | Tabel | Grain | Jumlah Baris | Fungsi |
 |---|---:|---:|---|
@@ -315,9 +330,9 @@ Relasi yang dirancang:
 | fact_anomaly_scenarios | entity_id | dim_entity | entity_id | Many-to-one |
 | fact_anomaly_scenarios | scenario | dim_scenario | scenario | Many-to-one |
 
-![Placeholder star schema analitis](assets/laporan/gambar_06_star_schema_dashboard.png)
+![Star schema analitis](assets/laporan/gambar_06_star_schema_dashboard.png)
 
-*Gambar 6. Placeholder rancangan star schema analitis, dengan fact table energi-cuaca dan fact table anomali sebagai sumber data dashboard.*
+*Gambar 6. Rancangan star schema analitis, dengan fact table energi-cuaca dan fact table anomali sebagai sumber data dashboard.*
 
 ### 3.6 Validasi Kualitas Data
 
@@ -337,11 +352,11 @@ Validasi kualitas data dilakukan pada level meter, baris fact, dan output model.
 | Fact rows | fact_energy_weather_daily | 10.524 |
 | Model eligible rows sebelum fitur rolling/lag lengkap | fact_energy_weather_daily | 10.524 |
 
-Walaupun seluruh baris fact utama memenuhi syarat awal model, feature rolling dan lag menyebabkan jumlah baris feature-complete untuk model menjadi 10.420.
+Walaupun seluruh baris fact utama memenuhi syarat awal model, feature rolling dan lag menyebabkan jumlah baris feature-complete untuk model menjadi 10.420. Pengurangan ini terjadi secara wajar karena fitur rolling dan lag membutuhkan observasi historis sebelumnya pada setiap entity.
 
 ### 3.7 Feature Engineering Awal
 
-Feature engineering digunakan untuk mendukung EDA, model, dan dashboard. Fitur yang dibuat dikelompokkan sebagai berikut:
+Feature engineering digunakan untuk mendukung EDA, model, dan dashboard. Fitur tidak hanya dibuat untuk meningkatkan performa model, tetapi juga untuk membantu interpretasi: rolling deviation menjelaskan penyimpangan dari pola terbaru, lag feature menjelaskan perubahan dari periode sebelumnya, dan fitur cuaca membantu membaca kondisi harian saat kandidat anomali muncul.
 
 | Kelompok Fitur | Contoh Kolom | Tujuan |
 |---|---|---|
@@ -352,11 +367,11 @@ Feature engineering digunakan untuk mendukung EDA, model, dan dashboard. Fitur y
 | Cuaca | `mean_temperature_c`, `rainfall_mm_model`, `temperature_band`, `rainfall_band` | Memberi konteks lingkungan |
 | Readiness model | `feature_complete_flag`, `model_feature_set_version` | Menandai baris siap model |
 
-Fitur rolling dan lag dihitung per `entity_id` dengan urutan waktu, sehingga tidak memakai informasi masa depan.
+Fitur rolling dan lag dihitung per `entity_id` dengan urutan waktu, sehingga tidak memakai informasi masa depan. Prinsip ini penting agar fitur yang digunakan model merepresentasikan informasi yang memang tersedia pada saat observasi dianalisis.
 
-![Placeholder feature engineering energi cuaca](assets/laporan/gambar_07_feature_engineering_energi_cuaca.png)
+![Feature engineering energi dan cuaca](assets/laporan/gambar_07_feature_engineering_energi_cuaca.png)
 
-*Gambar 7. Placeholder ringkasan feature engineering konsumsi, rolling, lag, kalender, dan cuaca.*
+*Gambar 7. Ringkasan feature engineering konsumsi, rolling, lag, kalender, dan cuaca.*
 
 ### 3.8 Output Tahap Scrub
 
@@ -382,54 +397,56 @@ Catatan kritis tahap Scrub:
 3. Data harian tidak dapat menjelaskan variasi konsumsi dalam satu hari.
 4. Entity mapping cukup untuk meter-level dan gedung utama, tetapi interpretasi detail ruang/equipment tetap perlu kehati-hatian.
 
+Dengan catatan tersebut, tahap Scrub tidak hanya berfungsi sebagai pembersihan teknis, tetapi juga sebagai mekanisme kontrol interpretasi. Setiap keputusan pembersihan dibuat agar data dapat digunakan oleh model tanpa menghilangkan informasi penting tentang keterbatasan sumber.
+
 ## 4. E - Explore
 
 ### 4.1 Tujuan Tahap Explore
 
-Tahap Explore bertujuan memahami pola konsumsi energi, variasi waktu, kontribusi meter, kualitas data, dan konteks cuaca sebelum hasil model diinterpretasikan. Eksplorasi juga dipakai untuk menentukan visual yang relevan bagi dashboard Vite React.
+Tahap Explore bertujuan memahami pola konsumsi energi, variasi waktu, kontribusi meter, kualitas data, dan konteks cuaca sebelum hasil model diinterpretasikan. Eksplorasi juga dipakai untuk menentukan visual yang relevan bagi dashboard Vite React. Pada tahap ini, setiap temuan dibaca sebagai indikasi awal yang perlu dikaitkan dengan kualitas data dan batas cakupan subset, sehingga laporan tidak hanya menyajikan grafik, tetapi juga menjelaskan makna analitisnya.
 
 ### 4.2 Statistik Deskriptif Utama
 
-Dataset utama berisi 10.524 baris observasi harian meter-level. Setelah fitur rolling dan lag diterapkan, 10.420 baris memiliki fitur lengkap untuk model. Pada level total harian selected meters, rata-rata konsumsi harian adalah 15.606,259 dengan nilai minimum 12.640 dan maksimum 17.400.
+Dataset utama berisi 10.524 baris observasi harian meter-level. Setelah fitur rolling dan lag diterapkan, 10.420 baris memiliki fitur lengkap untuk model. Pada level total harian meter terpilih, rata-rata konsumsi harian adalah 15.606,259 dengan nilai minimum 12.640 dan maksimum 17.400. Rentang nilai tersebut menunjukkan bahwa konsumsi total subset relatif terkendali, tetapi tetap memiliki variasi yang cukup untuk dianalisis melalui tren waktu, kontribusi meter, dan deteksi anomali.
 
 | Metrik | Nilai |
 |---|---:|
 | Baris fact energi-cuaca | 10.524 |
-| Entity selected main subset | 12 |
-| Hari analisis per selected meter | 877 |
-| Rata-rata total konsumsi harian selected meters | 15.606,259 |
-| Minimum total konsumsi harian selected meters | 12.640 |
-| Maksimum total konsumsi harian selected meters | 17.400 |
+| Entity subset utama terpilih | 12 |
+| Hari analisis per meter terpilih | 877 |
+| Rata-rata total konsumsi harian meter terpilih | 15.606,259 |
+| Minimum total konsumsi harian meter terpilih | 12.640 |
+| Maksimum total konsumsi harian meter terpilih | 17.400 |
 
 ### 4.3 Tren Konsumsi Harian
 
-Tren harian menunjukkan bahwa konsumsi selected meters relatif stabil, tetapi tetap memiliki periode tinggi dan rendah yang layak ditinjau. Pada visual ini, tanggal dengan kandidat anomali pada skenario balanced diberi marker agar pola model dapat dibaca bersama tren konsumsi. Placeholder berikut dapat diisi menggunakan visual sumber `outputs/eda/final/daily_consumption_trend.png`.
+Tren harian menunjukkan bahwa konsumsi meter terpilih relatif stabil, tetapi tetap memiliki periode tinggi dan rendah yang layak ditinjau. Pada visual ini, tanggal dengan kandidat anomali pada skenario balanced diberi marker agar pola model dapat dibaca bersama tren konsumsi. Visual tren harian penting karena menjadi jembatan antara analisis deskriptif dan hasil model: pembaca dapat melihat apakah kandidat anomali muncul pada puncak konsumsi, pada penurunan tidak biasa, atau pada perubahan pola yang tidak terlihat hanya dari nilai maksimum.
 
-![Placeholder tren konsumsi harian](assets/laporan/gambar_08_tren_konsumsi_harian.png)
+![Tren konsumsi harian](outputs/eda/final/daily_consumption_trend.png)
 
-Interpretasi: anomali tidak selalu identik dengan konsumsi paling tinggi secara absolut. Beberapa observasi dapat menjadi anomali karena menyimpang dari pola historis meter terkait, bukan hanya karena berada di puncak total konsumsi.
+Interpretasi: anomali tidak selalu identik dengan konsumsi paling tinggi secara absolut. Beberapa observasi dapat menjadi anomali karena menyimpang dari pola historis meter terkait, bukan hanya karena berada di puncak total konsumsi. Oleh sebab itu, tren harian perlu dibaca bersama fitur rolling deviation dan anomaly score, bukan hanya dengan membandingkan angka konsumsi tertinggi.
 
 ### 4.4 Tren Konsumsi Bulanan
 
-Tren bulanan digunakan untuk melihat variasi konsumsi pada horizon yang lebih panjang. Nilai total bulanan tertinggi terjadi pada 2022-05, sedangkan nilai terendah terjadi pada 2024-05. Nilai 2024-05 perlu dibaca hati-hati karena periode data berakhir pada 2024-05-27, sehingga bulan tersebut tidak penuh. Placeholder berikut dapat diisi menggunakan visual sumber `outputs/eda/final/monthly_consumption_trend.png`.
+Tren bulanan digunakan untuk melihat variasi konsumsi pada horizon yang lebih panjang. Nilai total bulanan tertinggi terjadi pada 2022-05, sedangkan nilai terendah terjadi pada 2024-05. Nilai 2024-05 perlu dibaca hati-hati karena periode data berakhir pada 2024-05-27, sehingga bulan tersebut tidak penuh. Agregasi bulanan membantu mengurangi noise harian dan memberikan konteks bagi pengguna manajerial yang lebih sering membaca performa energi dalam periode bulanan.
 
-![Placeholder tren konsumsi bulanan](assets/laporan/gambar_09_tren_konsumsi_bulanan.png)
+![Tren konsumsi bulanan](outputs/eda/final/monthly_consumption_trend.png)
 
 Interpretasi: perbandingan bulanan perlu memperhatikan bulan parsial pada awal atau akhir periode. Visual bulanan tetap berguna untuk dashboard karena membantu manajemen melihat perubahan jangka menengah.
 
 ### 4.5 Perbandingan Weekday dan Weekend
 
-Rata-rata total konsumsi harian weekday adalah 15.654,906, sedangkan weekend adalah 15.484,932. Selisih rata-rata weekday terhadap weekend adalah 169,973. Placeholder berikut dapat diisi menggunakan visual sumber `outputs/eda/final/weekday_weekend_consumption.png`.
+Rata-rata total konsumsi harian weekday adalah 15.654,906, sedangkan weekend adalah 15.484,932. Selisih rata-rata weekday terhadap weekend adalah 169,973. Perbedaan ini tidak terlalu ekstrem, tetapi cukup konsisten dengan ekspektasi bahwa aktivitas kampus pada hari kerja lebih padat daripada akhir pekan.
 
-![Placeholder perbandingan weekday dan weekend](assets/laporan/gambar_10_perbandingan_weekday_weekend.png)
+![Perbandingan konsumsi weekday dan weekend](outputs/eda/final/weekday_weekend_consumption.png)
 
 Interpretasi: konsumsi weekday lebih tinggi dibanding weekend, konsisten dengan dugaan bahwa aktivitas operasional kampus lebih padat pada hari kerja. Namun, selisih ini bersifat deskriptif dan belum memasukkan jadwal operasional aktual.
 
 ### 4.6 Kontribusi Meter dan Pola Pareto
 
-Analisis kontribusi menunjukkan bahwa konsumsi selected meters terkonsentrasi pada sejumlah kecil meter. Top 5 entity menyumbang sekitar 68,79% dari total konsumsi selected meters. Meter D0849 menjadi kontributor terbesar dengan kontribusi sekitar 20,62%. Placeholder berikut dapat diisi menggunakan visual sumber `outputs/eda/final/top_meter_contribution_pareto.png`.
+Analisis kontribusi menunjukkan bahwa konsumsi meter terpilih terkonsentrasi pada sejumlah kecil meter. Top 5 entity menyumbang sekitar 68,79% dari total konsumsi meter terpilih. Meter D0849 menjadi kontributor terbesar dengan kontribusi sekitar 20,62%. Pola ini penting karena prioritas efisiensi energi sering kali lebih efektif jika dimulai dari entity dengan kontribusi besar, selama interpretasinya tetap mempertimbangkan fungsi operasional meter tersebut.
 
-![Placeholder kontribusi meter dan Pareto](assets/laporan/gambar_11_kontribusi_meter_pareto.png)
+![Kontribusi meter dan pola Pareto](outputs/eda/final/top_meter_contribution_pareto.png)
 
 | Peringkat | Entity | Total Konsumsi | Kontribusi | Balanced Anomaly Count | Priority Score |
 |---:|---|---:|---:|---:|---:|
@@ -439,21 +456,21 @@ Analisis kontribusi menunjukkan bahwa konsumsi selected meters terkonsentrasi pa
 | 4 | D0853 | 1.774.050 | 12,96% | 8 | 43,07 |
 | 5 | D0862 | 898.620 | 6,57% | 2 | 17,75 |
 
-Interpretasi: meter dengan kontribusi tinggi perlu menjadi prioritas monitoring, tetapi kontribusi tinggi tidak otomatis berarti tidak efisien. Kontribusi harus dibaca bersama anomaly rate, peak consumption, fungsi equipment, dan kualitas data.
+Interpretasi: meter dengan kontribusi tinggi perlu menjadi prioritas monitoring, tetapi kontribusi tinggi tidak otomatis berarti tidak efisien. Kontribusi harus dibaca bersama anomaly rate, peak consumption, fungsi equipment, dan kualitas data. Dalam konteks laporan ini, D0849 menjadi perhatian utama bukan hanya karena konsumsi totalnya tinggi, tetapi juga karena jumlah kandidat anomali pada skenario balanced jauh lebih besar dibanding entity lain.
 
 ### 4.7 Konteks Cuaca terhadap Konsumsi
 
-Korelasi sederhana antara total konsumsi harian dan mean temperature adalah 0,236087. Korelasi dengan rainfall adalah 0,138492. Nilai ini menunjukkan hubungan yang lemah sampai sedang, sehingga cuaca lebih tepat digunakan sebagai konteks daripada bukti kausal tunggal. Placeholder berikut dapat diisi menggunakan visual sumber `outputs/eda/final/weather_consumption_context.png`.
+Korelasi sederhana antara total konsumsi harian dan mean temperature adalah 0,236087. Korelasi dengan rainfall adalah 0,138492. Nilai ini menunjukkan hubungan yang lemah sampai sedang, sehingga cuaca lebih tepat digunakan sebagai konteks daripada bukti kausal tunggal. Korelasi sederhana juga belum memperhitungkan jadwal akademik, okupansi, jenis ruang, dan karakteristik equipment, sehingga hasilnya tidak boleh dibaca sebagai pengaruh cuaca secara langsung.
 
-![Placeholder konteks cuaca terhadap konsumsi](assets/laporan/gambar_12_konteks_cuaca_konsumsi.png)
+![Konteks cuaca terhadap konsumsi](outputs/eda/final/weather_consumption_context.png)
 
-Interpretasi: suhu dan hujan dapat membantu membaca kondisi hari tertentu, terutama ketika suatu tanggal terdeteksi sebagai kandidat anomali. Namun, konsumsi gedung juga dipengaruhi jadwal penggunaan ruang, peralatan, dan operasi internal yang tidak tersedia dalam dataset.
+Interpretasi: suhu dan hujan dapat membantu membaca kondisi hari tertentu, terutama ketika suatu tanggal terdeteksi sebagai kandidat anomali. Namun, konsumsi gedung juga dipengaruhi jadwal penggunaan ruang, peralatan, dan operasi internal yang tidak tersedia dalam dataset. Karena itu, dashboard menempatkan cuaca sebagai filter, tooltip, dan konteks pendukung, bukan sebagai variabel untuk menyimpulkan penyebab tunggal.
 
 ### 4.8 Eksplorasi Kualitas Data
 
-Visual kualitas data memperlihatkan quality flag pada level meter dan baris fact. Meter yang tidak dipakai dalam model utama tetap dicatat agar batas analisis transparan. Placeholder berikut dapat diisi menggunakan visual sumber `outputs/eda/final/data_quality_flags.png`.
+Visual kualitas data memperlihatkan quality flag pada level meter dan baris fact. Meter yang tidak dipakai dalam model utama tetap dicatat agar batas analisis transparan. Bagian ini penting karena tanpa kualitas data yang jelas, ranking konsumsi dan hasil model dapat menyesatkan: meter nol konstan, near-zero, atau short coverage tidak boleh diperlakukan sama dengan meter aktif yang memiliki cakupan memadai.
 
-![Placeholder kualitas data](assets/laporan/gambar_13_kualitas_data.png)
+![Kualitas data meter dan observasi](outputs/eda/final/data_quality_flags.png)
 
 | Quality Flag | Jumlah Meter | Perlakuan |
 |---|---:|---|
@@ -462,7 +479,7 @@ Visual kualitas data memperlihatkan quality flag pada level meter dan baris fact
 | short_coverage | 1 | Tidak digunakan dalam model utama |
 | zero_constant | 4 | Tidak digunakan dalam model utama |
 
-Pada baris fact utama terdapat 72 baris dengan isu kualitas karena imputasi cuaca. Baris tersebut tetap dapat digunakan dengan field model-safe, tetapi perlu ditampilkan pada halaman metodologi dashboard.
+Pada baris fact utama terdapat 72 baris dengan isu kualitas karena imputasi cuaca. Baris tersebut tetap dapat digunakan dengan field model-safe, tetapi perlu ditampilkan pada halaman metodologi dashboard. Transparansi ini membantu pengguna memahami bahwa sebagian kecil konteks cuaca telah melalui treatment, bukan berasal langsung dari nilai observasi mentah.
 
 ### 4.9 Ringkasan Temuan Eksploratif
 
@@ -474,6 +491,8 @@ Pada baris fact utama terdapat 72 baris dengan isu kualitas karena imputasi cuac
 | Kontribusi meter | Top 5 menyumbang sekitar 68,79% | Audit perlu memperhatikan bias kontribusi |
 | Cuaca | Korelasi sederhana lemah sampai sedang | Cuaca digunakan sebagai konteks |
 | Kualitas data | Meter bermasalah sudah ditandai | Dashboard perlu halaman metodologi |
+
+Secara keseluruhan, tahap Explore menunjukkan bahwa pola konsumsi meter terpilih cukup stabil untuk dianalisis, tetapi prioritas interpretasi tidak boleh hanya mengandalkan nilai total. Kombinasi kontribusi meter, perbedaan kalender, konteks cuaca, dan kualitas data menjadi dasar yang lebih kuat untuk membaca hasil Isolation Forest pada tahap berikutnya.
 
 ### 4.10 Kesiapan Visual untuk Dashboard
 
@@ -493,11 +512,11 @@ Visual EDA yang sudah tersedia dapat dipetakan langsung ke halaman dashboard Vit
 
 ### 5.1 Tujuan Tahap Model
 
-Tahap Model bertujuan mendeteksi kandidat anomali konsumsi energi harian pada selected meters. Karena dataset tidak menyediakan label anomali resmi, pendekatan yang digunakan adalah unsupervised anomaly detection.
+Tahap Model bertujuan mendeteksi kandidat anomali konsumsi energi harian pada meter terpilih. Karena dataset tidak menyediakan label anomali resmi, pendekatan yang digunakan adalah unsupervised anomaly detection. Model dirancang untuk menghasilkan daftar observasi yang layak ditinjau lebih lanjut, bukan untuk menetapkan diagnosis operasional secara final.
 
 ### 5.2 Formulasi Masalah
 
-Masalah dimodelkan sebagai deteksi observasi yang tidak biasa pada kombinasi tanggal dan entity. Satu observasi dianggap kandidat anomali jika pola konsumsi dan fitur pendukungnya berbeda dari pola mayoritas observasi.
+Masalah dimodelkan sebagai deteksi observasi yang tidak biasa pada kombinasi tanggal dan entity. Satu observasi dianggap kandidat anomali jika pola konsumsi dan fitur pendukungnya berbeda dari pola mayoritas observasi. Dengan grain `date x entity_id`, model dapat menangkap penyimpangan pada masing-masing meter, bukan hanya perubahan total konsumsi gabungan.
 
 | Elemen | Definisi |
 |---|---|
@@ -509,9 +528,9 @@ Masalah dimodelkan sebagai deteksi observasi yang tidak biasa pada kombinasi tan
 
 ### 5.3 Alasan Menggunakan Unsupervised Anomaly Detection
 
-Supervised classification tidak digunakan karena tidak ada label historis yang menyatakan suatu observasi benar-benar normal atau anomali. Isolation Forest dipilih karena dapat mendeteksi observasi yang relatif mudah diisolasi dari mayoritas data tanpa label.
+Supervised classification tidak digunakan karena tidak ada label historis yang menyatakan suatu observasi benar-benar normal atau anomali. Isolation Forest dipilih karena dapat mendeteksi observasi yang relatif mudah diisolasi dari mayoritas data tanpa label. Metode ini sesuai untuk tahap penyaringan awal karena tidak membutuhkan definisi manual anomali sejak awal, tetapi tetap menghasilkan skor yang dapat diurutkan dan ditelusuri.
 
-Model ini cocok untuk tujuan screening awal, yaitu menghasilkan daftar kandidat yang perlu ditinjau oleh pengelola gedung atau analis, bukan untuk membuat diagnosis teknis final.
+Model ini cocok untuk tujuan penyaringan awal, yaitu menghasilkan daftar kandidat yang perlu ditinjau oleh pengelola gedung atau analis. Dalam konteks energi gedung, hasil model perlu dipadukan dengan informasi lapangan seperti jadwal penggunaan ruang, perawatan equipment, dan aktivitas khusus sebelum dijadikan dasar tindakan operasional.
 
 ### 5.4 Baseline Statistik: IQR dan Z-score
 
@@ -520,11 +539,11 @@ Baseline statistik digunakan agar hasil Isolation Forest tidak berdiri sendiri. 
 1. IQR anomaly flag, yaitu observasi di luar batas bawah atau atas berdasarkan kuartil per entity.
 2. Z-score anomaly flag, yaitu observasi dengan nilai absolut Z-score minimal 3 pada konsumsi harian per entity.
 
-Baseline ini membantu mengukur apakah kandidat model juga ekstrem secara statistik. Namun, baseline sederhana tidak selalu menangkap anomali multivariat karena hanya berfokus pada konsumsi.
+Baseline ini membantu mengukur apakah kandidat model juga ekstrem secara statistik. Namun, baseline sederhana tidak selalu menangkap anomali multivariat karena hanya berfokus pada konsumsi. Jika sebuah observasi ditandai oleh Isolation Forest tetapi tidak oleh IQR atau Z-score, observasi tersebut tetap dapat relevan apabila pola rolling, kalender, atau konteks cuacanya berbeda dari mayoritas data.
 
 ### 5.5 Feature Set Model
 
-Feature set model menggabungkan konsumsi, rolling pattern, lag, kalender, dan cuaca.
+Feature set model menggabungkan konsumsi, rolling pattern, lag, kalender, dan cuaca. Kombinasi fitur ini dipilih agar model tidak hanya membaca nilai konsumsi absolut, tetapi juga perubahan terhadap pola terbaru, perbedaan terhadap konsumsi sebelumnya, serta kondisi hari saat observasi terjadi.
 
 | Kelompok | Fitur |
 |---|---|
@@ -535,11 +554,11 @@ Feature set model menggabungkan konsumsi, rolling pattern, lag, kalender, dan cu
 | Cuaca | `mean_temperature_c`, `relative_humidity_pct`, `rainfall_mm_model`, `global_solar_radiation_mj_m2_model`, `mean_wind_speed_kmh` |
 | Cuaca turunan | `cooling_degree_day_24c`, `is_rainy_day`, `is_hot_day_28c` |
 
-Jumlah baris yang feature-complete untuk pemodelan adalah 10.420.
+Jumlah baris yang feature-complete untuk pemodelan adalah 10.420. Baris yang tidak feature-complete tidak dipaksakan masuk model karena dapat menurunkan kualitas pembacaan anomaly score.
 
 ### 5.6 Isolation Forest
 
-Isolation Forest dijalankan pada fitur numerik yang telah distandarkan. Model menggunakan parameter dasar:
+Isolation Forest dijalankan pada fitur numerik yang telah distandarkan. Standardisasi dilakukan agar fitur dengan skala besar tidak mendominasi fitur lain. Model menggunakan parameter dasar:
 
 | Parameter | Nilai |
 |---|---|
@@ -549,15 +568,15 @@ Isolation Forest dijalankan pada fitur numerik yang telah distandarkan. Model me
 | random_state | 42 |
 | contamination | Bergantung skenario |
 
-Skor anomali diorientasikan agar nilai yang lebih tinggi berarti lebih anomali. Output disimpan dalam `fact_anomaly_scenarios.csv`.
+Skor anomali diorientasikan agar nilai yang lebih tinggi berarti lebih anomali. Output disimpan dalam `fact_anomaly_scenarios.csv`, sehingga hasil model dapat digunakan ulang oleh notebook, laporan, dan dashboard tanpa menjalankan model langsung di frontend.
 
-![Placeholder alur pemodelan Isolation Forest](assets/laporan/gambar_14_alur_model_isolation_forest.png)
+![Alur pemodelan Isolation Forest](assets/laporan/gambar_14_alur_model_isolation_forest.png)
 
-*Gambar 14. Placeholder alur pemodelan dari feature set, standardisasi, Isolation Forest, hingga anomaly score dan anomaly flag.*
+*Gambar 14. Alur pemodelan dari feature set, standardisasi, Isolation Forest, hingga anomaly score dan anomaly flag.*
 
 ### 5.7 Skenario Model
 
-Tiga skenario digunakan agar pengguna dapat membandingkan sensitivitas model.
+Tiga skenario digunakan agar pengguna dapat membandingkan sensitivitas model. Perbedaan contamination tidak dimaksudkan untuk mencari satu jawaban absolut, tetapi untuk memberi beberapa tingkat prioritas investigasi.
 
 | Scenario | Contamination | Tujuan | Anomaly Count | Anomaly Rate |
 |---|---:|---|---:|---:|
@@ -565,7 +584,7 @@ Tiga skenario digunakan agar pengguna dapat membandingkan sensitivitas model.
 | balanced | 0,05 | Default untuk dashboard dan presentasi | 521 | 0,050000 |
 | sensitive | 0,10 | Menandai kandidat lebih luas | 1.042 | 0,100000 |
 
-Skenario balanced dipakai sebagai default karena menghasilkan kandidat anomali yang cukup representatif tanpa terlalu banyak menandai observasi.
+Skenario balanced dipakai sebagai default karena menghasilkan kandidat anomali yang cukup representatif tanpa terlalu banyak menandai observasi. Skenario strict berguna untuk melihat kasus paling ekstrem, sedangkan sensitive berguna untuk eksplorasi awal jika pengguna ingin daftar kandidat yang lebih luas.
 
 ### 5.8 Evaluasi Tanpa Label Ground Truth
 
@@ -583,19 +602,19 @@ Karena tidak tersedia label anomali resmi, evaluasi dilakukan melalui beberapa p
 | balanced | 10.420 | 521 | 10 | 6 | 313 |
 | sensitive | 10.420 | 1.042 | 24 | 12 | 313 |
 
-Nilai agreement dengan baseline relatif kecil. Hal ini wajar karena Isolation Forest menggunakan fitur multivariat, sedangkan IQR dan Z-score hanya membaca ekstremitas konsumsi per entity. Dengan demikian, kandidat anomali dapat muncul karena kombinasi pola konsumsi, rolling deviation, kalender, dan cuaca, bukan hanya nilai konsumsi absolut.
+Nilai agreement dengan baseline relatif kecil. Hal ini wajar karena Isolation Forest menggunakan fitur multivariat, sedangkan IQR dan Z-score hanya membaca ekstremitas konsumsi per entity. Dengan demikian, kandidat anomali dapat muncul karena kombinasi pola konsumsi, rolling deviation, kalender, dan cuaca, bukan hanya nilai konsumsi absolut. Agreement yang rendah tidak otomatis berarti model buruk; sebaliknya, hal tersebut menunjukkan bahwa model menangkap jenis penyimpangan yang lebih luas daripada baseline satu variabel.
 
-![Placeholder evaluasi skenario model](assets/laporan/gambar_15_evaluasi_skenario_model.png)
+![Evaluasi skenario model](assets/laporan/gambar_15_evaluasi_skenario_model.png)
 
-*Gambar 15. Placeholder ringkasan evaluasi strict, balanced, dan sensitive, termasuk anomaly count dan baseline agreement.*
+*Gambar 15. Ringkasan evaluasi strict, balanced, dan sensitive, termasuk anomaly count dan baseline agreement.*
 
 ### 5.9 Anomaly Case Review
 
-Anomaly case review berisi 20 kandidat teratas dari skenario balanced. Visual berikut menunjukkan deviasi kandidat anomali terhadap rolling mean terbaru. Placeholder berikut dapat diisi menggunakan visual sumber `outputs/eda/final/anomaly_case_review.png`.
+Anomaly case review berisi 20 kandidat teratas dari skenario balanced. Visual berikut menunjukkan deviasi kandidat anomali terhadap rolling mean terbaru. Case review digunakan untuk memastikan hasil model dapat dijelaskan secara naratif, bukan hanya berupa flag dan skor.
 
-![Placeholder anomaly case review](assets/laporan/gambar_16_anomaly_case_review.png)
+![Anomaly case review](outputs/eda/final/anomaly_case_review.png)
 
-Interpretasi utama: kandidat anomali yang kuat perlu dibaca berdasarkan deviasi dari pola terbaru, stabilitas lintas skenario, dan konteks cuaca. Kandidat yang muncul pada strict, balanced, dan sensitive lebih layak diprioritaskan dibanding kandidat yang hanya muncul pada sensitive.
+Interpretasi utama: kandidat anomali yang kuat perlu dibaca berdasarkan deviasi dari pola terbaru, stabilitas lintas skenario, dan konteks cuaca. Kandidat yang muncul pada strict, balanced, dan sensitive lebih layak diprioritaskan dibanding kandidat yang hanya muncul pada sensitive. Selain itu, kandidat pada entity dengan kontribusi konsumsi tinggi dapat diberi prioritas lebih tinggi karena potensi dampaknya lebih besar.
 
 ### 5.10 Entity Scorecard
 
@@ -609,11 +628,11 @@ Entity scorecard menggabungkan total konsumsi, anomaly rate, peak load, dan kual
 | D0853 | 1.774.050 | 8 | 0,009122 | 4 |
 | D0862 | 898.620 | 2 | 0,002281 | 5 |
 
-Scorecard ini bukan diagnosis teknis, melainkan daftar prioritas screening awal untuk membantu pengguna memilih entity yang perlu ditinjau lebih dulu.
+Scorecard ini bukan diagnosis teknis, melainkan daftar prioritas penyaringan awal untuk membantu pengguna memilih entity yang perlu ditinjau lebih dulu. D0849 berada pada prioritas tertinggi karena menggabungkan konsumsi besar, anomaly count tinggi, dan priority score maksimum pada subset yang dianalisis.
 
-![Placeholder entity scorecard](assets/laporan/gambar_17_entity_scorecard_prioritas_audit.png)
+![Entity scorecard prioritas audit](assets/laporan/gambar_17_entity_scorecard_prioritas_audit.png)
 
-*Gambar 17. Placeholder visual ranking entity scorecard untuk prioritas audit energi.*
+*Gambar 17. Visual ranking entity scorecard untuk prioritas audit energi.*
 
 ### 5.11 Keterbatasan Model
 
@@ -621,34 +640,40 @@ Keterbatasan model:
 
 1. Tidak ada ground truth, sehingga akurasi supervised tidak dapat dihitung.
 2. Model menghasilkan kandidat anomali, bukan bukti final gangguan operasional.
-3. Hasil model bergantung pada subset T1440 selected meters.
+3. Hasil model bergantung pada subset T1440 meter terpilih.
 4. Fitur cuaca harian tidak menangkap kondisi ruang, jadwal kuliah, atau jam operasional.
 5. Nilai contamination menentukan proporsi kandidat, sehingga interpretasi harus membandingkan skenario.
+
+Dengan keterbatasan tersebut, hasil model paling tepat digunakan sebagai alat bantu prioritisasi. Nilai `anomaly_flag` tidak boleh dibaca sebagai label kebenaran, tetapi sebagai sinyal bahwa observasi tersebut memiliki pola yang cukup berbeda sehingga layak diperiksa lebih lanjut.
 
 ## 6. N - iNterpret
 
 ### 6.1 Tujuan Tahap iNterpret
 
-Tahap iNterpret bertujuan menerjemahkan hasil eksplorasi dan model menjadi insight, rekomendasi, dan rancangan dashboard yang dapat dipahami pengguna non-teknis. Interpretasi harus tetap berbasis bukti dan tidak membuat klaim kausal berlebihan.
+Tahap iNterpret bertujuan menerjemahkan hasil eksplorasi dan model menjadi insight, rekomendasi, dan rancangan dashboard yang dapat dipahami pengguna non-teknis. Interpretasi harus tetap berbasis bukti dan tidak membuat klaim kausal berlebihan. Pada tahap ini, angka dan visual diubah menjadi narasi keputusan: apa yang perlu dipantau, entity mana yang perlu diprioritaskan, dan batas apa saja yang harus diketahui sebelum hasil digunakan.
 
 ### 6.2 Prinsip Interpretasi
 
 Prinsip interpretasi yang digunakan:
 
-1. Menjelaskan hasil sebagai screening kandidat, bukan keputusan final.
+1. Menjelaskan hasil sebagai penyaringan kandidat, bukan keputusan final.
 2. Memisahkan konsumsi tinggi, anomali, dan efisiensi.
 3. Membaca hasil model bersama konteks waktu, cuaca, dan kualitas data.
-4. Menyatakan batasan subset selected meters secara eksplisit.
+4. Menyatakan batasan subset meter terpilih secara eksplisit.
 5. Mengarahkan rekomendasi kepada pengguna yang tepat.
+
+Prinsip tersebut menjaga agar laporan tidak menyamakan tiga hal yang berbeda: konsumsi tinggi, anomali model, dan pemborosan energi. Konsumsi tinggi dapat normal apabila entity memang melayani beban besar; sebaliknya, konsumsi yang tidak terlalu tinggi tetap dapat menjadi anomali jika menyimpang dari pola historisnya.
 
 ### 6.3 Insight Utama
 
 | No | Insight | Bukti | Implikasi |
 |---:|---|---|---|
-| 1 | Konsumsi selected meters terkonsentrasi pada sedikit entity | Top 5 entity menyumbang 68,79% konsumsi | Prioritas audit sebaiknya dimulai dari entity kontribusi tinggi |
+| 1 | Konsumsi meter terpilih terkonsentrasi pada sedikit entity | Top 5 entity menyumbang 68,79% konsumsi | Prioritas audit sebaiknya dimulai dari entity kontribusi tinggi |
 | 2 | Weekday memiliki konsumsi rata-rata lebih tinggi daripada weekend | Selisih weekday-weekend sebesar 169,973 | Perlu filter kalender untuk membaca pola operasional |
 | 3 | Skenario balanced menghasilkan kandidat anomali sesuai parameter 5% | 521 anomali dari 10.420 eligible rows | Balanced layak menjadi skenario default dashboard |
 | 4 | Cuaca berguna sebagai konteks, tetapi korelasi sederhana tidak cukup untuk klaim kausal | Korelasi suhu 0,236087 dan rainfall 0,138492 | Cuaca ditampilkan sebagai filter dan tooltip pendukung |
+
+Keempat insight tersebut saling melengkapi. Insight kontribusi membantu menentukan prioritas awal, insight weekday/weekend membantu membaca pola operasional, insight skenario model membantu menentukan konfigurasi dashboard, dan insight cuaca menjaga agar pembacaan anomali tetap kontekstual. Dengan demikian, hasil analisis tidak berhenti pada daftar angka, tetapi mengarah pada mekanisme monitoring yang dapat digunakan secara praktis.
 
 ### 6.4 Rekomendasi Prioritas
 
@@ -657,12 +682,14 @@ Prinsip interpretasi yang digunakan:
 | 1 | Mulai audit dari entity prioritas tertinggi, terutama D0849 | Pengelola gedung | P0 | D0849 memiliki kontribusi dan anomaly count tertinggi |
 | 2 | Gunakan skenario balanced sebagai default dashboard | Data analyst dan pengelola dashboard | P0 | Balanced menghasilkan anomaly rate 5% sesuai desain |
 | 3 | Pertahankan halaman data quality agar batasan data transparan | Tim data | P0 | Meter excluded dan weather-imputed rows sudah dipisahkan |
-| 4 | Prioritaskan kandidat yang stabil lintas skenario atau didukung baseline | Manajemen kampus | P1 | Stabilitas skenario meningkatkan keyakinan screening |
+| 4 | Prioritaskan kandidat yang stabil lintas skenario atau didukung baseline | Manajemen kampus | P1 | Stabilitas skenario meningkatkan keyakinan penyaringan awal |
 | 5 | Gunakan cuaca sebagai konteks pembacaan, bukan penyebab tunggal | Tim sustainability | P1 | Korelasi cuaca sederhana masih terbatas |
+
+Rekomendasi P0 diarahkan pada hal yang perlu tersedia sebelum dashboard digunakan sebagai bahan presentasi atau monitoring rutin: prioritas entity, skenario default, dan transparansi kualitas data. Rekomendasi P1 diarahkan pada peningkatan kualitas interpretasi agar pengguna tidak hanya melihat banyaknya flag, tetapi juga mempertimbangkan stabilitas skenario, baseline, dan konteks lingkungan.
 
 ### 6.5 Arsitektur Dashboard Vite React
 
-Target visualisasi final terbaru adalah dashboard Vite React di folder `web/`. Dashboard ini tidak membaca CSV secara langsung di browser, tetapi menggunakan JSON statis yang dibangun dari output CSV final.
+Target visualisasi final terbaru adalah dashboard Vite React di folder `web/`. Dashboard ini tidak membaca CSV secara langsung di browser, tetapi menggunakan JSON statis yang dibangun dari output CSV final. Pendekatan ini membuat dashboard lebih ringan, lebih mudah dipublish sebagai static site, dan tetap menjaga CSV processed sebagai sumber analitis kanonik.
 
 | Komponen | Peran |
 |---|---|
@@ -690,9 +717,9 @@ JSON yang digunakan dashboard adalah:
 | `eda_summary.json` | Ringkasan hasil eksplorasi |
 | `insight_recommendation_matrix.json` | Insight dan rekomendasi |
 
-![Placeholder arsitektur dashboard Vite React](assets/laporan/gambar_18_arsitektur_dashboard_vite_react.png)
+![Arsitektur dashboard Vite React](assets/laporan/gambar_18_arsitektur_dashboard_vite_react.png)
 
-*Gambar 18. Placeholder alur CSV processed, packaging JSON, Vite React dashboard, dan deployment Vercel.*
+*Gambar 18. Alur CSV processed, packaging JSON, Vite React dashboard, dan deployment Vercel.*
 
 ### 6.6 Halaman Dashboard Vite React
 
@@ -716,17 +743,19 @@ Global filter yang disediakan dashboard:
 7. Weather.
 8. Data quality flag.
 
-![Placeholder dashboard executive overview](assets/laporan/gambar_19_dashboard_executive_overview.png)
+Setiap halaman dashboard dirancang untuk menjawab kebutuhan pembacaan yang berbeda. Executive Overview memberi ringkasan, Consumption Trend menjelaskan pola waktu, Anomaly Explorer menelusuri kandidat model, Weather Impact memberi konteks cuaca, Meter Ranking membantu prioritas audit, dan Data Quality and Methodology menjelaskan batas data serta metode.
 
-*Gambar 19. Placeholder screenshot halaman Executive Overview pada dashboard Vite React.*
+![Dashboard executive overview](assets/laporan/gambar_19_dashboard_executive_overview.png)
 
-![Placeholder dashboard anomaly explorer](assets/laporan/gambar_20_dashboard_anomaly_explorer.png)
+*Gambar 19. Screenshot halaman Executive Overview pada dashboard Vite React.*
 
-*Gambar 20. Placeholder screenshot halaman Anomaly Explorer pada dashboard Vite React.*
+![Dashboard anomaly explorer](assets/laporan/gambar_20_dashboard_anomaly_explorer.png)
 
-![Placeholder dashboard data quality methodology](assets/laporan/gambar_21_dashboard_data_quality_methodology.png)
+*Gambar 20. Screenshot halaman Anomaly Explorer pada dashboard Vite React.*
 
-*Gambar 21. Placeholder screenshot halaman Data Quality and Methodology pada dashboard Vite React.*
+![Dashboard data quality methodology](assets/laporan/gambar_21_dashboard_data_quality_methodology.png)
+
+*Gambar 21. Screenshot halaman Data Quality and Methodology pada dashboard Vite React.*
 
 ### 6.7 Runbook dan Validasi Dashboard
 
@@ -771,6 +800,8 @@ Validasi yang sudah dicatat pada cache proyek:
 6. Browser verification pada desktop dan mobile viewport.
 7. Enam halaman dashboard dapat dinavigasi tanpa console warning/error.
 
+Validasi tersebut menunjukkan bahwa dashboard sudah dapat dibangun dan diuji secara lokal. Namun, validasi produksi tetap perlu dilakukan setelah deployment Vercel berhasil, terutama untuk memastikan seluruh data statis termuat, filter bekerja, dan layout tidak mengalami overflow pada viewport target.
+
 ### 6.8 Batasan Interpretasi
 
 Batasan interpretasi:
@@ -782,6 +813,8 @@ Batasan interpretasi:
 5. Dashboard bersifat statis dan memakai prebuilt JSON; model tidak dilatih ulang di browser.
 6. Production deploy ke Vercel belum dilakukan dari CLI karena token lokal tidak valid.
 
+Batasan ini perlu disampaikan dalam presentasi akhir agar pengguna memahami perbedaan antara hasil analitik, prototype dashboard, dan implementasi monitoring produksi. Laporan ini telah menyiapkan fondasi analitik dan visual, tetapi keputusan operasional tetap membutuhkan validasi lapangan.
+
 ### 6.9 Tindak Lanjut
 
 Tindak lanjut yang direkomendasikan:
@@ -792,17 +825,19 @@ Tindak lanjut yang direkomendasikan:
 4. Lakukan review manual terhadap kandidat anomali utama, terutama D0849.
 5. Perluas analisis ke interval lebih kecil atau lebih banyak meter jika ingin membuat klaim kampus yang lebih luas.
 
+Urutan tindak lanjut tersebut disusun dari kebutuhan paling dekat dengan penyelesaian tugas besar menuju pengembangan analitik lanjutan. Deployment dan validasi screenshot mendukung presentasi akhir, sedangkan review D0849 dan perluasan data mendukung pengembangan analisis setelah tugas besar selesai.
+
 ## 7. Kesimpulan dan Rekomendasi
 
 ### 7.1 Kesimpulan
 
-Analisis ini berhasil membentuk pipeline OSEMN untuk studi konsumsi energi berbasis smart meter HKUST dan data cuaca HKO. Data harian T1440 dipilih karena sesuai dengan granularitas data cuaca harian. Dari 26 meter inventory, 12 meter aktif pada konteks `Cheng_Yu_Tung_Building` digunakan sebagai subset utama.
+Analisis ini berhasil membentuk pipeline OSEMN untuk studi konsumsi energi berbasis smart meter HKUST dan data cuaca HKO. Data harian T1440 dipilih karena sesuai dengan granularitas data cuaca harian dan mendukung pembacaan yang lebih mudah dipahami oleh pengguna manajerial. Dari 26 meter inventory, 12 meter aktif pada konteks `Cheng_Yu_Tung_Building` digunakan sebagai subset utama.
 
 Tahap Scrub menghasilkan fact table `date x entity_id` sebanyak 10.524 baris. Feature engineering menghasilkan 10.420 baris lengkap untuk model. Tahap Explore menunjukkan konsumsi yang relatif stabil, weekday lebih tinggi daripada weekend, top 5 meter menyumbang sekitar 68,79% konsumsi, dan cuaca lebih tepat dibaca sebagai konteks.
 
-Tahap Model menggunakan Isolation Forest dengan tiga skenario. Skenario balanced menghasilkan 521 kandidat anomali atau 5% dari 10.420 baris eligible. Entity D0849 menjadi prioritas utama berdasarkan kontribusi konsumsi, anomaly count, peak load, dan priority score.
+Tahap Model menggunakan Isolation Forest dengan tiga skenario. Skenario balanced menghasilkan 521 kandidat anomali atau 5% dari 10.420 baris eligible. Entity D0849 menjadi prioritas utama berdasarkan kontribusi konsumsi, anomaly count, peak load, dan priority score. Karena tidak tersedia ground truth, hasil model harus dibaca sebagai kandidat investigasi, bukan label final.
 
-Tahap iNterpret menghasilkan insight dan rekomendasi yang digunakan pada dashboard Vite React. Dashboard membaca JSON statis dari `web/public/data`, sementara CSV processed tetap menjadi sumber analitis kanonik.
+Tahap iNterpret menghasilkan insight dan rekomendasi yang digunakan pada dashboard Vite React. Dashboard membaca JSON statis dari `web/public/data`, sementara CSV processed tetap menjadi sumber analitis kanonik. Secara keseluruhan, laporan ini menunjukkan bahwa pipeline data, evidence table, output model, dan dashboard dapat disusun secara konsisten untuk mendukung monitoring energi berbasis data.
 
 ### 7.2 Rekomendasi Akhir
 
@@ -811,6 +846,8 @@ Tahap iNterpret menghasilkan insight dan rekomendasi yang digunakan pada dashboa
 3. Jangan menghapus meter bermasalah dari dokumentasi; tampilkan pada halaman Data Quality agar batasan analisis transparan.
 4. Baca anomali bersama rolling deviation, baseline agreement, cuaca, dan konteks weekday/weekend.
 5. Publish dashboard Vite React ke Vercel, lalu lakukan validasi visual desktop/mobile sebelum digunakan untuk presentasi final.
+
+Rekomendasi tersebut perlu dijalankan secara bertahap. Prioritas pertama adalah memastikan dashboard final dapat diakses dan divalidasi, kemudian menggunakan insight dari dashboard untuk diskusi teknis lebih lanjut dengan pihak yang memahami operasi gedung.
 
 ## 8. Lampiran
 
@@ -847,9 +884,9 @@ Tahap iNterpret menghasilkan insight dan rekomendasi yang digunakan pada dashboa
 | `outputs/eda/final/data_quality_flags.png` | Ringkasan quality flag |
 | `outputs/eda/final/anomaly_case_review.png` | Review kandidat anomali utama |
 
-### 8.3 Daftar Placeholder Gambar Manual
+### 8.3 Daftar Kebutuhan Gambar Manual
 
-| Placeholder | Isi yang Disarankan |
+| File Gambar | Isi yang Disarankan |
 |---|---|
 | `assets/laporan/gambar_01_alur_osemn_energi_anomali.png` | Diagram alur OSEMN proyek |
 | `assets/laporan/gambar_02_sumber_data_hkust_hko.png` | Ringkasan sumber data HKUST dan HKO |
