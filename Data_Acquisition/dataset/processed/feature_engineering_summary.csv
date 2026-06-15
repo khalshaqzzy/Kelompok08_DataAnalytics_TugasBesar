@@ -1,0 +1,30 @@
+feature_name,feature_group,non_null_count,missing_count,missing_rate,eligible_non_null_count,intended_use,leakage_risk_note
+log_daily_consumption,consumption_transform,10524,0,0.0,10524,"eda,model,interpretation",none
+consumption_rank_within_entity,consumption_transform,10524,0,0.0,10524,"eda,interpretation",uses full history for descriptive ranking; do not use for model training.
+consumption_percentile_within_entity,consumption_transform,10524,0,0.0,10524,"eda,interpretation",uses full history for descriptive ranking; do not use for model training.
+rolling_mean_7d,rolling_consumption,10488,36,0.0034207525655644243,10488,"model,interpretation",past_only
+rolling_std_7d,rolling_consumption,10468,56,0.005321170657544659,10468,"model,interpretation",past_only
+deviation_from_rolling_mean_7d,rolling_consumption,10488,36,0.0034207525655644243,10488,"model,interpretation",past_only
+pct_deviation_from_rolling_mean_7d,rolling_consumption,10488,36,0.0034207525655644243,10488,"model,interpretation",past_only
+lag_1d_consumption,lag_consumption,10512,12,0.0011402508551881414,10512,"model,interpretation",past_only
+lag_7d_consumption,lag_consumption,10440,84,0.00798175598631699,10440,"model,interpretation",past_only
+diff_from_lag_1d,lag_consumption,10512,12,0.0011402508551881414,10512,"model,interpretation",past_only
+diff_from_lag_7d,lag_consumption,10440,84,0.00798175598631699,10440,"model,interpretation",past_only
+is_month_start,calendar,10524,0,0.0,10524,"dashboard,model",none
+is_month_end,calendar,10524,0,0.0,10524,"dashboard,model",none
+temperature_band,weather_context,10524,0,0.0,10524,"eda,dashboard,interpretation",none
+rainfall_band,weather_context,10524,0,0.0,10524,"eda,dashboard,interpretation",none
+feature_complete_flag,feature_readiness,10524,0,0.0,10524,"model,dashboard",none
+model_feature_set_version,feature_readiness,10524,0,0.0,10524,"model,dashboard",none
+daily_consumption,model_input_existing,10524,0,0.0,10524,model,existing source or calendar/weather field
+is_weekend,model_input_existing,10524,0,0.0,10524,model,existing source or calendar/weather field
+month,model_input_existing,10524,0,0.0,10524,model,existing source or calendar/weather field
+day_of_week_num,model_input_existing,10524,0,0.0,10524,model,existing source or calendar/weather field
+mean_temperature_c,model_input_existing,10524,0,0.0,10524,model,existing source or calendar/weather field
+relative_humidity_pct,model_input_existing,10524,0,0.0,10524,model,existing source or calendar/weather field
+rainfall_mm_model,model_input_existing,10524,0,0.0,10524,model,existing source or calendar/weather field
+global_solar_radiation_mj_m2_model,model_input_existing,10524,0,0.0,10524,model,existing source or calendar/weather field
+mean_wind_speed_kmh,model_input_existing,10524,0,0.0,10524,model,existing source or calendar/weather field
+cooling_degree_day_24c,model_input_existing,10524,0,0.0,10524,model,existing source or calendar/weather field
+is_rainy_day,model_input_existing,10524,0,0.0,10524,model,existing source or calendar/weather field
+is_hot_day_28c,model_input_existing,10524,0,0.0,10524,model,existing source or calendar/weather field

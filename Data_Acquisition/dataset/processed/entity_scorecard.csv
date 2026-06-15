@@ -1,0 +1,13 @@
+entity_id,meter_id,building,floor,room_or_equipment,total_consumption,average_daily_consumption,peak_daily_consumption,model_eligible_days,data_quality_issue_count,entity_contribution_pct,balanced_anomaly_count,sensitive_anomaly_count,strict_anomaly_count,iqr_anomaly_count,zscore_anomaly_count,balanced_anomaly_rate,entity_priority_score,entity_priority_rank
+D0849,D0849,Cheng_Yu_Tung_Building,Cheng_Yu_Tung_Building_UGF,Normal_MVAC_Equipment_Riser_AN0,2822400.0,3218.24401368301,4100.0,877,6,0.20621495819770583,396,621,258,0,0,0.45153933865450396,100.0,1
+D0848,D0848,Cheng_Yu_Tung_Building,Cheng_Yu_Tung_Building_UGF,Normal_Lighting_AN55; Power_Riser_AN5,2053420.0,2341.4139110604333,2870.0,877,6,0.15003044198637083,59,204,22,0,0,0.06727480045610035,52.57,2
+D0854,D0854,Cheng_Yu_Tung_Building,Cheng_Yu_Tung_Building_UGF,Normal_Lab_Equipment_Riser_AN0,1866900.0,2128.7343215507412,2980.0,877,6,0.1364026025578575,12,53,7,0,0,0.013683010262257697,46.15,3
+D0853,D0853,Cheng_Yu_Tung_Building,Unknown,Normal_Non_Fire_Services_Installation_of_Automatic_Changeover_Switch_No_8B_AN0,1774050.0,2022.8620296465222,2810.0,877,6,0.12961863895643425,8,21,6,71,13,0.009122006841505131,43.07,4
+D0862,D0862,Cheng_Yu_Tung_Building,Unknown,Normal_Left_Automatic_Changeover_Switch_AN0,898620.0,1024.6522234891677,1420.0,877,6,0.06565649296188435,2,12,1,11,0,0.002280501710376283,17.75,5
+D0851,D0851,Cheng_Yu_Tung_Building,Unknown,Normal_Fire_Services_Installation_of_Automatic_Changeover_Switch_No_5B_AN0,855730.0,975.7468643101482,1350.0,877,6,0.06252279130474872,2,10,1,2,0,0.002280501710376283,16.52,6
+D0857,D0857,Cheng_Yu_Tung_Building,Cheng_Yu_Tung_Building_UGF,Load_Riser_AN0,877200.0,1000.2280501710376,1220.0,877,6,0.06409146872556248,1,8,0,8,0,0.0011402508551881414,16.07,7
+D0861,D0861,Cheng_Yu_Tung_Building,Cheng_Yu_Tung_Building_RF,Virtual_Stack_Fan_SEAF_R_8_9_10_AN0,760510.0,867.1721778791334,1050.0,877,6,0.055565666758410306,0,4,0,1,1,0.0,12.77,8
+D0852,D0852,Cheng_Yu_Tung_Building,Cheng_Yu_Tung_Building_RF,MVAC_AN0; Plumbing_Drainage_Equipment_AN0,679530.0,774.8346636259977,1240.0,877,6,0.049648969155359636,1,7,0,19,8,0.0011402508551881414,12.46,9
+D0860,D0860,Cheng_Yu_Tung_Building,Cheng_Yu_Tung_Building_RF,Virtual_Stack_Fan_SEAF_R_5_6_7_AN0,607590.0,692.8050171037628,760.0,877,6,0.04439276730844107,0,7,0,21,13,0.0,8.15,10
+D0850,D0850,Cheng_Yu_Tung_Building,Cheng_Yu_Tung_Building_GF,A_C_Plant_AN0,314270.0,358.3466362599772,840.0,877,6,0.02296172580526963,23,65,10,9,6,0.026225769669327253,4.83,11
+D0865,D0865,Cheng_Yu_Tung_Building,Cheng_Yu_Tung_Building_UGF,Essential_Lab_Power_AN0; MVAC_Riser_AN0,176469.0,201.21892816419611,922.0,877,6,0.01289347628195541,17,30,8,199,36,0.019384264538198404,2.26,12

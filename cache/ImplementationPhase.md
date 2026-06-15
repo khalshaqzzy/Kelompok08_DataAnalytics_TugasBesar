@@ -25,6 +25,11 @@ Current scope guard:
 - "Documentation out of scope" pada task ini berarti final academic documentation/reporting artifacts di luar `cache/`; cache planning/handoff files tetap boleh diubah karena menjadi target eksplisit task.
 - PRD tetap diperlakukan sebagai source-of-truth dan tidak diubah kecuali diminta eksplisit.
 
+Implementation update 2026-06-15:
+
+- Scope teknis saat ini mencakup feature engineering readiness, anomaly modelling outputs, formal notebook Model section, processed CSV outputs, dan cache tracker.
+- Final academic report, presentation, slide deck, video/demo, dan README tetap di luar scope.
+
 Aturan wajib:
 
 1. Setiap perubahan penting pada pipeline, dataset, notebook, model, visual, atau output Power BI-ready harus memperbarui dokumen ini.
@@ -61,8 +66,8 @@ Aturan wajib:
 | Default dashboard scenario | `balanced` |
 | Notebook policy | Only one active notebook in `/notebooks` |
 | Old notebook policy | Archive old notebooks to `cache/archive/notebooks` |
-| Current active branch | `feat-powerbi-datamart-foundation` |
-| Current planned commit message | `Build Power BI datamart foundation` |
+| Current active branch | `feat-energy-anomaly-features` |
+| Current planned commit message | `Build energy anomaly feature outputs` |
 | Power BI scope | Manual `.pbix` build plan, CSV datamart, measures, relationships, page checklist |
 | Out of scope for current cache-only alignment task | Script changes, notebook changes, dataset/output regeneration, final academic report/documentation, slide deck, presentation script, video/demo, README |
 
@@ -287,6 +292,7 @@ scripts/
   hkust_t1440.py
   ttl_entity_mapping.py
   build_powerbi_datamart.py
+  feature_engineering.py
   model_anomaly_scenarios.py
   build_final_eda.py
   build_osemn_notebook.py
@@ -300,6 +306,7 @@ Data_Acquisition/
       dim_date.csv
       dim_entity.csv
       dim_scenario.csv
+      feature_engineering_summary.csv
       data_quality_summary.csv
       data_dictionary_energy_dashboard.csv
       model_evaluation_summary.csv
@@ -600,7 +607,7 @@ Acceptance criteria:
 
 ## Phase 3.5 - Feature Engineering Readiness
 
-Status: Not Started
+Status: Done
 
 Goal:
 
@@ -610,11 +617,21 @@ Deliverables:
 
 | Deliverable | Status | Purpose |
 |---|---|---|
-| Feature engineering logic in canonical scripts | Not Started | Generate reusable features outside notebook cells |
-| Updated `fact_energy_weather_daily.csv` feature columns, if needed | Not Started | Add dashboard/model-safe features at the daily entity grain |
-| Feature dictionary rows in `data_dictionary_energy_dashboard.csv` | Not Started | Document formulas, sources, use cases, and limitations |
-| Feature completeness checks | Not Started | Confirm model-eligible rows have complete numeric feature values |
-| Optional `feature_engineering_summary.csv` | Not Started | Summarize engineered feature coverage and missingness |
+| Feature engineering logic in canonical scripts | Done | `scripts/feature_engineering.py` generates reusable features outside notebook cells |
+| Updated `fact_energy_weather_daily.csv` feature columns | Done | Added dashboard/model-safe features at the daily entity grain |
+| Feature dictionary rows in `data_dictionary_energy_dashboard.csv` | Done | Documented formulas, sources, use cases, and limitations |
+| Feature completeness checks | Done | Confirmed 10,420 rows with complete model feature set |
+| `feature_engineering_summary.csv` | Done | Summarizes engineered feature coverage and missingness |
+
+Verified output facts:
+
+| Metric | Value |
+|---|---:|
+| `fact_energy_weather_daily` rows | 10,524 |
+| Duplicate `date + entity_id` after feature update | 0 |
+| Feature-complete rows | 10,420 |
+| `feature_engineering_summary.csv` rows | 29 |
+| Model feature set version | `energy_anomaly_v1` |
 
 Recommended feature groups:
 
@@ -667,7 +684,7 @@ Acceptance criteria:
 
 ## Phase 4 - Anomaly Modelling
 
-Status: Not Started
+Status: Done
 
 Goal:
 
@@ -677,10 +694,23 @@ Deliverables:
 
 | Deliverable | Status |
 |---|---|
-| `Data_Acquisition/dataset/processed/fact_anomaly_scenarios.csv` | Not Started |
-| `Data_Acquisition/dataset/processed/model_evaluation_summary.csv` | Not Started |
-| `Data_Acquisition/dataset/processed/anomaly_case_review.csv` | Not Started |
-| `Data_Acquisition/dataset/processed/entity_scorecard.csv` | Not Started |
+| `Data_Acquisition/dataset/processed/fact_anomaly_scenarios.csv` | Done |
+| `Data_Acquisition/dataset/processed/model_evaluation_summary.csv` | Done |
+| `Data_Acquisition/dataset/processed/anomaly_case_review.csv` | Done |
+| `Data_Acquisition/dataset/processed/entity_scorecard.csv` | Done |
+
+Verified output facts:
+
+| Metric | Value |
+|---|---:|
+| Model-eligible feature-complete rows | 10,420 |
+| `fact_anomaly_scenarios.csv` rows | 31,260 |
+| Duplicate `date + entity_id + scenario` | 0 |
+| Strict anomaly count / rate | 313 / 0.030038 |
+| Balanced anomaly count / rate | 521 / 0.050000 |
+| Sensitive anomaly count / rate | 1,042 / 0.100000 |
+| `anomaly_case_review.csv` rows | 20 |
+| `entity_scorecard.csv` rows | 12 |
 
 Prerequisite:
 
@@ -853,6 +883,7 @@ python scripts\download_hko_open_data.py
 python scripts\hkust_t1440.py
 python scripts\hko_weather.py
 python scripts\build_powerbi_datamart.py
+python scripts\feature_engineering.py
 python scripts\model_anomaly_scenarios.py
 python scripts\build_final_eda.py
 python scripts\build_osemn_notebook.py
@@ -861,7 +892,7 @@ python scripts\build_osemn_notebook.py
 Validation commands:
 
 ```powershell
-python -m py_compile scripts\config.py scripts\io_utils.py scripts\hko_weather.py scripts\hkust_t1440.py scripts\ttl_entity_mapping.py scripts\build_powerbi_datamart.py scripts\model_anomaly_scenarios.py scripts\build_final_eda.py scripts\build_osemn_notebook.py
+python -m py_compile scripts\config.py scripts\io_utils.py scripts\hko_weather.py scripts\hkust_t1440.py scripts\ttl_entity_mapping.py scripts\build_powerbi_datamart.py scripts\feature_engineering.py scripts\model_anomaly_scenarios.py scripts\build_final_eda.py scripts\build_osemn_notebook.py
 ```
 
 Notebook validation:
@@ -921,6 +952,9 @@ Import these tables into Power BI Desktop:
 5. `Data_Acquisition/dataset/processed/dim_scenario.csv`
 6. `Data_Acquisition/dataset/processed/entity_scorecard.csv`
 7. `Data_Acquisition/dataset/processed/data_quality_summary.csv`
+8. `Data_Acquisition/dataset/processed/feature_engineering_summary.csv`
+9. `Data_Acquisition/dataset/processed/model_evaluation_summary.csv`
+10. `Data_Acquisition/dataset/processed/anomaly_case_review.csv`
 
 ## 7.2 Relationships
 
@@ -1214,6 +1248,9 @@ Recommendation-ready targets:
 | 2026-06-14 | Verification | Done | Compile checks passed; notebook executed with 0 error outputs; datamart key checks passed. Fact table has 10,524 rows, 12 entities, no duplicate `date + entity_id`; `dim_entity` has 26 meters; rainfall missing 5 days and solar radiation missing 1 day remain documented. |
 | 2026-06-15 | Cache alignment | Done | Updated cache-only alignment analysis against PRD, roadmap, and grading guide. Added scope guard, rubric-based gap analysis, improvement backlog, notebook policy correction, and out-of-scope notes for final academic documentation, presentation, and video/demo. |
 | 2026-06-15 | Feature engineering planning | Done | Added Phase 3.5 feature engineering readiness with feature families, feature rules, leakage prevention, data dictionary requirements, notebook policy, and acceptance criteria before final anomaly modelling. |
+| 2026-06-15 | Feature engineering implementation | Done | Added `scripts/feature_engineering.py`; generated feature-ready `fact_energy_weather_daily.csv`, `feature_engineering_summary.csv`, and updated data dictionary. Feature-complete model rows: 10,420. |
+| 2026-06-15 | Anomaly modelling implementation | Done | Added `scripts/model_anomaly_scenarios.py`; generated `fact_anomaly_scenarios.csv`, `model_evaluation_summary.csv`, `anomaly_case_review.csv`, and `entity_scorecard.csv`. Strict/balanced/sensitive anomaly rates: 0.030038 / 0.050000 / 0.100000. |
+| 2026-06-15 | Notebook Model section | Done | Updated active notebook with formal M - Model section using generated model outputs only. Notebook execution completed with 0 error outputs and markdown contains no development wording: phase, backlog, development, or plan. |
 
 ---
 
@@ -1225,23 +1262,17 @@ Recommendation-ready targets:
 | 1 | Script Consolidation | Done |
 | 2 | Notebook Unification | Done |
 | 3 | Power BI Datamart | Done |
-| 3.5 | Feature Engineering Readiness | Not Started |
-| 4 | Anomaly Modelling | Not Started |
+| 3.5 | Feature Engineering Readiness | Done |
+| 4 | Anomaly Modelling | Done |
 | 5 | Final EDA and Dashboard Preparation | Not Started |
 | 6 | Verification and Handoff Update | Not Started |
 
 Backlog after this branch:
 
-1. Implement feature engineering readiness before final modelling.
-2. Document engineered feature formulas in the data dictionary.
-3. Validate feature completeness for model-eligible rows.
-4. Build scenario-based Isolation Forest output.
-5. Generate `fact_anomaly_scenarios.csv`.
-6. Generate `model_evaluation_summary.csv`.
-7. Generate `anomaly_case_review.csv`.
-8. Generate `entity_scorecard.csv`.
-9. Generate final EDA plots under `outputs/eda/final`.
-10. Build manual Power BI `.pbix` from final CSV outputs.
-11. Update `notebooks/energy_analytics_osemn.ipynb` after each substantive analysis output.
-12. Expand notebook EDA into a complete report-style section as final EDA outputs become available.
-13. Add formal Model and iNterpret sections to notebook only after the corresponding final outputs exist.
+1. Generate final EDA plots under `outputs/eda/final`.
+2. Build `eda_summary.csv` and interpretation-per-visual support table.
+3. Expand notebook EDA into a complete report-style section after final EDA outputs are available.
+4. Build insight-recommendation matrix after EDA/model evidence is consolidated.
+5. Add formal iNterpret section to notebook only after insight and recommendation evidence exists.
+6. Build manual Power BI `.pbix` from final CSV outputs.
+7. Validate Power BI relationship, DAX, slicer, page, and screenshot checklist.

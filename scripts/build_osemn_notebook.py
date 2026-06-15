@@ -44,9 +44,9 @@ def build_notebook() -> nbf.NotebookNode:
             """
             # Analisis Fondasi Data Energi HKUST dan Cuaca HKO
 
-            Notebook ini menyajikan fondasi analisis data untuk topik konsumsi energi kampus menggunakan smart meter HKUST dan data cuaca Hong Kong Observatory. Struktur notebook mengikuti alur OSEMN pada bagian yang sudah memiliki data final: Obtain, Scrub, dan Explore awal.
+            Notebook ini menyajikan analisis data untuk topik konsumsi energi kampus menggunakan smart meter HKUST dan data cuaca Hong Kong Observatory. Struktur notebook mengikuti alur OSEMN pada bagian yang sudah memiliki data final: Obtain, Scrub, Explore awal, dan Model.
 
-            Fokus analisis saat ini adalah menyiapkan dataset harian T1440 yang bersih, terdokumentasi, memiliki konteks metadata, dan siap digunakan sebagai sumber Power BI. Bagian modelling anomaly detection dan interpretasi akhir tidak disajikan dalam notebook ini karena memerlukan output model final yang terpisah.
+            Fokus analisis saat ini adalah dataset harian T1440 yang bersih, terdokumentasi, memiliki konteks metadata, memiliki fitur turunan untuk analisis, dan menghasilkan deteksi anomali yang siap digunakan sebagai sumber Power BI. Interpretasi rekomendasi akhir tidak disajikan karena membutuhkan matriks insight dan rekomendasi berbasis bukti yang terpisah.
             """
         ),
         md(
@@ -183,6 +183,132 @@ def build_notebook() -> nbf.NotebookNode:
         ),
         md(
             """
+            ## M - Model: Deteksi Anomali Konsumsi Energi
+
+            Tujuan pemodelan adalah menandai observasi tanggal dan meter yang memiliki pola konsumsi tidak biasa dibandingkan riwayat konsumsi entity yang sama serta konteks waktu dan cuaca. Dataset tidak memiliki label resmi normal atau anomali, sehingga pendekatan yang digunakan adalah unsupervised anomaly detection.
+
+            Model utama menggunakan Isolation Forest dengan tiga skenario sensitivitas. Baseline IQR dan Z-score digunakan sebagai pembanding agar hasil model tidak berdiri sendiri.
+            """
+        ),
+        code(
+            """
+            fact_anomaly = pd.read_csv(PROCESSED_DIR / "fact_anomaly_scenarios.csv", parse_dates=["date"])
+            model_eval = pd.read_csv(PROCESSED_DIR / "model_evaluation_summary.csv")
+            case_review = pd.read_csv(PROCESSED_DIR / "anomaly_case_review.csv", parse_dates=["date"])
+            entity_scorecard = pd.read_csv(PROCESSED_DIR / "entity_scorecard.csv")
+            feature_summary = pd.read_csv(PROCESSED_DIR / "feature_engineering_summary.csv")
+
+            model_outputs = pd.DataFrame(
+                [
+                    ["fact_anomaly_scenarios", len(fact_anomaly)],
+                    ["model_evaluation_summary", len(model_eval)],
+                    ["anomaly_case_review", len(case_review)],
+                    ["entity_scorecard", len(entity_scorecard)],
+                    ["feature_engineering_summary", len(feature_summary)],
+                ],
+                columns=["Tabel", "Jumlah baris"],
+            )
+            display(model_outputs)
+            """
+        ),
+        md(
+            """
+            Fitur model menggabungkan konsumsi harian, deviasi rolling 7 hari, lag konsumsi, kalender, dan cuaca model-safe. Kolom kualitas data digunakan untuk filter dan interpretasi, bukan sebagai sinyal utama model.
+            """
+        ),
+        code(
+            """
+            feature_groups = (
+                feature_summary.groupby(["feature_group", "intended_use"], as_index=False)
+                .agg(feature_count=("feature_name", "count"), missing_rate_max=("missing_rate", "max"))
+                .sort_values(["feature_group", "intended_use"])
+            )
+            display(feature_groups)
+            """
+        ),
+        md(
+            """
+            Ringkasan evaluasi berikut menunjukkan jumlah anomali pada masing-masing skenario. Karena tidak ada ground-truth label, evaluasi dibaca melalui kesesuaian jumlah flag dengan parameter contamination, agreement dengan baseline IQR/Z-score, stabilitas antar skenario, dan tinjauan kasus.
+            """
+        ),
+        code(
+            """
+            display(
+                model_eval[
+                    [
+                        "scenario",
+                        "contamination",
+                        "eligible_row_count",
+                        "anomaly_count",
+                        "anomaly_rate",
+                        "iqr_agreement_count",
+                        "zscore_agreement_count",
+                        "both_baseline_agreement_count",
+                    ]
+                ]
+            )
+            """
+        ),
+        md(
+            """
+            Skenario balanced digunakan sebagai skenario default untuk peninjauan dashboard. Tabel berikut menampilkan contoh kandidat anomali dengan skor tertinggi, deviasi dari pola konsumsi terkini, serta konteks cuaca dan baseline.
+            """
+        ),
+        code(
+            """
+            display(
+                case_review[
+                    [
+                        "date",
+                        "entity_id",
+                        "building",
+                        "scenario",
+                        "anomaly_rank_within_scenario",
+                        "daily_consumption",
+                        "pct_deviation_from_rolling_mean_7d",
+                        "mean_temperature_c",
+                        "rainfall_mm_model",
+                        "baseline_agreement_count",
+                        "scenario_anomaly_count",
+                        "consumption_context_label",
+                        "weather_context_label",
+                    ]
+                ].head(10)
+            )
+            """
+        ),
+        md(
+            """
+            Entity scorecard menggabungkan total konsumsi, tingkat anomali pada skenario balanced, konsumsi puncak, dan kualitas data untuk membantu menentukan prioritas audit energi pada level meter terpilih.
+            """
+        ),
+        code(
+            """
+            display(
+                entity_scorecard[
+                    [
+                        "entity_priority_rank",
+                        "entity_id",
+                        "building",
+                        "total_consumption",
+                        "balanced_anomaly_count",
+                        "balanced_anomaly_rate",
+                        "strict_anomaly_count",
+                        "sensitive_anomaly_count",
+                        "entity_contribution_pct",
+                        "entity_priority_score",
+                    ]
+                ].head(12)
+            )
+            """
+        ),
+        md(
+            """
+            Keterbatasan model perlu dibaca secara eksplisit. Model tidak membuktikan penyebab anomali, tidak memiliki label supervised untuk validasi akurasi, dan hanya berlaku pada meter T1440 terpilih. Hasil anomali sebaiknya digunakan sebagai daftar kandidat investigasi, bukan sebagai keputusan operasional tunggal.
+            """
+        ),
+        md(
+            """
             ## Kesiapan Data untuk Power BI
 
             Tabel berikut merupakan dataset yang dapat diimpor ke Power BI Desktop. Relasi utama menghubungkan fact table ke `dim_date`, `dim_entity`, dan `dim_scenario`.
@@ -192,9 +318,14 @@ def build_notebook() -> nbf.NotebookNode:
             """
             outputs = [
                 "fact_energy_weather_daily.csv",
+                "fact_anomaly_scenarios.csv",
                 "dim_date.csv",
                 "dim_entity.csv",
                 "dim_scenario.csv",
+                "feature_engineering_summary.csv",
+                "model_evaluation_summary.csv",
+                "anomaly_case_review.csv",
+                "entity_scorecard.csv",
                 "data_quality_summary.csv",
                 "data_dictionary_energy_dashboard.csv",
             ]

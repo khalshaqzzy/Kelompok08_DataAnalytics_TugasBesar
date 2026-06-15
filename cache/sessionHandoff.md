@@ -2,6 +2,58 @@
 
 Last updated: 2026-06-15, Asia/Jakarta
 
+Update 2026-06-15 - Feature engineering and anomaly evidence outputs:
+
+- Branch kerja aktif: `feat-energy-anomaly-features`.
+- Commit message yang disiapkan: `Build energy anomaly feature outputs`.
+- Scope implementasi terbaru mencakup scripts, processed CSV outputs, notebook aktif, dan cache trackers. Final academic report/documentation, presentation, slide deck, video/demo, dan README tetap di luar scope.
+- Script canonical baru:
+  - `scripts/feature_engineering.py`
+  - `scripts/model_anomaly_scenarios.py`
+- Output feature engineering baru/terbarui:
+  - `Data_Acquisition/dataset/processed/fact_energy_weather_daily.csv`
+  - `Data_Acquisition/dataset/processed/feature_engineering_summary.csv`
+  - `Data_Acquisition/dataset/processed/data_dictionary_energy_dashboard.csv`
+- Output anomaly modelling baru:
+  - `Data_Acquisition/dataset/processed/fact_anomaly_scenarios.csv`
+  - `Data_Acquisition/dataset/processed/model_evaluation_summary.csv`
+  - `Data_Acquisition/dataset/processed/anomaly_case_review.csv`
+  - `Data_Acquisition/dataset/processed/entity_scorecard.csv`
+- Feature set versi: `energy_anomaly_v1`.
+- Feature-complete model rows: 10.420.
+- `fact_anomaly_scenarios.csv`: 31.260 rows, grain `date x entity_id x scenario`, duplicate key 0.
+- Scenario anomaly summary:
+  - `strict`: 313 anomalies, rate 0,030038;
+  - `balanced`: 521 anomalies, rate 0,050000;
+  - `sensitive`: 1.042 anomalies, rate 0,100000.
+- `anomaly_case_review.csv`: 20 rows dari top balanced anomaly candidates.
+- `entity_scorecard.csv`: 12 selected active entities.
+- Notebook aktif `notebooks/energy_analytics_osemn.ipynb` diperbarui dengan bagian formal `M - Model`:
+  - problem formulation unsupervised anomaly detection;
+  - feature groups;
+  - IQR/Z-score baseline;
+  - Isolation Forest scenario summary;
+  - evaluation without labels;
+  - anomaly case review;
+  - entity scorecard;
+  - limitations.
+- Notebook tetap tidak memuat iNterpret final karena insight-recommendation matrix belum dibuat.
+- Validasi yang sudah dilakukan:
+  - compile `scripts/feature_engineering.py`, `scripts/model_anomaly_scenarios.py`, dan `scripts/build_osemn_notebook.py`;
+  - run `python scripts\build_powerbi_datamart.py`;
+  - run `python scripts\feature_engineering.py`;
+  - run `python scripts\model_anomaly_scenarios.py`;
+  - run `python scripts\build_osemn_notebook.py --execute`;
+  - key uniqueness passed for `fact_energy_weather_daily(date, entity_id)` and `fact_anomaly_scenarios(date, entity_id, scenario)`;
+  - notebook executed with 0 error outputs;
+  - notebook markdown checked clean from development wording: `phase`, `backlog`, `development`, `plan`.
+- Backlog berikutnya:
+  - final EDA plots under `outputs/eda/final`;
+  - `eda_summary.csv` and interpretation-per-visual support;
+  - insight-recommendation matrix;
+  - formal iNterpret section in notebook only after evidence exists;
+  - Power BI manual build and validation checklist.
+
 Update 2026-06-15 - Cache-only alignment audit:
 
 - Scope perubahan terakhir dibatasi hanya ke file di `cache/`.
@@ -17,12 +69,8 @@ Update 2026-06-15 - Cache-only alignment audit:
   - final report, presentation, slide deck, video/demo, dan README berada di luar scope kecuali diminta eksplisit;
   - PRD tetap source-of-truth dan tidak diubah pada update ini.
 - Backlog improvement yang harus dipertahankan untuk progress teknis berikutnya:
-  - feature engineering readiness sebelum final modelling;
-  - dokumentasi formula feature di data dictionary;
-  - validasi feature completeness untuk row `is_model_eligible = 1`;
   - final EDA plots dan `eda_summary.csv`;
   - interpretation per visual dan notebook Explore expansion;
-  - scenario-based anomaly modelling, baseline agreement, model evaluation without labels, dan anomaly case review;
   - insight-recommendation matrix dengan evidence, target user, priority, dan limitation;
   - Power BI relationship, DAX, slicer, page, dan screenshot validation checklist.
 - Feature engineering yang perlu dipertimbangkan pada progress teknis berikutnya:
@@ -138,7 +186,7 @@ File ini adalah sumber konteks utama untuk melanjutkan pekerjaan. **Setiap perub
 
 Aturan tambahan:
 
-- Untuk update 2026-06-15, perubahan dibatasi ke `cache/`; jangan mengubah script, notebook, dataset, outputs, final academic documentation/report, presentation, video/demo, atau README kecuali ada instruksi baru yang eksplisit.
+- Update cache-only 2026-06-15 sebelumnya dibatasi ke `cache/`, tetapi implementasi terbaru pada branch `feat-energy-anomaly-features` sudah mencakup scripts, processed CSV outputs, notebook aktif, dan cache trackers sesuai instruksi user berikutnya.
 - Setiap progress implementasi juga wajib memperbarui `cache/ImplementationPhase.md`.
 - Jika output/path/schema/keputusan modelling berubah, update `sessionHandoff.md` dan `ImplementationPhase.md` pada turn yang sama.
 - Sebelum melanjutkan implementasi, baca `sessionHandoff.md`, `ImplementationPhase.md`, `prd_energi_anomaly_powerbi.md`, dan `roadmap_improvement_energi_dashboard.md`.
