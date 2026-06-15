@@ -1,6 +1,327 @@
 # Session Handoff - Kelompok08 Data Analytics Tugas Besar
 
-Last updated: 2026-06-13, Asia/Jakarta
+Last updated: 2026-06-15, Asia/Jakarta
+
+Update 2026-06-15 - Desktop React dashboard polish:
+
+- Branch kerja aktif: `feat-energy-react-dashboard`.
+- Commit message yang disiapkan: `Polish energy dashboard experience`.
+- Scope polish mengikuti instruksi terbaru: fokus desktop; mobile polish ditunda.
+- Perubahan dashboard:
+  - mengganti visible copy `React dashboard target` menjadi `Energy analytics dashboard`;
+  - menambahkan KPI `Average Daily Consumption` pada Executive Overview;
+  - menambahkan anomaly marker pada daily consumption trend;
+  - menambahkan matrix `Month by weekday average consumption`;
+  - menambahkan `Anomaly count by month`;
+  - menambahkan full `Anomaly detail` table dengan score, temperature, rainfall, rolling deviation, baseline agreement, dan quality flag;
+  - menambahkan rainfall scatter context dan hot/rainy anomaly day table;
+  - menambahkan entity-by-month consumption matrix dan quality flag table pada Meter Ranking;
+  - menambahkan Data Quality Issue Rows, Model Eligible Rows, dan Missing Weather Days KPI;
+  - memperbaiki formatter untuk score, contamination/rate, temperature, rainfall, dan consumption.
+- Validasi yang sudah dilakukan:
+  - `npm run build:web` berhasil;
+  - `npm audit --omit=dev` menghasilkan 0 vulnerabilities;
+  - production preview `npm run preview:web -- --port 4173`;
+  - desktop browser verification di 1440x900 untuk semua 6 page;
+  - production preview console: 0 errors, 0 warnings;
+  - desktop overflow: false untuk semua page;
+  - filter scenario/entity pada Anomaly Explorer berubah dari 521 ke 313 ke 7, sehingga filter terbukti aktif.
+- Catatan:
+  - Vite dev server dapat memunculkan React dev instrumentation `DataCloneError` saat data besar dirender ulang, tetapi error tersebut tidak muncul di production preview/Vercel-style build.
+  - Build masih memberi chunk-size warning karena charting dependencies dan data-heavy dashboard; gzip JS sekitar 192 KB dan masih dapat diterima untuk dashboard statis ini.
+
+Update 2026-06-15 - React dashboard target:
+
+- Branch kerja aktif: `feat-energy-react-dashboard`.
+- Commit message yang disiapkan: `Build energy React dashboard`.
+- Target visualisasi final terbaru berubah dari Power BI menjadi standalone React dashboard yang siap dipublish ke Vercel.
+- Power BI guide dan `.pbix` workflow tetap dipertahankan sebagai historical/manual alternative, tetapi bukan target utama terbaru.
+- Struktur frontend baru:
+  - root `package.json` dan `package-lock.json`;
+  - `vercel.json`;
+  - `web/` Vite React TypeScript app;
+  - `web/public/data/*.json` sebagai delivery data statis;
+  - `web/src/main.tsx` dan `web/src/styles.css`.
+- Script data packaging baru:
+  - `scripts/build_react_dashboard_data.py`
+- Guide deployment baru:
+  - `cache/react_dashboard_vercel_guide.md`
+- Output JSON dashboard:
+  - `manifest.json`;
+  - `daily_trend.json`;
+  - `monthly_trend.json`;
+  - `entity_daily.json`;
+  - `anomalies.json`;
+  - `dimensions.json`;
+  - `entity_scorecard.json`;
+  - `anomaly_case_review.json`;
+  - `data_quality_summary.json`;
+  - `model_evaluation_summary.json`;
+  - `eda_summary.json`;
+  - `insight_recommendation_matrix.json`.
+- Dashboard pages:
+  - Executive Overview;
+  - Consumption Trend;
+  - Anomaly Explorer;
+  - Weather Impact;
+  - Meter Ranking;
+  - Data Quality and Methodology.
+- Global filters:
+  - date start/end;
+  - scenario;
+  - entity;
+  - anomaly flag;
+  - day type;
+  - weather;
+  - data quality flag.
+- Validasi yang sudah dilakukan:
+  - `python -m py_compile scripts\build_react_dashboard_data.py`;
+  - `python scripts\build_react_dashboard_data.py`;
+  - `npm install`;
+  - `npm audit --omit=dev` menghasilkan 0 vulnerabilities setelah upgrade Vite;
+  - `npm run build:web` berhasil;
+  - browser verification di `http://127.0.0.1:5173` untuk desktop dan mobile;
+  - semua halaman dashboard bisa dinavigasi tanpa console warning/error.
+- Vercel deployment status:
+  - `npx --yes vercel whoami` gagal karena token lokal tidak valid;
+  - production deploy belum dilakukan dari CLI;
+  - lanjutkan dengan `vercel login` atau import repo dari Vercel dashboard.
+- Next action:
+  - publish ke Vercel dari branch ini dengan setting di `cache/react_dashboard_vercel_guide.md`;
+  - jika Vercel CLI sudah authenticated, gunakan `npx vercel --prod`; jika belum, import repo melalui Vercel dashboard.
+- Final academic report/documentation, presentation, slide deck, video/demo, dan README tetap di luar scope.
+
+Update 2026-06-15 - Power BI manual build guide:
+
+- Branch kerja aktif: `feat-energy-dashboard-evidence`.
+- Commit message yang disiapkan: `Add Power BI manual build guide`.
+- Menambahkan panduan build manual dashboard:
+  - `cache/powerbi_manual_build_guide.md`
+- Guide ini berisi:
+  - prerequisite dan folder sumber CSV;
+  - daftar tabel import;
+  - tipe data yang harus dicek;
+  - relationship model;
+  - DAX measures siap copy-paste;
+  - best practice data modelling Power BI;
+  - design system dashboard;
+  - layout 6 halaman dashboard;
+  - slicer, tooltip, interaction, validation, screenshot, dan save checklist.
+- Next action user:
+  - buka Power BI Desktop;
+  - ikuti `cache/powerbi_manual_build_guide.md`;
+  - save `.pbix` ke `outputs/powerbi/energy_anomaly_dashboard.pbix`.
+- Scope tetap cache-only untuk task ini. Tidak ada perubahan ke scripts, datasets, notebook, outputs, atau `.pbix`.
+- Final academic report/documentation, presentation, slide deck, video/demo, dan README tetap di luar scope.
+
+Update 2026-06-15 - Notebook builder scripts removed:
+
+- Branch kerja aktif: `feat-energy-dashboard-evidence`.
+- Commit message yang disiapkan: `Remove notebook builder scripts`.
+- Sesuai keputusan terbaru, notebook aktif `notebooks/energy_analytics_osemn.ipynb` dipertahankan sebagai artefak final saat ini dan tidak lagi diregenerate melalui script builder.
+- Script notebook builder yang dihapus:
+  - `scripts/build_osemn_notebook.py`
+  - `scripts/build_exploration_notebook.py`
+- Dampak runbook:
+  - jangan lagi menjalankan `python scripts\build_osemn_notebook.py --execute`;
+  - jangan lagi menjalankan `python scripts\build_exploration_notebook.py`;
+  - validasi notebook berikutnya dilakukan dengan membuka/mengeksekusi notebook langsung dari environment notebook, atau dengan pemeriksaan programatik `nbformat` jika hanya perlu memastikan tidak ada error output tersimpan.
+- Scope tetap repo pipeline/dashboard. Final academic report/documentation, presentation, slide deck, video/demo, dan README tetap di luar scope.
+
+Update 2026-06-15 - Final EDA, interpretation evidence, and dashboard readiness:
+
+- Branch kerja aktif: `feat-energy-dashboard-evidence`.
+- Commit message yang disiapkan: `Build energy dashboard evidence outputs`.
+- Scope implementasi terbaru mencakup scripts, processed CSV outputs, final EDA visuals, notebook aktif, dan cache trackers. Final academic report/documentation, presentation, slide deck, video/demo, dan README tetap di luar scope.
+- Script canonical baru:
+  - `scripts/build_final_eda.py`
+- Config path baru:
+  - `FINAL_EDA_DIR = outputs/eda/final`
+- Output final EDA visuals baru:
+  - `outputs/eda/final/daily_consumption_trend.png`
+  - `outputs/eda/final/monthly_consumption_trend.png`
+  - `outputs/eda/final/weekday_weekend_consumption.png`
+  - `outputs/eda/final/top_meter_contribution_pareto.png`
+  - `outputs/eda/final/weather_consumption_context.png`
+  - `outputs/eda/final/data_quality_flags.png`
+  - `outputs/eda/final/anomaly_case_review.png`
+- Output evidence/dashboard readiness baru:
+  - `Data_Acquisition/dataset/processed/eda_summary.csv`
+  - `Data_Acquisition/dataset/processed/visual_interpretation_summary.csv`
+  - `Data_Acquisition/dataset/processed/insight_recommendation_matrix.csv`
+  - `Data_Acquisition/dataset/processed/dashboard_validation_checklist.csv`
+  - `Data_Acquisition/dataset/processed/data_dictionary_energy_dashboard.csv`
+- `insight_recommendation_matrix.csv`: 4 insight rows dan 3 recommendation rows.
+- `dashboard_validation_checklist.csv`: 12 checklist rows untuk import, relationship, DAX measures, slicers, pages, interaction, dan screenshot validation.
+- Notebook aktif `notebooks/energy_analytics_osemn.ipynb` diperbarui menjadi formal OSEMN lengkap berbasis output yang tersedia:
+  - O - Obtain;
+  - S - Scrub;
+  - E - Explore dengan final EDA visuals dan interpretation summary;
+  - M - Model;
+  - N - iNterpret dengan insight/recommendation matrix;
+  - Power BI readiness dan limitation notes.
+- Validasi yang sudah dilakukan:
+  - historical before cleanup: compile `scripts/config.py`, `scripts/build_final_eda.py`, dan `scripts/build_osemn_notebook.py`;
+  - run `python scripts\build_final_eda.py`;
+  - historical before cleanup: run `python scripts\build_osemn_notebook.py --execute`;
+  - 7 final EDA PNG files exist dan non-empty;
+  - required columns ada untuk `eda_summary.csv`, `visual_interpretation_summary.csv`, `insight_recommendation_matrix.csv`, dan `dashboard_validation_checklist.csv`;
+  - key uniqueness tetap passed untuk `fact_energy_weather_daily(date, entity_id)` dan `fact_anomaly_scenarios(date, entity_id, scenario)`;
+  - notebook executed with 0 error outputs;
+  - notebook markdown checked clean from development wording: `phase`, `backlog`, `development`, `plan`.
+- Backlog berikutnya:
+  - manual Power BI `.pbix` build dari final CSV outputs;
+  - validasi manual relationship, DAX, slicer, page, tooltip/cross-filter, dan screenshot checklist di Power BI Desktop;
+  - final academic report/documentation, presentation, slide deck, dan video/demo hanya dikerjakan jika diminta eksplisit.
+
+Update 2026-06-15 - Feature engineering and anomaly evidence outputs:
+
+- Branch kerja aktif: `feat-energy-anomaly-features`.
+- Commit message yang disiapkan: `Build energy anomaly feature outputs`.
+- Scope implementasi terbaru mencakup scripts, processed CSV outputs, notebook aktif, dan cache trackers. Final academic report/documentation, presentation, slide deck, video/demo, dan README tetap di luar scope.
+- Script canonical baru:
+  - `scripts/feature_engineering.py`
+  - `scripts/model_anomaly_scenarios.py`
+- Output feature engineering baru/terbarui:
+  - `Data_Acquisition/dataset/processed/fact_energy_weather_daily.csv`
+  - `Data_Acquisition/dataset/processed/feature_engineering_summary.csv`
+  - `Data_Acquisition/dataset/processed/data_dictionary_energy_dashboard.csv`
+- Output anomaly modelling baru:
+  - `Data_Acquisition/dataset/processed/fact_anomaly_scenarios.csv`
+  - `Data_Acquisition/dataset/processed/model_evaluation_summary.csv`
+  - `Data_Acquisition/dataset/processed/anomaly_case_review.csv`
+  - `Data_Acquisition/dataset/processed/entity_scorecard.csv`
+- Feature set versi: `energy_anomaly_v1`.
+- Feature-complete model rows: 10.420.
+- `fact_anomaly_scenarios.csv`: 31.260 rows, grain `date x entity_id x scenario`, duplicate key 0.
+- Scenario anomaly summary:
+  - `strict`: 313 anomalies, rate 0,030038;
+  - `balanced`: 521 anomalies, rate 0,050000;
+  - `sensitive`: 1.042 anomalies, rate 0,100000.
+- `anomaly_case_review.csv`: 20 rows dari top balanced anomaly candidates.
+- `entity_scorecard.csv`: 12 selected active entities.
+- Notebook aktif `notebooks/energy_analytics_osemn.ipynb` diperbarui dengan bagian formal `M - Model`:
+  - problem formulation unsupervised anomaly detection;
+  - feature groups;
+  - IQR/Z-score baseline;
+  - Isolation Forest scenario summary;
+  - evaluation without labels;
+  - anomaly case review;
+  - entity scorecard;
+  - limitations.
+- Notebook tetap tidak memuat iNterpret final karena insight-recommendation matrix belum dibuat.
+- Validasi yang sudah dilakukan:
+  - historical before cleanup: compile `scripts/feature_engineering.py`, `scripts/model_anomaly_scenarios.py`, dan `scripts/build_osemn_notebook.py`;
+  - run `python scripts\build_powerbi_datamart.py`;
+  - run `python scripts\feature_engineering.py`;
+  - run `python scripts\model_anomaly_scenarios.py`;
+  - historical before cleanup: run `python scripts\build_osemn_notebook.py --execute`;
+  - key uniqueness passed for `fact_energy_weather_daily(date, entity_id)` and `fact_anomaly_scenarios(date, entity_id, scenario)`;
+  - notebook executed with 0 error outputs;
+  - notebook markdown checked clean from development wording: `phase`, `backlog`, `development`, `plan`.
+- Backlog berikutnya:
+  - final EDA plots under `outputs/eda/final`;
+  - `eda_summary.csv` and interpretation-per-visual support;
+  - insight-recommendation matrix;
+  - formal iNterpret section in notebook only after evidence exists;
+  - Power BI manual build and validation checklist.
+
+Update 2026-06-15 - Cache-only alignment audit:
+
+- Scope perubahan terakhir dibatasi hanya ke file di `cache/`.
+- Tidak ada perubahan ke `scripts/`, `notebooks/`, dataset, `outputs/`, Power BI file, final academic report/documentation, presentation, slide deck, video/demo, atau README.
+- "Docs out of scope" pada update ini berarti final academic documentation/reporting artifacts di luar `cache/`; cache planning/handoff files tetap boleh diubah karena menjadi target eksplisit.
+- `cache/ImplementationPhase.md` diperbarui dengan audit kesesuaian terhadap PRD, roadmap, dan panduan penilaian:
+  - fondasi Obtain/Scrub dan Power BI datamart dinilai kuat;
+  - gap utama masih ada pada final EDA, anomaly modelling, interpretation layer, dan dashboard validation;
+  - analisis harus dibatasi sebagai selected T1440 meter-level / selected building case study, bukan klaim full-campus HKUST;
+  - notebook aktif hanya boleh diperluas setelah output OSEMN yang relevan tersedia dan layak ditulis formal.
+- `cache/roadmap_improvement_energi_dashboard.md` diperbarui dengan scope alignment note:
+  - roadmap tetap menjadi cache planning artifact;
+  - final report, presentation, slide deck, video/demo, dan README berada di luar scope kecuali diminta eksplisit;
+  - PRD tetap source-of-truth dan tidak diubah pada update ini.
+- Backlog improvement yang harus dipertahankan untuk progress teknis berikutnya:
+  - final EDA plots dan `eda_summary.csv`;
+  - interpretation per visual dan notebook Explore expansion;
+  - insight-recommendation matrix dengan evidence, target user, priority, dan limitation;
+  - Power BI relationship, DAX, slicer, page, dan screenshot validation checklist.
+- Feature engineering yang perlu dipertimbangkan pada progress teknis berikutnya:
+  - consumption transforms: `log_daily_consumption`, percentile/rank konsumsi per entity;
+  - rolling features: `rolling_mean_7d`, `rolling_std_7d`, deviation dan percent deviation dari rolling mean;
+  - lag features: `lag_1d_consumption`, `lag_7d_consumption`, difference dari lag;
+  - calendar features dari `dim_date`: weekend, month, quarter, day-of-week, month start/end;
+  - weather model-safe fields dan weather bands: hot/rainy/temperature/rainfall context;
+  - entity contribution features: contribution percentage, cumulative contribution, consumption rank;
+  - quality/eligibility features untuk filtering dan methodology page, bukan primary model signal.
+- Feature engineering rules:
+  - logic reusable harus berada di `/scripts`, bukan notebook cells;
+  - raw fields dan engineered fields harus tetap dibedakan;
+  - rolling/lag feature dihitung per `entity_id` dan tidak boleh memakai future information;
+  - semua feature yang dipakai EDA/model/dashboard harus masuk data dictionary;
+  - notebook hanya menjelaskan feature setelah kolom/output feature benar-benar tersedia.
+- Jika progress teknis berikutnya menghasilkan output baru untuk EDA, Model, atau iNterpret, update notebook pada sesi yang sama. Notebook tetap formal seperti laporan analitis dan tidak boleh memakai bahasa development seperti phase/backlog/plan di isi notebook.
+
+Update 2026-06-14 - Power BI datamart foundation:
+
+- Branch kerja aktif: `feat-powerbi-datamart-foundation`.
+- Aturan branch/commit baru:
+  - nama branch dan commit message harus behavior-based;
+  - tidak boleh mengandung `/`;
+  - tidak boleh mereferensikan phase, milestone, sprint, atau nomor fase;
+  - commit message yang disiapkan untuk pekerjaan ini: `Build Power BI datamart foundation`.
+- Path canonical final dikunci ke `Data_Acquisition/dataset`; root `dataset/processed` hanya boleh dibaca sebagai artefak historis/kompatibilitas, bukan target output final.
+- Menambahkan `cache/ImplementationPhase.md` sebagai tracker implementasi utama. Setiap progress penting wajib memperbarui `sessionHandoff.md` dan `ImplementationPhase.md` pada turn yang sama.
+- Menambahkan script canonical:
+  - `scripts/config.py`
+  - `scripts/io_utils.py`
+  - `scripts/hko_weather.py`
+  - `scripts/hkust_t1440.py`
+  - `scripts/ttl_entity_mapping.py`
+  - `scripts/build_powerbi_datamart.py`
+  - historical: `scripts/build_osemn_notebook.py` pernah dipakai untuk membuat notebook final, tetapi sudah dihapus setelah notebook final tersedia.
+- Output Power BI datamart foundation baru:
+  - `Data_Acquisition/dataset/processed/dim_date.csv`
+  - `Data_Acquisition/dataset/processed/dim_entity.csv`
+  - `Data_Acquisition/dataset/processed/dim_scenario.csv`
+  - `Data_Acquisition/dataset/processed/fact_energy_weather_daily.csv`
+  - `Data_Acquisition/dataset/processed/data_quality_summary.csv`
+  - `Data_Acquisition/dataset/processed/data_dictionary_energy_dashboard.csv`
+  - `Data_Acquisition/dataset/profile_hkust_hko/final_data_sources.md`
+- Notebook aktif sekarang hanya satu di `/notebooks`: `notebooks/energy_analytics_osemn.ipynb`.
+- Notebook lama diarsipkan ke:
+  - `cache/archive/notebooks/eksplorasi_hkust_hko.ipynb`
+  - `cache/archive/notebooks/01_explore_and_select_subset.ipynb`
+- Notebook aktif ditulis dengan gaya laporan formal: O - Obtain, S - Scrub, E - Explore awal, Kesiapan Data Power BI, dan Catatan Keterbatasan. Notebook tidak memakai bahasa development seperti phase/backlog/plan dan tidak memaksakan bagian model/interpretasi final yang belum memiliki output.
+- Validasi yang sudah dilakukan:
+  - historical before cleanup: `python -m py_compile scripts\config.py scripts\io_utils.py scripts\hko_weather.py scripts\ttl_entity_mapping.py scripts\hkust_t1440.py scripts\build_powerbi_datamart.py scripts\build_osemn_notebook.py`
+  - `python scripts\hkust_t1440.py`
+  - `python scripts\hko_weather.py`
+  - `python scripts\build_powerbi_datamart.py`
+  - historical before cleanup: `python scripts\build_osemn_notebook.py --execute`
+- Hasil validasi datamart:
+  - `dim_date`: 878 baris, key `date` unik.
+  - `dim_entity`: 26 baris, key `entity_id` unik.
+  - `dim_scenario`: 3 baris, key `scenario` unik.
+  - `fact_energy_weather_daily`: 10.524 baris, 12 entity, key `date + entity_id` unik.
+  - Periode fact: 2022-01-02 sampai 2024-05-27.
+  - `rainfall_mm` missing tetap terdokumentasi 5 hari.
+  - `global_solar_radiation_mj_m2` missing tetap terdokumentasi 1 hari.
+  - `data_quality_flag`: 10.452 `valid`, 72 `weather_imputed`.
+- Backlog berikutnya:
+  - scenario-based Isolation Forest;
+  - `fact_anomaly_scenarios.csv`;
+  - `model_evaluation_summary.csv`;
+  - `anomaly_case_review.csv`;
+  - `entity_scorecard.csv`;
+  - final EDA plots;
+  - manual Power BI `.pbix` build.
+- Backlog notebook aktif:
+  - setiap progress analisis berikutnya harus ikut memperbarui `notebooks/energy_analytics_osemn.ipynb`;
+  - notebook harus berkembang bertahap sampai mencakup seluruh OSEMN setelah outputnya benar-benar tersedia;
+  - bagian EDA harus diperluas secara lengkap seiring final EDA plots dan tabel ringkasan dibuat;
+  - bagian Model hanya ditambahkan setelah output anomaly detection final tersedia;
+  - bagian iNterpret hanya ditambahkan setelah `entity_scorecard.csv`, `anomaly_case_review.csv`, insight, dan rekomendasi berbasis data tersedia;
+  - notebook tetap harus formal seperti laporan analitis dan tidak memakai bahasa development seperti phase/backlog/plan di isi notebook.
 
 Update 2026-06-14:
 
@@ -34,6 +355,17 @@ File ini adalah sumber konteks utama untuk melanjutkan pekerjaan. **Setiap perub
 - keputusan modelling, preprocessing, feature engineering, atau evaluasi;
 - perubahan scope berdasarkan panduan tugas besar;
 - issue/blocker yang ditemukan.
+
+Aturan tambahan:
+
+- Update cache-only 2026-06-15 sebelumnya dibatasi ke `cache/`, tetapi implementasi terbaru pada branch `feat-energy-anomaly-features` sudah mencakup scripts, processed CSV outputs, notebook aktif, dan cache trackers sesuai instruksi user berikutnya.
+- Setiap progress implementasi juga wajib memperbarui `cache/ImplementationPhase.md`.
+- Jika output/path/schema/keputusan modelling berubah, update `sessionHandoff.md` dan `ImplementationPhase.md` pada turn yang sama.
+- Sebelum melanjutkan implementasi, baca `sessionHandoff.md`, `ImplementationPhase.md`, `prd_energi_anomaly_powerbi.md`, dan `roadmap_improvement_energi_dashboard.md`.
+- Nama branch dan commit message harus behavior-based, tidak mengandung `/`, dan tidak mereferensikan phase, milestone, sprint, atau nomor fase.
+- Notebook aktif harus formal seperti laporan analitis, bukan catatan development. Jangan menulis bagian OSEMN yang belum punya output memadai.
+- Setiap progress berikutnya harus mengevaluasi apakah notebook aktif perlu diperbarui. Jika ada output baru untuk Obtain, Scrub, Explore, Model, atau iNterpret, update notebook pada sesi yang sama.
+- EDA di notebook harus menjadi bagian yang lengkap secara bertahap: trend harian, tren bulanan, weekday/weekend, kontribusi/Pareto meter, konteks cuaca, kualitas data, dan interpretasi singkat per visual saat output tersebut sudah tersedia.
 
 Jika melanjutkan sesi, baca file ini dulu, lalu cek status aktual repo dengan:
 
@@ -309,7 +641,7 @@ Script:
 | `download_hko_open_data.py` | Download 7 dataset HKO ke `dataset/hko_open_data/raw/` dan membuat manifest |
 | `profile_datasets.py` | Profil file HKUST dan HKO: inventory, shape, periode, missing, sample rows |
 | `explore_energy_weather.py` | Membuat dataset gabungan harian, EDA plots, anomaly baseline, baseline regression |
-| `build_exploration_notebook.py` | Membuat dan mengeksekusi notebook eksplorasi `notebooks/eksplorasi_hkust_hko.ipynb` |
+| `build_exploration_notebook.py` | Historical; sudah dihapus setelah notebook eksplorasi lama diarsipkan |
 
 Cara menjalankan ulang workflow:
 
@@ -317,7 +649,6 @@ Cara menjalankan ulang workflow:
 python scripts\download_hko_open_data.py
 python scripts\profile_datasets.py
 python scripts\explore_energy_weather.py
-python scripts\build_exploration_notebook.py
 ```
 
 Dependency Python yang dipakai:
@@ -689,7 +1020,6 @@ Script:
 
 ```powershell
 python -m py_compile scripts\download_hko_open_data.py scripts\profile_datasets.py scripts\explore_energy_weather.py
-python -m py_compile scripts\build_exploration_notebook.py
 ```
 
 Notebook:

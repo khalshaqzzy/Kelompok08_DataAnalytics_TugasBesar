@@ -1,6 +1,6 @@
 # Roadmap Improvement Maksimal
 
-## HKUST Energy Analytics + Power BI Dashboard
+## HKUST Energy Analytics + React Dashboard
 
 | Komponen | Keterangan |
 |---|---|
@@ -9,23 +9,36 @@
 | Dataset utama | HKUST smart meter dataset |
 | Dataset pendukung | Hong Kong Observatory Open Data |
 | Scope data prioritas | T1440 harian + metadata TTL |
-| Output akhir yang dituju | Dataset Power BI-ready, anomaly detection defensible, dashboard interaktif, insight dan rekomendasi |
+| Output akhir yang dituju | Dataset dashboard-ready, anomaly detection defensible, React dashboard interaktif, insight dan rekomendasi |
 | Status dokumen | Roadmap implementasi lanjutan |
-| Tanggal | 2026-06-13 |
+| Tanggal | 2026-06-15 |
+
+---
+
+# Scope Alignment Note - 2026-06-15
+
+Roadmap ini dipertahankan sebagai cache planning artifact untuk repo pipeline dan dashboard readiness. Untuk scope kerja saat ini:
+
+1. Perubahan implementasi dibatasi ke repo pipeline/dashboard dan cache planning files.
+2. Final academic report/documentation, presentation, slide deck, video/demo, dan README berada di luar scope kecuali diminta eksplisit di task terpisah.
+3. PRD tetap menjadi source-of-truth produk analitik; roadmap ini hanya menyusun prioritas improvement.
+4. Notebook aktif harus formal seperti laporan analitis, tetapi hanya memuat bagian OSEMN yang sudah didukung output final.
+5. Klaim analisis harus dibatasi pada selected T1440 meter-level subset, terutama `Cheng_Yu_Tung_Building`, bukan keseluruhan kampus HKUST.
+6. Target visualisasi final terbaru adalah standalone React dashboard di `web/` yang dipublish ke Vercel. Power BI tetap boleh dipakai sebagai historical/manual alternative, tetapi bukan target utama implementasi berikutnya.
 
 ---
 
 # 1. Ringkasan Eksekutif
 
-Roadmap ini menyusun improvement dari awal pipeline sampai dashboard akhir untuk proyek **Analisis Konsumsi dan Efisiensi Energi Gedung/Kampus**. Fokus utama bukan membangun sistem produksi, tetapi menghasilkan tugas besar yang kuat secara akademik: sumber data jelas, preprocessing dapat dipertanggungjawabkan, eksplorasi tajam, model anomaly detection masuk akal, dan dashboard Power BI benar-benar membantu interpretasi.
+Roadmap ini menyusun improvement dari awal pipeline sampai dashboard akhir untuk proyek **Analisis Konsumsi dan Efisiensi Energi Gedung/Kampus**. Fokus utama bukan membangun sistem produksi, tetapi menghasilkan tugas besar yang kuat secara akademik: sumber data jelas, preprocessing dapat dipertanggungjawabkan, eksplorasi tajam, model anomaly detection masuk akal, dan dashboard React yang bisa dipublish ke Vercel benar-benar membantu interpretasi.
 
 Keputusan utama:
 
 1. **T1440 tetap menjadi analytical table utama** karena selaras dengan data cuaca harian HKO.
 2. **TTL harus mulai dimanfaatkan** agar analisis tidak berhenti di level agregat kampus atau ID meter tanpa konteks.
 3. **Isolation Forest tetap menjadi model utama**, tetapi perlu diperbaiki menjadi scenario-based dan menghasilkan skor anomali.
-4. **Power BI harus membaca dataset final dari Python**, bukan melatih model secara dinamis.
-5. **Dashboard harus interaktif**, dengan slicer skenario model, waktu, entity, kondisi cuaca, dan status anomali.
+4. **React dashboard harus membaca prebuilt JSON dari output Python**, bukan melatih model secara dinamis.
+5. **Dashboard harus interaktif**, dengan filter skenario model, waktu, entity, kondisi cuaca, dan status anomali.
 
 ---
 
@@ -403,11 +416,11 @@ Setiap insight sebaiknya mengikuti pola:
 
 ---
 
-# 4. Improvement Power BI Dashboard
+# 4. Improvement React Dashboard
 
-# 4.1 Data Model yang Disarankan
+# 4.1 Data Model dan Delivery Format yang Disarankan
 
-Gunakan star schema sederhana:
+Gunakan star schema sederhana sebagai canonical processed CSV, lalu buat prebuilt JSON untuk React dashboard:
 
 | Tabel | Grain | Isi |
 |---|---|---|
@@ -426,6 +439,23 @@ Relasi:
 | `fact_anomaly_scenarios` | `dim_date` | `date` |
 | `fact_anomaly_scenarios` | `dim_entity` | `entity_id` |
 | `fact_anomaly_scenarios` | `dim_scenario` | `scenario` |
+
+Delivery React:
+
+| JSON | Isi |
+|---|---|
+| `manifest.json` | Metadata build, date range, selected entities, limitation |
+| `daily_trend.json` | Daily consumption trend and anomaly markers |
+| `monthly_trend.json` | Monthly trend |
+| `entity_daily.json` | Daily meter-level rows for filters |
+| `anomalies.json` | Scenario-level anomaly rows |
+| `dimensions.json` | Entity and scenario dimensions |
+| `entity_scorecard.json` | Meter ranking and priority score |
+| `anomaly_case_review.json` | Top anomaly case review |
+| `data_quality_summary.json` | Quality summary |
+| `model_evaluation_summary.json` | Scenario evaluation |
+| `eda_summary.json` | EDA evidence |
+| `insight_recommendation_matrix.json` | Evidence-backed insights and recommendations |
 
 # 4.2 Halaman Dashboard Final
 
@@ -517,9 +547,9 @@ Visual:
 - OSEMN pipeline summary
 - source table
 
-# 4.3 Slicer Wajib
+# 4.3 Filter Wajib
 
-| Slicer | Kegunaan |
+| Filter | Kegunaan |
 |---|---|
 | Date range | Filter periode |
 | Scenario | Pilih strict, balanced, sensitive |
@@ -530,9 +560,9 @@ Visual:
 | Rainy day/hot day | Konteks cuaca |
 | Data quality flag | Pisahkan data valid dan bermasalah |
 
-# 4.4 Measures Minimum
+# 4.4 Frontend Metrics Minimum
 
-| Measure | Definisi |
+| Metric | Definisi |
 |---|---|
 | `Total Consumption` | Sum daily consumption |
 | `Average Daily Consumption` | Average daily consumption |
@@ -545,7 +575,7 @@ Visual:
 | `Rainy Day Count` | Count rainy days |
 | `Hot Day Count` | Count hot days |
 
-# 4.5 Dashboard Design Principle
+# 4.5 React Dashboard Design Principle
 
 1. Fokus pada decision support, bukan dekorasi.
 2. KPI di atas, tren dan ranking di tengah, detail tabel di bawah.
@@ -553,6 +583,8 @@ Visual:
 4. Gunakan tooltip untuk konteks cuaca dan quality flag.
 5. Jangan menyembunyikan data quality issue.
 6. Default scenario dashboard adalah `balanced`.
+7. Dashboard harus responsif untuk desktop dan mobile.
+8. Dashboard harus deployable ke Vercel dari `web/dist`.
 
 ---
 
@@ -564,10 +596,10 @@ Visual:
 |---|---|---|
 | 1 | Buat data quality flag per meter dan per hari | Mengontrol bias dari meter nol/coverage pendek |
 | 2 | Buat `dim_entity` dari TTL atau fallback | Membuat analisis punya konteks fisik |
-| 3 | Buat `fact_anomaly_scenarios` | Output utama untuk Power BI |
+| 3 | Buat `fact_anomaly_scenarios` | Output utama untuk anomaly dashboard |
 | 4 | Jalankan Isolation Forest 3 scenario | Model lebih defensible dan interaktif |
 | 5 | Buat entity scorecard | Menghasilkan rekomendasi audit yang konkret |
-| 6 | Buat dashboard blueprint dengan measures | Memastikan Power BI bukan sekadar grafik statis |
+| 6 | Buat React dashboard dengan filters dan metrics | Memastikan dashboard bukan sekadar grafik statis |
 
 ## P1 - Sangat Disarankan
 
@@ -586,7 +618,7 @@ Visual:
 | 1 | T60 hourly sample analysis | Memberi kedalaman pola jam |
 | 2 | Forecasting baseline | Menambah variasi modelling |
 | 3 | Clustering entity | Menemukan kelompok pola konsumsi |
-| 4 | Power BI theme custom | Meningkatkan presentasi visual |
+| 4 | React dashboard visual polish | Meningkatkan presentasi visual |
 
 ---
 
@@ -638,7 +670,7 @@ Deliverable:
 
 Tujuan:
 
-Membuat anomaly detection yang kuat dan siap Power BI.
+Membuat anomaly detection yang kuat dan siap dashboard.
 
 Task:
 
@@ -655,31 +687,33 @@ Deliverable:
 - `model_evaluation_summary.csv`
 - `anomaly_case_review.csv`
 
-## Milestone 4 - Power BI Dashboard
+## Milestone 4 - React Dashboard and Vercel Readiness
 
 Tujuan:
 
-Membangun dashboard interaktif berdasarkan dataset final.
+Membangun dashboard React interaktif berdasarkan dataset final dan menyiapkannya untuk publish ke Vercel.
 
 Task:
 
-1. Load fact dan dimension tables.
-2. Buat relationship model.
-3. Buat measures.
+1. Buat script packaging CSV final menjadi JSON statis.
+2. Buat Vite React app di `web/`.
+3. Buat global filters untuk date, scenario, entity, anomaly flag, day type, weather, dan quality flag.
 4. Buat 6 halaman dashboard.
-5. Uji slicer, tooltip, cross-filter, dan drill-down.
+5. Uji charts, tables, responsive layout, dan browser console.
+6. Tambahkan Vercel config dan deployment guide.
 
 Deliverable:
 
-- Power BI dashboard
-- screenshot dashboard untuk laporan
-- daftar measures
+- React dashboard app
+- `web/public/data/*.json`
+- `vercel.json`
+- Vercel deployment guide
 
-## Milestone 5 - Final Report and Presentation
+## Milestone 5 - External Final Deliverables
 
 Tujuan:
 
-Mengunci hasil akhir untuk penilaian.
+Mengunci hasil akhir untuk penilaian jika scope laporan, presentasi, atau demo diminta pada task terpisah. Bagian ini bukan scope implementasi repo pipeline/dashboard saat ini.
 
 Task:
 
@@ -694,6 +728,12 @@ Deliverable:
 - laporan akhir OSEMN
 - slide akhir
 - script presentasi
+
+Scope status:
+
+- Out of scope untuk current cache-only alignment task.
+- Out of scope untuk repo pipeline/dashboard implementation kecuali user meminta eksplisit.
+- Tidak boleh menghalangi prioritas teknis: EDA final, model anomaly scenario, interpretation matrix, dan dashboard validation.
 
 ---
 

@@ -1,0 +1,4 @@
+scenario,contamination,scenario_label,scenario_description,is_default
+strict,0.03,Strict,Flags only the most extreme anomaly candidates.,0
+balanced,0.05,Balanced,Default scenario for dashboard review and presentation.,1
+sensitive,0.1,Sensitive,Flags a wider candidate set for exploratory review.,0

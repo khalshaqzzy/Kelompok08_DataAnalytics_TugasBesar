@@ -1,0 +1,13 @@
+validation_area,check_item,expected_result,source_table,status,notes
+table_import,Import fact_energy_weather_daily,Table loads with date and entity_id columns.,fact_energy_weather_daily,ready,Power BI Desktop validation is manual; Python outputs are ready.
+table_import,Import fact_anomaly_scenarios,"Table loads with date, entity_id, scenario, score, and flag.",fact_anomaly_scenarios,ready,Power BI Desktop validation is manual; Python outputs are ready.
+table_import,Import dimension and summary tables,"dim_date, dim_entity, dim_scenario, entity_scorecard, summaries load successfully.",multiple,ready,Power BI Desktop validation is manual; Python outputs are ready.
+relationship,Connect fact_energy_weather_daily to dim_date,Many-to-one relationship on date.,fact_energy_weather_daily;dim_date,manual_check_required,Power BI Desktop validation is manual; Python outputs are ready.
+relationship,Connect fact_energy_weather_daily to dim_entity,Many-to-one relationship on entity_id.,fact_energy_weather_daily;dim_entity,manual_check_required,Power BI Desktop validation is manual; Python outputs are ready.
+relationship,Connect fact_anomaly_scenarios to dimensions,"Many-to-one relationships on date, entity_id, and scenario.",fact_anomaly_scenarios,manual_check_required,Power BI Desktop validation is manual; Python outputs are ready.
+dax_measure,Create consumption KPI measures,"Total, average, peak, and active entity measures return values.",fact_energy_weather_daily,manual_check_required,Power BI Desktop validation is manual; Python outputs are ready.
+dax_measure,Create anomaly KPI measures,"Anomaly count, rate, and average anomaly score return values by scenario.",fact_anomaly_scenarios,manual_check_required,Power BI Desktop validation is manual; Python outputs are ready.
+slicer,Create required slicers,"Date, scenario, anomaly flag, entity, weekend, rainy/hot day, and quality filters work.",multiple,manual_check_required,Power BI Desktop validation is manual; Python outputs are ready.
+dashboard_page,Build six dashboard pages,"Executive, Trend, Anomaly, Weather, Ranking, and Quality pages exist.",multiple,manual_check_required,Power BI Desktop validation is manual; Python outputs are ready.
+interaction,Validate cross-filter and tooltip behavior,Selections propagate from dimensions to fact visuals.,multiple,manual_check_required,Power BI Desktop validation is manual; Python outputs are ready.
+screenshot,Capture dashboard screenshots,Six page screenshots are captured after dashboard validation.,Power BI Desktop,manual_check_required,Power BI Desktop validation is manual; Python outputs are ready.
