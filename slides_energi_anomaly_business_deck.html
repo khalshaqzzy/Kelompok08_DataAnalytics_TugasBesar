@@ -1,0 +1,806 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Energy Anomaly Analytics Business Deck</title>
+  <style>
+    :root {
+      --ink: #17202a;
+      --muted: #5d6673;
+      --line: #d8dee8;
+      --soft: #f5f7fb;
+      --blue: #173f70;
+      --blue2: #2f6f9f;
+      --teal: #14756f;
+      --gold: #a36a00;
+      --red: #b83f3f;
+      --green: #287a45;
+      --bg: #edf1f6;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "Aptos", "Segoe UI", Arial, sans-serif;
+      line-height: 1.28;
+    }
+
+    .deck {
+      display: grid;
+      gap: 22px;
+      padding: 22px;
+      max-width: 1440px;
+      margin: 0 auto;
+    }
+
+    .slide {
+      width: 1280px;
+      height: 720px;
+      margin: 0 auto;
+      background: #fff;
+      border: 1px solid var(--line);
+      box-shadow: 0 14px 34px rgba(23, 32, 42, 0.14);
+      display: grid;
+      grid-template-rows: 60px 1fr 26px;
+      overflow: hidden;
+      page-break-after: always;
+    }
+
+    .cover {
+      grid-template-rows: 1fr 30px;
+      color: #fff;
+      background:
+        linear-gradient(90deg, rgba(23, 63, 112, 0.96), rgba(20, 117, 111, 0.85)),
+        url("outputs/eda/final/daily_consumption_trend.png");
+      background-size: cover;
+      background-position: center;
+    }
+
+    .cover-content {
+      padding: 50px 64px 34px;
+      display: grid;
+      grid-template-columns: 1.35fr 0.75fr;
+      gap: 36px;
+      align-items: end;
+    }
+
+    .cover h1 {
+      margin: 0 0 14px;
+      font-size: 50px;
+      line-height: 1.02;
+      letter-spacing: 0;
+      font-weight: 820;
+    }
+
+    .subtitle {
+      font-size: 20px;
+      color: rgba(255, 255, 255, 0.88);
+      max-width: 820px;
+    }
+
+    .eyebrow {
+      font-size: 13px;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      color: #cfe6f2;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+
+    .header {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: end;
+      padding: 13px 32px 9px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .section-label {
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--teal);
+      font-weight: 820;
+      margin-bottom: 3px;
+    }
+
+    .slide-num {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 27px;
+      line-height: 1.1;
+      font-weight: 780;
+      color: var(--blue);
+    }
+
+    h3 {
+      margin: 0 0 7px;
+      font-size: 16px;
+      color: var(--ink);
+      font-weight: 780;
+    }
+
+    p { margin: 0; }
+
+    .content {
+      padding: 16px 32px 12px;
+      display: grid;
+      gap: 11px;
+      min-height: 0;
+    }
+
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 4px 32px 8px;
+      border-top: 1px solid #edf0f5;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .cover .footer {
+      border: 0;
+      color: rgba(255, 255, 255, 0.82);
+      padding: 0 64px 14px;
+    }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 11px; min-height: 0; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; min-height: 0; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; min-height: 0; }
+    .grid-main { display: grid; grid-template-columns: 1.45fr 0.85fr; gap: 11px; min-height: 0; }
+    .grid-side { display: grid; grid-template-columns: 0.85fr 1.45fr; gap: 11px; min-height: 0; }
+    .grid-tight { display: grid; grid-template-columns: 1.1fr 1fr 0.9fr; gap: 10px; min-height: 0; }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--soft);
+      padding: 11px 12px;
+      min-height: 0;
+    }
+
+    .white { background: #fff; }
+    .blue { background: #f1f6fb; border-color: #c6d7e8; }
+    .green { background: #f1f8f6; border-color: #c8e1db; }
+    .gold { background: #fff8ea; border-color: #ead8b4; }
+    .red { background: #fff4f4; border-color: #efd0d0; }
+
+    .kpi {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-left: 5px solid var(--blue);
+      border-radius: 6px;
+      padding: 10px 11px;
+      min-height: 74px;
+    }
+
+    .kpi.teal { border-left-color: var(--teal); }
+    .kpi.gold { border-left-color: var(--gold); }
+    .kpi.red { border-left-color: var(--red); }
+    .kpi.green { border-left-color: var(--green); }
+
+    .value {
+      display: block;
+      color: var(--blue);
+      font-size: 28px;
+      line-height: 1;
+      font-weight: 820;
+      white-space: nowrap;
+    }
+
+    .label {
+      display: block;
+      margin-top: 5px;
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      font-weight: 800;
+    }
+
+    .note {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .small {
+      color: var(--muted);
+      font-size: 12.4px;
+    }
+
+    ul, ol {
+      margin: 0;
+      padding-left: 17px;
+      display: grid;
+      gap: 4px;
+      font-size: 13.6px;
+    }
+
+    li::marker { color: var(--teal); }
+
+    .callout {
+      border-left: 5px solid var(--teal);
+      background: #f2f8f7;
+      padding: 9px 11px;
+      border-radius: 4px;
+      font-size: 14px;
+      font-weight: 680;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .tag {
+      background: #e8eef6;
+      color: #24394f;
+      border: 1px solid #d4ddea;
+      border-radius: 4px;
+      padding: 4px 7px;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .tag.green { background: #e7f3f0; color: #0e5e59; border-color: #c8e1db; }
+    .tag.gold { background: #fff2d8; color: #7b5100; border-color: #ead8b4; }
+    .tag.red { background: #fde8e8; color: #8b2e2e; border-color: #efd0d0; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      border: 1px solid var(--line);
+      font-size: 12px;
+    }
+
+    th, td {
+      padding: 6px 7px;
+      border-bottom: 1px solid #e8ecf2;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #edf3f8;
+      color: var(--blue);
+      font-size: 10.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      font-weight: 850;
+    }
+
+    tr:last-child td { border-bottom: 0; }
+    .num { text-align: right; font-variant-numeric: tabular-nums; }
+
+    .chart-box {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 7px;
+      display: grid;
+      grid-template-rows: 1fr auto;
+      gap: 4px;
+      min-height: 0;
+    }
+
+    .chart-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      min-height: 0;
+    }
+
+    .chart-caption {
+      text-align: center;
+      color: var(--muted);
+      font-size: 10.5px;
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+    }
+
+    .step {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-top: 4px solid var(--blue);
+      border-radius: 6px;
+      padding: 9px;
+      min-height: 92px;
+    }
+
+    .step strong {
+      display: block;
+      color: var(--blue);
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+
+    .step span {
+      color: var(--muted);
+      font-size: 11.5px;
+      display: block;
+    }
+
+    .rank {
+      display: grid;
+      gap: 7px;
+    }
+
+    .rank-row {
+      display: grid;
+      grid-template-columns: 52px 1fr 58px;
+      gap: 8px;
+      align-items: center;
+      font-size: 12.2px;
+    }
+
+    .bar {
+      height: 11px;
+      background: #e7ecf2;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .bar span {
+      display: block;
+      height: 100%;
+      background: var(--blue2);
+    }
+
+    .agenda {
+      background: rgba(255, 255, 255, 0.13);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 6px;
+      padding: 16px;
+    }
+
+    .agenda ul {
+      font-size: 14px;
+      gap: 7px;
+      padding-left: 18px;
+    }
+
+    .agenda li::marker { color: #cfe6f2; }
+
+    .dense-flow {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .dense-flow .panel { padding: 9px 10px; }
+
+    .appendix-list {
+      columns: 2;
+      column-gap: 18px;
+      font-size: 11.5px;
+      color: var(--muted);
+      margin: 0;
+      padding-left: 17px;
+    }
+
+    @media print {
+      body { background: #fff; }
+      .deck { padding: 0; gap: 0; max-width: none; }
+      .slide {
+        width: 100vw;
+        height: 100vh;
+        box-shadow: none;
+        border: 0;
+      }
+      @page { size: 16in 9in; margin: 0; }
+    }
+  </style>
+</head>
+<body>
+  <main class="deck">
+    <section class="slide cover">
+      <div class="cover-content">
+        <div>
+          <div class="eyebrow">Business Deck | Energy Analytics</div>
+          <h1>Analisis Konsumsi Energi & Deteksi Anomali Smart Meter HKUST</h1>
+          <p class="subtitle">Studi kasus selected T1440 daily meter-level dengan konteks cuaca HKO dan rancangan dashboard Power BI.</p>
+          <div class="tag-row">
+            <span class="tag">OSEMN</span>
+            <span class="tag green">Isolation Forest</span>
+            <span class="tag gold">Power BI-ready</span>
+            <span class="tag">2022-01-02 to 2024-05-27</span>
+          </div>
+        </div>
+        <div class="agenda">
+          <h3 style="color:#fff;">Deck focus</h3>
+          <ul>
+            <li>Scope and data foundation</li>
+            <li>Scrubbed datamart and feature layer</li>
+            <li>Exploratory evidence</li>
+            <li>Anomaly model results</li>
+            <li>Power BI blueprint and actions</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer"><span>Kelompok 08 - Data Analitik</span><span>Final analysis deck</span></div>
+    </section>
+
+    <section class="slide">
+      <div class="header">
+        <div><div class="section-label">Executive Summary + OSEMN</div><h2>Scope is focused, outputs are dashboard-ready, and model results are screening candidates</h2></div>
+        <div class="slide-num">02</div>
+      </div>
+      <div class="content">
+        <div class="grid-4">
+          <div class="kpi"><span class="value">26</span><span class="label">T1440 meters</span><p class="note">Daily inventory</p></div>
+          <div class="kpi teal"><span class="value">12</span><span class="label">Selected meters</span><p class="note">Main model subset</p></div>
+          <div class="kpi gold"><span class="value">10.524</span><span class="label">Fact rows</span><p class="note">Date x entity</p></div>
+          <div class="kpi red"><span class="value">521</span><span class="label">Balanced anomalies</span><p class="note">5% scenario</p></div>
+        </div>
+        <div class="flow">
+          <div class="step"><strong>O - Obtain</strong><span>HKUST T1440, TTL metadata, and HKO daily weather.</span></div>
+          <div class="step"><strong>S - Scrub</strong><span>Daily consumption, weather treatment, quality flags, datamart.</span></div>
+          <div class="step"><strong>E - Explore</strong><span>Trend, contribution, calendar, weather, and quality evidence.</span></div>
+          <div class="step"><strong>M - Model</strong><span>IQR, Z-score, and Isolation Forest scenarios.</span></div>
+          <div class="step"><strong>N - Interpret</strong><span>Insight matrix, recommendations, Power BI structure.</span></div>
+        </div>
+        <div class="grid-main">
+          <div class="panel white">
+            <h3>Business framing</h3>
+            <ul>
+              <li>Use the result as a screening tool for targeted energy review, not as confirmed operational fault evidence.</li>
+              <li>Primary claim is selected daily meter-level analysis for Cheng_Yu_Tung_Building context, not full-campus coverage.</li>
+              <li>Power BI can be built manually from prepared CSV fact and dimension tables.</li>
+            </ul>
+          </div>
+          <div class="callout">Top action: begin review from high-priority entities, especially D0849, while checking anomaly stability and data quality.</div>
+        </div>
+      </div>
+      <div class="footer"><span>Executive overview</span><span>Compact OSEMN summary</span></div>
+    </section>
+
+    <section class="slide">
+      <div class="header">
+        <div><div class="section-label">O - Obtain</div><h2>Two-source foundation with explicit meter selection and quality control</h2></div>
+        <div class="slide-num">03</div>
+      </div>
+      <div class="content">
+        <div class="grid-side">
+          <div class="panel blue">
+            <h3>Source portfolio</h3>
+            <ul>
+              <li><strong>HKUST smart meter</strong>: primary energy source.</li>
+              <li><strong>TTL metadata</strong>: meter, building, floor, room/equipment context.</li>
+              <li><strong>HKO weather</strong>: daily external context.</li>
+            </ul>
+            <div class="tag-row">
+              <span class="tag">.xlsx</span><span class="tag">.ttl</span><span class="tag">.csv</span><span class="tag green">Daily join</span>
+            </div>
+          </div>
+          <table>
+            <tr><th>Dataset</th><th>Role</th><th>Treatment</th><th>Limitation</th></tr>
+            <tr><td>HKUST T1440</td><td>Main consumption data</td><td>Meter reading converted to daily consumption</td><td>Only 26 daily meters in inventory</td></tr>
+            <tr><td>HKUST TTL</td><td>Entity context</td><td>Mapped to building, floor, and equipment where available</td><td>Some fields remain unknown</td></tr>
+            <tr><td>HKO Weather</td><td>Context data</td><td>Daily weather joined by date</td><td>Not indoor/building-specific weather</td></tr>
+          </table>
+        </div>
+        <div class="grid-4">
+          <div class="kpi"><span class="value">878</span><span class="label">Calendar days</span><p class="note">dim_date</p></div>
+          <div class="kpi teal"><span class="value">7</span><span class="label">Weather variables</span><p class="note">Temperature, humidity, rain, solar, wind</p></div>
+          <div class="kpi gold"><span class="value">5</span><span class="label">Rainfall missing</span><p class="note">Model-safe field created</p></div>
+          <div class="kpi red"><span class="value">1</span><span class="label">Solar missing</span><p class="note">Monthly median imputation</p></div>
+        </div>
+        <div class="grid-main">
+          <table>
+            <tr><th>Selection category</th><th class="num">Count</th><th>Model treatment</th><th>Reason</th></tr>
+            <tr><td>Selected main subset</td><td class="num">12</td><td>Included</td><td>Active, full coverage, primary building context</td></tr>
+            <tr><td>Comparison / secondary</td><td class="num">4</td><td>Not in main model</td><td>Useful context, not final subset</td></tr>
+            <tr><td>Excluded from main model</td><td class="num">10</td><td>Excluded</td><td>Zero constant, near-zero, short coverage, or outside scope</td></tr>
+          </table>
+          <div class="panel gold">
+            <h3>Selected meters</h3>
+            <p class="small">D0849, D0848, D0854, D0853, D0862, D0857, D0851, D0861, D0852, D0860, D0850, D0865.</p>
+          </div>
+        </div>
+      </div>
+      <div class="footer"><span>Obtain stage</span><span>Source and subset logic</span></div>
+    </section>
+
+    <section class="slide">
+      <div class="header">
+        <div><div class="section-label">S - Scrub</div><h2>Processed datamart and feature layer are compact enough for Power BI and modelling</h2></div>
+        <div class="slide-num">04</div>
+      </div>
+      <div class="content">
+        <div class="grid-main">
+          <table>
+            <tr><th>Table</th><th>Grain</th><th class="num">Rows</th><th>Business use</th></tr>
+            <tr><td>fact_energy_weather_daily</td><td>Date x entity</td><td class="num">10.524</td><td>KPI, trend, weather, quality flag, model features</td></tr>
+            <tr><td>fact_anomaly_scenarios</td><td>Date x entity x scenario</td><td class="num">31.260</td><td>Anomaly score, flag, ranking, baseline agreement</td></tr>
+            <tr><td>dim_date</td><td>Date</td><td class="num">878</td><td>Calendar filters</td></tr>
+            <tr><td>dim_entity</td><td>Meter/entity</td><td class="num">26</td><td>Metadata, selection, quality status</td></tr>
+            <tr><td>dim_scenario</td><td>Scenario</td><td class="num">3</td><td>Strict, balanced, sensitive</td></tr>
+            <tr><td>entity_scorecard</td><td>Entity</td><td class="num">12</td><td>Audit priority ranking</td></tr>
+          </table>
+          <div class="dense-flow">
+            <div class="kpi green"><span class="value">10.420</span><span class="label">Model-ready rows</span><p class="note">Complete features after rolling/lag</p></div>
+            <div class="kpi teal"><span class="value">29</span><span class="label">Tracked features</span><p class="note">Feature summary</p></div>
+            <div class="panel green"><h3>Energy treatment</h3><p class="small">Meter reading is differenced per meter to create daily_consumption.</p></div>
+            <div class="panel gold"><h3>Weather treatment</h3><p class="small">Original and model-safe weather fields are kept separately.</p></div>
+          </div>
+        </div>
+        <table>
+          <tr><th>Feature family</th><th>Representative fields</th><th>Primary use</th><th>Control</th></tr>
+          <tr><td>Consumption</td><td>daily_consumption, log, rank, percentile</td><td>EDA, ranking, model base signal</td><td>Original value preserved</td></tr>
+          <tr><td>Rolling and lag</td><td>rolling_mean_7d, deviation, lag_1d, lag_7d</td><td>Recent-pattern anomaly context</td><td>Past-only by entity</td></tr>
+          <tr><td>Calendar and weather</td><td>is_weekend, month, temperature, rainfall, hot/rainy flags</td><td>Model context and dashboard slicers</td><td>No causal overclaim</td></tr>
+        </table>
+      </div>
+      <div class="footer"><span>Scrub stage</span><span>Datamart, quality, and feature readiness</span></div>
+    </section>
+
+    <section class="slide">
+      <div class="header">
+        <div><div class="section-label">E - Explore</div><h2>Daily and monthly trends show monitoring value before model drill-down</h2></div>
+        <div class="slide-num">05</div>
+      </div>
+      <div class="content">
+        <div class="grid-2">
+          <div class="chart-box"><img src="outputs/eda/final/daily_consumption_trend.png" alt="Daily consumption trend"><div class="chart-caption">Daily selected-meter consumption with balanced anomaly markers</div></div>
+          <div class="chart-box"><img src="outputs/eda/final/monthly_consumption_trend.png" alt="Monthly consumption trend"><div class="chart-caption">Monthly total and average meter-day consumption</div></div>
+        </div>
+        <div class="grid-4">
+          <div class="kpi"><span class="value">15.606</span><span class="label">Avg daily total</span><p class="note">Selected meters</p></div>
+          <div class="kpi teal"><span class="value">12.640</span><span class="label">Min daily total</span><p class="note">Observed range floor</p></div>
+          <div class="kpi gold"><span class="value">17.400</span><span class="label">Max daily total</span><p class="note">Observed range ceiling</p></div>
+          <div class="kpi red"><span class="value">2022-05</span><span class="label">Peak month</span><p class="note">499.975 total</p></div>
+        </div>
+        <div class="callout">Interpretation: aggregate trend is stable enough for monitoring, but anomaly review must drill into entity-specific history and scenario score.</div>
+      </div>
+      <div class="footer"><span>Explore stage</span><span>Trend evidence</span></div>
+    </section>
+
+    <section class="slide">
+      <div class="header">
+        <div><div class="section-label">E - Explore</div><h2>Calendar and contribution patterns guide dashboard filters and audit ranking</h2></div>
+        <div class="slide-num">06</div>
+      </div>
+      <div class="content">
+        <div class="grid-2">
+          <div class="chart-box"><img src="outputs/eda/final/weekday_weekend_consumption.png" alt="Weekday weekend consumption"><div class="chart-caption">Weekday vs weekend total daily consumption</div></div>
+          <div class="chart-box"><img src="outputs/eda/final/top_meter_contribution_pareto.png" alt="Top meter contribution pareto"><div class="chart-caption">Selected-meter contribution and Pareto pattern</div></div>
+        </div>
+        <div class="grid-main">
+          <div class="rank panel white">
+            <h3>Top contribution ranking</h3>
+            <div class="rank-row"><strong>D0849</strong><div class="bar"><span style="width:100%"></span></div><span>20,62%</span></div>
+            <div class="rank-row"><strong>D0848</strong><div class="bar"><span style="width:73%"></span></div><span>15,00%</span></div>
+            <div class="rank-row"><strong>D0854</strong><div class="bar"><span style="width:66%"></span></div><span>13,64%</span></div>
+            <div class="rank-row"><strong>D0853</strong><div class="bar"><span style="width:63%"></span></div><span>12,96%</span></div>
+            <div class="rank-row"><strong>D0862</strong><div class="bar"><span style="width:32%"></span></div><span>6,57%</span></div>
+          </div>
+          <div class="panel gold">
+            <h3>Business implications</h3>
+            <ul>
+              <li>Weekday average is <strong>169,973</strong> above weekend.</li>
+              <li>Top 5 meters contribute <strong>68,79%</strong> of selected-meter consumption.</li>
+              <li>High contribution is not automatically inefficiency; combine with anomaly rate and quality flags.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="footer"><span>Explore stage</span><span>Calendar and contribution evidence</span></div>
+    </section>
+
+    <section class="slide">
+      <div class="header">
+        <div><div class="section-label">E - Explore</div><h2>Weather and quality evidence keep interpretation grounded and transparent</h2></div>
+        <div class="slide-num">07</div>
+      </div>
+      <div class="content">
+        <div class="grid-2">
+          <div class="chart-box"><img src="outputs/eda/final/weather_consumption_context.png" alt="Weather consumption context"><div class="chart-caption">Consumption vs temperature and rainfall</div></div>
+          <div class="chart-box"><img src="outputs/eda/final/data_quality_flags.png" alt="Data quality flags"><div class="chart-caption">Meter quality and fact row quality flags</div></div>
+        </div>
+        <div class="grid-4">
+          <div class="kpi"><span class="value">0,236</span><span class="label">Temperature corr.</span><p class="note">Simple daily correlation</p></div>
+          <div class="kpi teal"><span class="value">0,138</span><span class="label">Rainfall corr.</span><p class="note">Context, not causality</p></div>
+          <div class="kpi gold"><span class="value">72</span><span class="label">Quality issue rows</span><p class="note">Weather imputation</p></div>
+          <div class="kpi red"><span class="value">8</span><span class="label">Excluded / non-active meters</span><p class="note">Visible in dimension</p></div>
+        </div>
+        <div class="callout">Weather supports context for anomaly review, while quality flags protect ranking and model interpretation from silent exclusions.</div>
+      </div>
+      <div class="footer"><span>Explore stage</span><span>Context and quality evidence</span></div>
+    </section>
+
+    <section class="slide">
+      <div class="header">
+        <div><div class="section-label">M - Model</div><h2>Isolation Forest scenarios provide controlled anomaly candidate volumes</h2></div>
+        <div class="slide-num">08</div>
+      </div>
+      <div class="content">
+        <div class="grid-main">
+          <table>
+            <tr><th>Scenario</th><th class="num">Contamination</th><th class="num">Anomaly count</th><th class="num">Anomaly rate</th><th>Use case</th></tr>
+            <tr><td>Strict</td><td class="num">0,03</td><td class="num">313</td><td class="num">0,030038</td><td>Only strongest candidates</td></tr>
+            <tr><td>Balanced</td><td class="num">0,05</td><td class="num">521</td><td class="num">0,050000</td><td>Default dashboard scenario</td></tr>
+            <tr><td>Sensitive</td><td class="num">0,10</td><td class="num">1.042</td><td class="num">0,100000</td><td>Wider exploratory review</td></tr>
+          </table>
+          <div class="panel blue">
+            <h3>Model framing</h3>
+            <ul>
+              <li>Problem type: unsupervised anomaly detection.</li>
+              <li>Unit: daily observation per meter entity.</li>
+              <li>Output: anomaly_score, anomaly_flag, rank, baseline agreement.</li>
+              <li>Interpretation: candidate review, not confirmed fault.</li>
+            </ul>
+          </div>
+        </div>
+        <table>
+          <tr><th>Evaluation lens</th><th>Why it matters</th><th>Observed result</th></tr>
+          <tr><td>Contamination sanity</td><td>Checks model volume against scenario design</td><td>Balanced exactly 5%; sensitive exactly 10%; strict approximately 3%</td></tr>
+          <tr><td>IQR and Z-score agreement</td><td>Compares multivariate model with simple statistical outliers</td><td>Agreement is low, suggesting model captures broader patterns than absolute consumption only</td></tr>
+          <tr><td>Scenario stability</td><td>Prioritizes candidates appearing across scenarios</td><td>313 strict candidates remain stable within broader scenarios</td></tr>
+          <tr><td>Case review</td><td>Supports narrative inspection without labels</td><td>Top 20 balanced candidates prepared for review</td></tr>
+        </table>
+      </div>
+      <div class="footer"><span>Model stage</span><span>Scenario design and evaluation without labels</span></div>
+    </section>
+
+    <section class="slide">
+      <div class="header">
+        <div><div class="section-label">M - Model</div><h2>Balanced anomaly review and scorecard make D0849 the first audit target</h2></div>
+        <div class="slide-num">09</div>
+      </div>
+      <div class="content">
+        <div class="grid-main">
+          <div class="chart-box"><img src="outputs/eda/final/anomaly_case_review.png" alt="Anomaly case review"><div class="chart-caption">Top balanced anomaly cases by deviation from recent pattern</div></div>
+          <div class="panel white">
+            <h3>Entity priority scorecard</h3>
+            <table>
+              <tr><th>Rank</th><th>Entity</th><th class="num">Balanced count</th><th class="num">Score</th></tr>
+              <tr><td>1</td><td>D0849</td><td class="num">396</td><td class="num">100,00</td></tr>
+              <tr><td>2</td><td>D0848</td><td class="num">59</td><td class="num">52,57</td></tr>
+              <tr><td>3</td><td>D0854</td><td class="num">12</td><td class="num">46,15</td></tr>
+              <tr><td>4</td><td>D0853</td><td class="num">8</td><td class="num">43,07</td></tr>
+              <tr><td>5</td><td>D0862</td><td class="num">2</td><td class="num">17,75</td></tr>
+            </table>
+            <div class="callout" style="margin-top:9px;">D0849 combines high consumption contribution, high anomaly count, and high peak load.</div>
+          </div>
+        </div>
+        <div class="grid-3">
+          <div class="panel green"><h3>Review priority</h3><p class="small">Start with D0849, then review top scorecard entities by anomaly rate and contribution.</p></div>
+          <div class="panel gold"><h3>Validation need</h3><p class="small">Confirm whether unusual dates align with equipment function or operations schedule.</p></div>
+          <div class="panel red"><h3>Interpretation guard</h3><p class="small">Anomaly candidate does not automatically mean fault, waste, or inefficiency.</p></div>
+        </div>
+      </div>
+      <div class="footer"><span>Model stage</span><span>Anomaly case review and audit prioritization</span></div>
+    </section>
+
+    <section class="slide">
+      <div class="header">
+        <div><div class="section-label">N - Interpret</div><h2>Insight-to-action matrix converts analytics into practical review priorities</h2></div>
+        <div class="slide-num">10</div>
+      </div>
+      <div class="content">
+        <table>
+          <tr><th>Insight</th><th>Evidence</th><th>Recommended action</th><th>Owner</th></tr>
+          <tr><td>Consumption is concentrated in a small number of selected meters.</td><td>Top 5 contribution = 68,79%</td><td>Start audit prioritization from high-contribution entities, but check anomaly and quality context.</td><td>Building manager</td></tr>
+          <tr><td>Weekday average is higher than weekend.</td><td>Weekday gap = 169,973</td><td>Use weekday/weekend filters to review abnormal high consumption outside expected operations.</td><td>Facilities team</td></tr>
+          <tr><td>Balanced scenario produces controlled anomaly candidate volume.</td><td>Balanced anomaly rate = 5%</td><td>Use balanced as default; compare strict and sensitive for confidence.</td><td>Data analyst</td></tr>
+          <tr><td>Weather helps context but does not prove causality.</td><td>Temperature corr. 0,236; rainfall corr. 0,138</td><td>Use weather as tooltip/filter context when reviewing anomaly dates.</td><td>Sustainability team</td></tr>
+        </table>
+        <div class="grid-3">
+          <div class="panel green"><h3>P0: Audit focus</h3><p class="small">Audit D0849 and other high-priority scorecard entities first.</p></div>
+          <div class="panel blue"><h3>P0: Dashboard default</h3><p class="small">Use balanced scenario as default for management review and presentation.</p></div>
+          <div class="panel gold"><h3>P1: Review logic</h3><p class="small">Prioritize stable anomaly candidates before acting on sensitive-only cases.</p></div>
+        </div>
+        <div class="callout">Decision rule: do not read any single metric alone; combine contribution, anomaly score, scenario stability, weather context, and quality flags.</div>
+      </div>
+      <div class="footer"><span>Interpret stage</span><span>Evidence-backed recommendations</span></div>
+    </section>
+
+    <section class="slide">
+      <div class="header">
+        <div><div class="section-label">Power BI Blueprint</div><h2>Dashboard structure is ready for manual .pbix build and validation</h2></div>
+        <div class="slide-num">11</div>
+      </div>
+      <div class="content">
+        <div class="grid-3">
+          <div class="panel blue"><h3>Executive Overview</h3><p class="small">KPI cards, trend, top entities, top anomaly days.</p></div>
+          <div class="panel blue"><h3>Consumption Trend</h3><p class="small">Daily/monthly trend, weekday/weekend, calendar filters.</p></div>
+          <div class="panel blue"><h3>Anomaly Explorer</h3><p class="small">Score scatter, candidate table, anomaly by entity and scenario.</p></div>
+          <div class="panel green"><h3>Weather Impact</h3><p class="small">Consumption vs temperature/rainfall, hot/rainy filters.</p></div>
+          <div class="panel green"><h3>Meter Ranking</h3><p class="small">Contribution, anomaly rate, entity scorecard priority.</p></div>
+          <div class="panel green"><h3>Data Quality</h3><p class="small">Excluded meters, imputed weather, source and method transparency.</p></div>
+        </div>
+        <div class="grid-main">
+          <div class="panel white">
+            <h3>Required slicers</h3>
+            <div class="tag-row">
+              <span class="tag">Date range</span>
+              <span class="tag">Scenario</span>
+              <span class="tag">Anomaly flag</span>
+              <span class="tag">Entity</span>
+              <span class="tag">Weekday/weekend</span>
+              <span class="tag">Hot/rainy day</span>
+              <span class="tag">Quality flag</span>
+            </div>
+          </div>
+          <div class="panel gold">
+            <h3>Measures</h3>
+            <p class="small">Total consumption, average daily consumption, peak consumption, anomaly count, anomaly rate, average anomaly score, quality issue count, rainy day count, hot day count.</p>
+          </div>
+        </div>
+        <table>
+          <tr><th>Relationship</th><th>Cardinality</th><th>Recommended direction</th></tr>
+          <tr><td>dim_date to both fact tables on date</td><td>Many-to-one</td><td>Single direction from dimension</td></tr>
+          <tr><td>dim_entity to both fact tables on entity_id</td><td>Many-to-one</td><td>Single direction from dimension</td></tr>
+          <tr><td>dim_scenario to fact_anomaly_scenarios on scenario</td><td>Many-to-one</td><td>Single direction from dimension</td></tr>
+        </table>
+      </div>
+      <div class="footer"><span>Power BI design</span><span>Manual build-ready structure</span></div>
+    </section>
+
+    <section class="slide">
+      <div class="header">
+        <div><div class="section-label">Close</div><h2>Use the analytics output as a screening system, then validate operationally</h2></div>
+        <div class="slide-num">12</div>
+      </div>
+      <div class="content">
+        <div class="grid-main">
+          <div class="panel white">
+            <h3>Final conclusions</h3>
+            <ul>
+              <li>The OSEMN pipeline is complete through data readiness, EDA evidence, anomaly modelling, and interpretation matrix.</li>
+              <li>The strongest business signal is concentration of consumption and anomaly candidates in a small number of selected meters.</li>
+              <li>D0849 is the first audit candidate, but operational validation is required before technical conclusions.</li>
+              <li>Power BI can be built from the prepared CSV star schema and validated page by page.</li>
+            </ul>
+          </div>
+          <div class="panel green">
+            <h3>Next actions</h3>
+            <ol>
+              <li>Build the Power BI `.pbix` from final CSV outputs.</li>
+              <li>Validate relationships, measures, slicers, tooltips, and screenshots.</li>
+              <li>Review D0849 and stable anomaly candidates with operations context.</li>
+              <li>Extend beyond T1440 if broader campus claims are required.</li>
+            </ol>
+          </div>
+        </div>
+        <div class="panel blue">
+          <h3>Handoff files</h3>
+          <ul class="appendix-list">
+            <li>fact_energy_weather_daily.csv</li>
+            <li>fact_anomaly_scenarios.csv</li>
+            <li>dim_date.csv</li>
+            <li>dim_entity.csv</li>
+            <li>dim_scenario.csv</li>
+            <li>entity_scorecard.csv</li>
+            <li>model_evaluation_summary.csv</li>
+            <li>anomaly_case_review.csv</li>
+            <li>eda_summary.csv</li>
+            <li>insight_recommendation_matrix.csv</li>
+            <li>dashboard_validation_checklist.csv</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer"><span>Final recommendation</span><span>Review, validate, operationalize</span></div>
+    </section>
+  </main>
+</body>
+</html>
