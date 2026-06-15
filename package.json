@@ -1,0 +1,31 @@
+{
+  "name": "energy-anomaly-dashboard",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build:web-data": "python scripts/build_react_dashboard_data.py",
+    "dev:web": "vite --config web/vite.config.ts --host 0.0.0.0",
+    "build:web": "tsc -p web/tsconfig.json && vite build --config web/vite.config.ts",
+    "preview:web": "vite preview --config web/vite.config.ts --host 0.0.0.0"
+  },
+  "dependencies": {
+    "@phosphor-icons/react": "^2.1.10",
+    "@radix-ui/react-select": "^2.2.6",
+    "@radix-ui/react-tabs": "^1.1.13",
+    "@tailwindcss/vite": "^4.1.10",
+    "@tanstack/react-table": "^8.21.3",
+    "clsx": "^2.1.1",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "recharts": "^2.15.3",
+    "tailwindcss": "^4.1.10"
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "@vitejs/plugin-react": "^6.0.2",
+    "typescript": "^5.8.3",
+    "vite": "^8.0.16"
+  }
+}

@@ -2,6 +2,63 @@
 
 Last updated: 2026-06-15, Asia/Jakarta
 
+Update 2026-06-15 - React dashboard target:
+
+- Branch kerja aktif: `feat-energy-react-dashboard`.
+- Commit message yang disiapkan: `Build energy React dashboard`.
+- Target visualisasi final terbaru berubah dari Power BI menjadi standalone React dashboard yang siap dipublish ke Vercel.
+- Power BI guide dan `.pbix` workflow tetap dipertahankan sebagai historical/manual alternative, tetapi bukan target utama terbaru.
+- Struktur frontend baru:
+  - root `package.json` dan `package-lock.json`;
+  - `vercel.json`;
+  - `web/` Vite React TypeScript app;
+  - `web/public/data/*.json` sebagai delivery data statis;
+  - `web/src/main.tsx` dan `web/src/styles.css`.
+- Script data packaging baru:
+  - `scripts/build_react_dashboard_data.py`
+- Guide deployment baru:
+  - `cache/react_dashboard_vercel_guide.md`
+- Output JSON dashboard:
+  - `manifest.json`;
+  - `daily_trend.json`;
+  - `monthly_trend.json`;
+  - `entity_daily.json`;
+  - `anomalies.json`;
+  - `dimensions.json`;
+  - `entity_scorecard.json`;
+  - `anomaly_case_review.json`;
+  - `data_quality_summary.json`;
+  - `model_evaluation_summary.json`;
+  - `eda_summary.json`;
+  - `insight_recommendation_matrix.json`.
+- Dashboard pages:
+  - Executive Overview;
+  - Consumption Trend;
+  - Anomaly Explorer;
+  - Weather Impact;
+  - Meter Ranking;
+  - Data Quality and Methodology.
+- Global filters:
+  - date start/end;
+  - scenario;
+  - entity;
+  - anomaly flag;
+  - day type;
+  - weather;
+  - data quality flag.
+- Validasi yang sudah dilakukan:
+  - `python -m py_compile scripts\build_react_dashboard_data.py`;
+  - `python scripts\build_react_dashboard_data.py`;
+  - `npm install`;
+  - `npm audit --omit=dev` menghasilkan 0 vulnerabilities setelah upgrade Vite;
+  - `npm run build:web` berhasil;
+  - browser verification di `http://127.0.0.1:5173` untuk desktop dan mobile;
+  - semua halaman dashboard bisa dinavigasi tanpa console warning/error.
+- Next action:
+  - publish ke Vercel dari branch ini dengan setting di `cache/react_dashboard_vercel_guide.md`;
+  - jika Vercel CLI sudah authenticated, gunakan `npx vercel --prod`; jika belum, import repo melalui Vercel dashboard.
+- Final academic report/documentation, presentation, slide deck, video/demo, dan README tetap di luar scope.
+
 Update 2026-06-15 - Power BI manual build guide:
 
 - Branch kerja aktif: `feat-energy-dashboard-evidence`.

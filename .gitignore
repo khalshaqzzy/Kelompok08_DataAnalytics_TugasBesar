@@ -14,6 +14,11 @@ venv/
 env/
 ENV/
 
+# Node / frontend build artifacts
+node_modules/
+web/dist/
+dist/
+
 # Jupyter
 .ipynb_checkpoints/
 */.ipynb_checkpoints/

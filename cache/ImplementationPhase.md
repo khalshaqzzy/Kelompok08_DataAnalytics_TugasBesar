@@ -1,4 +1,4 @@
-# Implementation Phase - OSEMN Finalization + Power BI Datamart
+# Implementation Phase - OSEMN Finalization + React Dashboard
 
 Last updated: 2026-06-15, Asia/Jakarta
 
@@ -20,19 +20,20 @@ Dokumen ini adalah tracker implementasi utama untuk menyelesaikan pipeline dari 
 
 Current scope guard:
 
-- Perubahan teknis terbaru boleh menyentuh `scripts/`, `outputs/`, `Data_Acquisition/dataset/processed`, `notebooks/`, dan `cache/` sesuai instruksi user untuk final EDA, evidence matrix, notebook interpretation, dan dashboard readiness.
+- Perubahan teknis terbaru boleh menyentuh `scripts/`, `web/`, root npm/Vercel config, `outputs/`, `Data_Acquisition/dataset/processed`, `notebooks/`, dan `cache/` sesuai instruksi user untuk mengganti target Power BI menjadi React dashboard.
 - Final academic report, presentation, slide deck, video/demo, README, Power BI `.pbix` automation, dan Power BI Service deployment tetap di luar scope kecuali diminta eksplisit.
 - "Documentation out of scope" berarti final academic documentation/reporting artifacts di luar `cache/`; cache planning/handoff files tetap wajib diperbarui.
 - PRD tetap diperlakukan sebagai source-of-truth dan tidak diubah kecuali diminta eksplisit.
 
 Implementation update 2026-06-15:
 
-- Scope teknis saat ini mencakup final EDA visuals, evidence tables, insight-recommendation matrix, dashboard validation checklist, formal notebook Explore/iNterpret sections, processed CSV outputs, cache tracker, dan penghapusan notebook builder scripts yang sudah tidak diperlukan.
+- Scope teknis saat ini mencakup standalone React dashboard, Vite/Vercel setup, JSON data packaging dari CSV final, cache tracker, dan deployment readiness ke Vercel.
+- Power BI manual build guide tetap historical/manual alternative; target visualisasi utama sekarang adalah React dashboard.
 - Final academic report, presentation, slide deck, video/demo, dan README tetap di luar scope.
 
 Aturan wajib:
 
-1. Setiap perubahan penting pada pipeline, dataset, notebook, model, visual, atau output Power BI-ready harus memperbarui dokumen ini.
+1. Setiap perubahan penting pada pipeline, dataset, notebook, model, visual, React dashboard, atau output dashboard-ready harus memperbarui dokumen ini.
 2. Setiap perubahan penting juga harus memperbarui `cache/sessionHandoff.md` pada turn yang sama.
 3. Jika path canonical, nama file output, schema dataset, atau keputusan modelling berubah, perubahan tersebut harus dicatat di bagian **Progress Log**, **Decisions**, dan **Known Issues** dokumen ini.
 4. Sebelum melanjutkan pekerjaan pada sesi baru, baca berurutan:
@@ -43,7 +44,7 @@ Aturan wajib:
 5. Jangan membuat output final baru di root `dataset/processed`. Path canonical final adalah `Data_Acquisition/dataset`.
 6. Notebook final aktif harus hanya satu file di `/notebooks`.
 7. Logic pipeline utama harus berada di `/scripts`, bukan di notebook.
-8. Power BI Desktop boleh dibangun manual dari CSV final; automation `.pbix` tidak diwajibkan dalam fase ini.
+8. React dashboard di `web/` adalah target visualisasi utama. Power BI Desktop boleh dibangun manual dari CSV final sebagai alternatif historis, tetapi bukan target utama terbaru.
 9. Branch dan commit message harus behavior-based, tidak boleh mengandung `/`, dan tidak boleh mereferensikan phase, milestone, sprint, atau nomor fase.
 10. Notebook aktif hanya wajib mencakup output OSEMN yang sudah tersedia dan terverifikasi. Notebook harus ditulis formal seperti laporan analitis, dipisahkan berdasarkan OSEMN yang sudah siap, dan tidak boleh memakai bahasa development seperti phase, backlog, atau plan.
 11. Progress teknis berikutnya harus mengevaluasi apakah notebook perlu diperbarui. Notebook hanya diperluas setelah output baru untuk EDA, model, atau interpretasi sudah tersedia dan layak ditulis secara formal.
@@ -66,9 +67,11 @@ Aturan wajib:
 | Default dashboard scenario | `balanced` |
 | Notebook policy | Only one active notebook in `/notebooks` |
 | Old notebook policy | Archive old notebooks to `cache/archive/notebooks` |
-| Current active branch | `feat-energy-dashboard-evidence` |
-| Current planned commit message | `Add Power BI manual build guide` |
-| Power BI scope | Manual `.pbix` build guide, CSV datamart, measures, relationships, page checklist |
+| Current active branch | `feat-energy-react-dashboard` |
+| Current planned commit message | `Build energy React dashboard` |
+| Dashboard target | Standalone Vite React app in `web/`, published through Vercel |
+| Dashboard data delivery | Prebuilt JSON in `web/public/data`, generated from canonical processed CSV |
+| Power BI scope | Historical/manual alternative only; `.pbix` automation remains out of scope |
 | Out of scope for current branch | Final academic report/documentation, slide deck, presentation script, video/demo, README, and automated Power BI Desktop manipulation |
 
 Notebook scope note:
@@ -945,19 +948,116 @@ If multiple flags apply, use a semicolon-delimited string in a stable order.
 
 ---
 
-# 7. Power BI Manual Build Plan
+# 7. React Dashboard and Vercel Readiness
+
+Detailed React/Vercel build guide:
+
+`cache/react_dashboard_vercel_guide.md`
+
+Guide status: Done.
+
+Primary visualization target:
+
+`web/`
+
+Deployment target:
+
+Vercel static deployment from `web/dist`.
+
+Dashboard data delivery:
+
+`web/public/data/*.json`
+
+Canonical source remains:
+
+`Data_Acquisition/dataset/processed/*.csv`
+
+## 7.1 React App Outputs
+
+| Output | Status | Notes |
+|---|---|---|
+| `package.json` | Done | Root npm scripts for dashboard data, dev, build, and preview |
+| `package-lock.json` | Done | Locked frontend dependency graph |
+| `vercel.json` | Done | Vercel build command and output directory |
+| `web/index.html` | Done | Vite app entry |
+| `web/src/main.tsx` | Done | Six-page React dashboard |
+| `web/src/styles.css` | Done | Responsive analytical dashboard styling |
+| `web/public/favicon.svg` | Done | Browser favicon |
+| `web/public/data/*.json` | Done | Static dashboard delivery data |
+| `scripts/build_react_dashboard_data.py` | Done | Converts processed CSV outputs into React dashboard JSON |
+
+## 7.2 React Dashboard Pages
+
+1. Executive Overview
+2. Consumption Trend
+3. Anomaly Explorer
+4. Weather Impact
+5. Meter Ranking
+6. Data Quality and Methodology
+
+## 7.3 React Dashboard Runbook
+
+Run from repo root:
+
+```powershell
+npm install
+npm run build:web-data
+npm run dev:web
+```
+
+Production build:
+
+```powershell
+npm run build:web
+```
+
+Production preview:
+
+```powershell
+npm run preview:web
+```
+
+Vercel settings:
+
+| Setting | Value |
+|---|---|
+| Framework Preset | Vite |
+| Install Command | `npm install` |
+| Build Command | `npm run build:web` |
+| Output Directory | `web/dist` |
+| Root Directory | repo root |
+
+## 7.4 React Dashboard Verification
+
+Completed checks:
+
+1. `python -m py_compile scripts\build_react_dashboard_data.py`
+2. `python scripts\build_react_dashboard_data.py`
+3. `npm install`
+4. `npm audit --omit=dev`
+5. `npm run build:web`
+6. Browser verification on desktop and mobile viewport.
+7. All six dashboard pages navigate without console warning/error.
+
+Known note:
+
+- Build emits a chunk-size warning because charting dependencies are bundled in the main app. Gzipped JS is about 191 KB and acceptable for this static dashboard. If app scope grows, add route-level code splitting.
+
+---
+
+# 8. Historical Power BI Manual Build Plan
 
 Detailed manual build guide:
 
 `cache/powerbi_manual_build_guide.md`
 
-Guide status: Done.
+Guide status: Done, historical/manual alternative.
 
 Recommended `.pbix` output:
 
 `outputs/powerbi/energy_anomaly_dashboard.pbix`
 
-## 7.1 Import CSV Files
+## 8.1 Import CSV Files
 
 Import these tables into Power BI Desktop:
 
@@ -972,7 +1072,7 @@ Import these tables into Power BI Desktop:
 9. `Data_Acquisition/dataset/processed/model_evaluation_summary.csv`
 10. `Data_Acquisition/dataset/processed/anomaly_case_review.csv`
 
-## 7.2 Relationships
+## 8.2 Relationships
 
 Create relationships:
 
@@ -986,7 +1086,7 @@ Create relationships:
 
 Recommended cross-filter direction: single direction from dimensions to facts.
 
-## 7.3 Required DAX Measures
+## 8.3 Required DAX Measures
 
 ```DAX
 Total Consumption =
@@ -1038,7 +1138,7 @@ CALCULATE (
 )
 ```
 
-## 7.4 Dashboard Pages
+## 8.4 Dashboard Pages
 
 ### Page 1 - Executive Overview
 
@@ -1145,7 +1245,7 @@ Slicers:
 2. Meter quality flag
 3. Date range
 
-## 7.5 Screenshot Checklist
+## 8.5 Screenshot Checklist
 
 Before using dashboard screenshots in report/presentation later:
 
@@ -1158,9 +1258,9 @@ Before using dashboard screenshots in report/presentation later:
 
 ---
 
-# 8. Verification Plan
+# 9. Verification Plan
 
-## 8.1 Static Checks
+## 9.1 Static Checks
 
 ```powershell
 python -m py_compile scripts\*.py
@@ -1168,7 +1268,7 @@ python -m py_compile scripts\*.py
 
 If wildcard fails in PowerShell context, enumerate script files explicitly.
 
-## 8.2 Data Integrity Checks
+## 9.2 Data Integrity Checks
 
 Required checks:
 
@@ -1183,7 +1283,7 @@ Required checks:
 9. Rainfall missing count remains documented as 5 days.
 10. Solar radiation missing count remains documented as 1 day.
 
-## 8.3 Model Checks
+## 9.3 Model Checks
 
 Required checks:
 
@@ -1194,7 +1294,7 @@ Required checks:
 5. Baseline agreement columns exist.
 6. Evaluation summary includes no-ground-truth note.
 
-## 8.4 Notebook Checks
+## 9.4 Notebook Checks
 
 Required checks:
 
@@ -1203,7 +1303,7 @@ Required checks:
 3. Final notebook executes with 0 error outputs.
 4. Final notebook reads or calls script outputs, not duplicated long logic.
 
-## 8.5 Power BI Readiness Checks
+## 9.5 Dashboard Readiness Checks
 
 Required checks:
 
@@ -1215,7 +1315,7 @@ Required checks:
 
 ---
 
-# 9. Insight and Recommendation Targets
+# 10. Insight and Recommendation Targets
 
 The implementation should produce data artifacts that support, but do not yet write, final report insights.
 
@@ -1237,7 +1337,7 @@ Recommendation-ready targets:
 
 ---
 
-# 10. Known Issues and Risks
+# 11. Known Issues and Risks
 
 | Risk | Impact | Mitigation |
 |---|---|---|
@@ -1252,7 +1352,7 @@ Recommendation-ready targets:
 
 ---
 
-# 11. Progress Log
+# 12. Progress Log
 
 | Date | Phase | Status | Notes |
 |---|---|---|---|
@@ -1272,10 +1372,11 @@ Recommendation-ready targets:
 | 2026-06-15 | Final EDA verification and handoff | Done | Verified final EDA PNG files are non-empty, evidence tables have required columns, insight/recommendation count is 4/3, fact/model keys remain unique, and cache trackers were updated. |
 | 2026-06-15 | Notebook builder cleanup | Done | Removed `scripts/build_osemn_notebook.py` and `scripts/build_exploration_notebook.py` because the final notebook now exists as the active artifact. Updated runbook and handoff notes so future validation does not call removed builder scripts. |
 | 2026-06-15 | Power BI manual build guide | Done | Added `cache/powerbi_manual_build_guide.md` with concrete import steps, data type checks, relationship model, DAX measures, dashboard design system, six-page layout, slicer/tooltip guidance, validation checklist, screenshot checklist, and `.pbix` naming convention. |
+| 2026-06-15 | React dashboard implementation | Done | Created branch `feat-energy-react-dashboard`; added Vite React TypeScript app in `web/`, Vercel config, JSON data packaging script, static dashboard JSON outputs, six responsive dashboard pages, React/Vercel guide, and cache/PRD/roadmap updates that supersede Power BI as the primary visualization target. |
 
 ---
 
-# 12. Phase Status Summary
+# 13. Phase Status Summary
 
 | Phase | Name | Status |
 |---:|---|---|
@@ -1287,9 +1388,12 @@ Recommendation-ready targets:
 | 4 | Anomaly Modelling | Done |
 | 5 | Final EDA and Dashboard Preparation | Done |
 | 6 | Verification and Handoff Update | Done |
+| 7 | React Dashboard and Vercel Readiness | Done |
 
 Backlog after this branch:
 
-1. Build manual Power BI `.pbix` from final CSV outputs by following `cache/powerbi_manual_build_guide.md`.
-2. Validate Power BI relationship, DAX, slicer, page, tooltip/cross-filter, and screenshot checklist in Power BI Desktop.
+1. Publish React dashboard to Vercel by following `cache/react_dashboard_vercel_guide.md`.
+2. Validate the deployed URL for desktop/mobile layout, data load, filters, and all six dashboard pages.
+3. Manual Power BI `.pbix` build remains optional/historical by following `cache/powerbi_manual_build_guide.md`.
+4. Final academic report/documentation, presentation, slide deck, and video/demo remain out of scope unless requested explicitly.
 3. Final academic report/documentation, presentation, slide deck, and video/demo remain out of scope unless requested explicitly.

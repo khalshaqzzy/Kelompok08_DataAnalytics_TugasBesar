@@ -1,6 +1,6 @@
 # Product Requirements Document
 
-## Energy Efficiency Analytics: HKUST Smart Meter Anomaly Detection and Power BI Dashboard
+## Energy Efficiency Analytics: HKUST Smart Meter Anomaly Detection and React Dashboard
 
 | Komponen | Keterangan |
 |---|---|
@@ -10,10 +10,26 @@
 | Dataset utama | HKUST campus-level smart meter database |
 | Dataset pendukung | Hong Kong Observatory Open Data |
 | Model utama | Isolation Forest anomaly detection |
-| Media visualisasi akhir | Power BI dashboard interaktif |
+| Media visualisasi akhir | Standalone React dashboard interaktif yang dipublish ke Vercel |
 | Pengguna sasaran | Pengelola gedung, sarana prasarana, manajemen kampus, tim sustainability, dosen/penilai |
-| Versi dokumen | 1.1 |
-| Tanggal | 2026-06-13 |
+| Versi dokumen | 1.2 |
+| Tanggal | 2026-06-15 |
+
+---
+
+# Revision Notes v1.2
+
+Update v1.2 mengganti target visualisasi final dari Power BI menjadi standalone React dashboard yang siap dipublish ke Vercel.
+
+1. Dataset CSV final tetap menjadi canonical analytical output.
+2. React dashboard memakai prebuilt JSON di `web/public/data` sebagai delivery format.
+3. Power BI `.pbix` dan manual build guide dipertahankan sebagai historical/manual alternative, bukan target utama.
+4. Target deploy baru adalah Vercel static deployment dari Vite React app di `web/`.
+5. Enam halaman dashboard tetap dipertahankan: Executive Overview, Consumption Trend, Anomaly Explorer, Weather Impact, Meter Ranking, dan Data Quality and Methodology.
+
+Supersession rule:
+
+Setiap referensi lama ke Power BI, `.pbix`, DAX, atau Power BI Service di bagian historis dokumen ini harus dibaca sebagai keputusan yang sudah superseded oleh React dashboard target, kecuali bagian tersebut eksplisit menyebut historical/manual alternative.
 
 ---
 
@@ -34,7 +50,7 @@ Update v1.1 menyinkronkan PRD dengan `roadmap_improvement_energi_dashboard.md`. 
 
 Produk analitik ini dirancang untuk membantu pengelola kampus memahami pola konsumsi listrik, menemukan pemakaian tidak wajar, dan menentukan prioritas efisiensi energi berbasis data. Dataset utama berasal dari smart meter kampus HKUST, sedangkan data cuaca Hong Kong Observatory digunakan sebagai konteks pendukung untuk membaca perubahan konsumsi listrik harian.
 
-Output akhir yang diharapkan bukan hanya laporan statistik, tetapi pipeline analitik yang dapat menghasilkan dataset siap visualisasi, flag anomali berbasis Isolation Forest, dan dashboard Power BI interaktif. Dashboard akan memungkinkan pengguna melihat tren konsumsi, membandingkan meter/gedung/zona, memfilter skenario anomaly detection, serta menelusuri hari atau meter yang perlu ditinjau lebih lanjut.
+Output akhir yang diharapkan bukan hanya laporan statistik, tetapi pipeline analitik yang dapat menghasilkan dataset siap visualisasi, flag anomali berbasis Isolation Forest, dan dashboard React interaktif yang bisa dipublish ke Vercel. Dashboard akan memungkinkan pengguna melihat tren konsumsi, membandingkan meter/gedung/zona, memfilter skenario anomaly detection, serta menelusuri hari atau meter yang perlu ditinjau lebih lanjut.
 
 ---
 
@@ -57,7 +73,7 @@ Tujuan utama:
 
 1. Menghasilkan dataset analitik gabungan energi dan cuaca yang bersih, terdokumentasi, dan siap dipakai.
 2. Mendeteksi anomali konsumsi listrik menggunakan baseline statistik dan Isolation Forest.
-3. Menyediakan dashboard Power BI interaktif untuk memantau konsumsi, anomali, dan konteks cuaca.
+3. Menyediakan dashboard React interaktif untuk memantau konsumsi, anomali, dan konteks cuaca.
 4. Mendukung interpretasi dan rekomendasi efisiensi energi untuk pengguna non-teknis.
 5. Memenuhi kebutuhan tugas besar Data Analitik berbasis OSEMN, termasuk tahap Model dan iNterpret.
 
@@ -70,7 +86,7 @@ Definisi sukses:
 | Evaluasi | Hasil model dibandingkan dengan IQR/Z-score, dicek secara visual, dan dijelaskan keterbatasannya |
 | Dashboard | Pengguna dapat memfilter periode, meter/gedung/zona, skenario model, dan status anomali |
 | Interpretasi | Minimal 3 insight dan 3 rekomendasi efisiensi dapat diturunkan dari dashboard/analisis |
-| Reproducibility | Pipeline dapat dijalankan ulang dari raw/clean data hingga output Power BI |
+| Reproducibility | Pipeline dapat dijalankan ulang dari raw/clean data hingga output dashboard React |
 
 ---
 
@@ -503,7 +519,7 @@ Model dianggap layak untuk tugas besar jika:
 
 ---
 
-# 10. Power BI Dashboard Requirements
+# 10. React Dashboard Requirements
 
 ## 10.1 Tujuan Dashboard
 
@@ -515,7 +531,7 @@ Dashboard harus membantu pengguna menjawab:
 4. Apakah hari anomali berhubungan dengan cuaca, weekend, atau kualitas data?
 5. Area mana yang perlu diprioritaskan untuk audit atau investigasi?
 
-## 10.2 Data Tables
+## 10.2 Data Tables and Delivery Format
 
 Tabel minimum:
 
@@ -526,6 +542,23 @@ Tabel minimum:
 | `dim_date` | Kalender, bulan, tahun, weekday/weekend | generated |
 | `dim_entity` | Meter/building/zone metadata | TTL parsing atau fallback meter ID |
 | `dim_scenario` | strict, balanced, sensitive | generated |
+
+Delivery format untuk React:
+
+| JSON | Isi | Sumber CSV |
+|---|---|---|
+| `manifest.json` | Metadata build, date range, limitation, selected entity count | generated |
+| `daily_trend.json` | Aggregated daily trend | `fact_energy_weather_daily`, `fact_anomaly_scenarios` |
+| `monthly_trend.json` | Aggregated monthly trend | `fact_energy_weather_daily` |
+| `entity_daily.json` | Daily selected meter rows for filtering | `fact_energy_weather_daily` |
+| `anomalies.json` | Scenario anomaly rows | `fact_anomaly_scenarios` |
+| `dimensions.json` | Entity and scenario dimensions | `dim_entity`, `dim_scenario` |
+| `entity_scorecard.json` | Ranking and priority score | `entity_scorecard` |
+| `anomaly_case_review.json` | Top balanced anomaly cases | `anomaly_case_review` |
+| `data_quality_summary.json` | Quality summary | `data_quality_summary` |
+| `model_evaluation_summary.json` | Scenario model evaluation | `model_evaluation_summary` |
+| `eda_summary.json` | EDA evidence summary | `eda_summary` |
+| `insight_recommendation_matrix.json` | Insight/recommendation evidence | `insight_recommendation_matrix` |
 
 Jika TTL belum berhasil diparse:
 
@@ -672,9 +705,9 @@ Slicer:
 - Date range
 - Dataset group
 
-## 10.4 Required Measures
+## 10.4 Required Frontend Metrics
 
-Measure Power BI minimum:
+React dashboard metrics minimum:
 
 | Measure | Definisi |
 |---|---|
@@ -696,12 +729,14 @@ Measure Power BI minimum:
 
 Dashboard harus mendukung:
 
-1. Cross-filter antar visual.
-2. Drill-down dari kampus ke building/zone/meter jika metadata tersedia.
+1. Global filtering by date, scenario, entity, anomaly flag, day type, weather context, and data quality flag.
+2. Drill-down style comparison from selected building scope to meter-level detail.
 3. Tooltip yang menampilkan cuaca dan anomaly score.
-4. Slicer scenario untuk membandingkan strict, balanced, sensitive.
+4. Scenario filter untuk membandingkan strict, balanced, sensitive.
 5. Filter anomaly flag untuk melihat hanya hari/meter bermasalah.
-6. Export table untuk daftar kandidat audit.
+6. Detail tables for top anomaly cases, scorecard, data quality, and model evaluation.
+7. Responsive desktop and mobile layout.
+8. Vercel static deployment from `web/dist`.
 
 ---
 
@@ -709,9 +744,9 @@ Dashboard harus mendukung:
 
 | Area | Requirement |
 |---|---|
-| Reproducibility | Semua data Power BI berasal dari output script yang dapat dijalankan ulang |
+| Reproducibility | Semua data dashboard berasal dari output script yang dapat dijalankan ulang |
 | Traceability | Setiap dataset memiliki sumber dan periode yang jelas |
-| Performance | File dashboard harus tetap responsif dengan data harian dan scenario model |
+| Performance | React dashboard harus tetap responsif dengan data harian dan scenario model |
 | Explainability | Model anomaly harus dijelaskan dengan baseline dan contoh kasus |
 | Maintainability | Raw, processed, output, notebook, dan dokumen dipisahkan |
 | Academic compliance | Struktur mengikuti OSEMN dan mencantumkan keterbatasan |
