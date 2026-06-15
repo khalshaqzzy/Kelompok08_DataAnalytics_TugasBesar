@@ -1,6 +1,45 @@
 # Session Handoff - Kelompok08 Data Analytics Tugas Besar
 
-Last updated: 2026-06-14, Asia/Jakarta
+Last updated: 2026-06-15, Asia/Jakarta
+
+Update 2026-06-15 - Cache-only alignment audit:
+
+- Scope perubahan terakhir dibatasi hanya ke file di `cache/`.
+- Tidak ada perubahan ke `scripts/`, `notebooks/`, dataset, `outputs/`, Power BI file, final academic report/documentation, presentation, slide deck, video/demo, atau README.
+- "Docs out of scope" pada update ini berarti final academic documentation/reporting artifacts di luar `cache/`; cache planning/handoff files tetap boleh diubah karena menjadi target eksplisit.
+- `cache/ImplementationPhase.md` diperbarui dengan audit kesesuaian terhadap PRD, roadmap, dan panduan penilaian:
+  - fondasi Obtain/Scrub dan Power BI datamart dinilai kuat;
+  - gap utama masih ada pada final EDA, anomaly modelling, interpretation layer, dan dashboard validation;
+  - analisis harus dibatasi sebagai selected T1440 meter-level / selected building case study, bukan klaim full-campus HKUST;
+  - notebook aktif hanya boleh diperluas setelah output OSEMN yang relevan tersedia dan layak ditulis formal.
+- `cache/roadmap_improvement_energi_dashboard.md` diperbarui dengan scope alignment note:
+  - roadmap tetap menjadi cache planning artifact;
+  - final report, presentation, slide deck, video/demo, dan README berada di luar scope kecuali diminta eksplisit;
+  - PRD tetap source-of-truth dan tidak diubah pada update ini.
+- Backlog improvement yang harus dipertahankan untuk progress teknis berikutnya:
+  - feature engineering readiness sebelum final modelling;
+  - dokumentasi formula feature di data dictionary;
+  - validasi feature completeness untuk row `is_model_eligible = 1`;
+  - final EDA plots dan `eda_summary.csv`;
+  - interpretation per visual dan notebook Explore expansion;
+  - scenario-based anomaly modelling, baseline agreement, model evaluation without labels, dan anomaly case review;
+  - insight-recommendation matrix dengan evidence, target user, priority, dan limitation;
+  - Power BI relationship, DAX, slicer, page, dan screenshot validation checklist.
+- Feature engineering yang perlu dipertimbangkan pada progress teknis berikutnya:
+  - consumption transforms: `log_daily_consumption`, percentile/rank konsumsi per entity;
+  - rolling features: `rolling_mean_7d`, `rolling_std_7d`, deviation dan percent deviation dari rolling mean;
+  - lag features: `lag_1d_consumption`, `lag_7d_consumption`, difference dari lag;
+  - calendar features dari `dim_date`: weekend, month, quarter, day-of-week, month start/end;
+  - weather model-safe fields dan weather bands: hot/rainy/temperature/rainfall context;
+  - entity contribution features: contribution percentage, cumulative contribution, consumption rank;
+  - quality/eligibility features untuk filtering dan methodology page, bukan primary model signal.
+- Feature engineering rules:
+  - logic reusable harus berada di `/scripts`, bukan notebook cells;
+  - raw fields dan engineered fields harus tetap dibedakan;
+  - rolling/lag feature dihitung per `entity_id` dan tidak boleh memakai future information;
+  - semua feature yang dipakai EDA/model/dashboard harus masuk data dictionary;
+  - notebook hanya menjelaskan feature setelah kolom/output feature benar-benar tersedia.
+- Jika progress teknis berikutnya menghasilkan output baru untuk EDA, Model, atau iNterpret, update notebook pada sesi yang sama. Notebook tetap formal seperti laporan analitis dan tidak boleh memakai bahasa development seperti phase/backlog/plan di isi notebook.
 
 Update 2026-06-14 - Power BI datamart foundation:
 
@@ -99,6 +138,7 @@ File ini adalah sumber konteks utama untuk melanjutkan pekerjaan. **Setiap perub
 
 Aturan tambahan:
 
+- Untuk update 2026-06-15, perubahan dibatasi ke `cache/`; jangan mengubah script, notebook, dataset, outputs, final academic documentation/report, presentation, video/demo, atau README kecuali ada instruksi baru yang eksplisit.
 - Setiap progress implementasi juga wajib memperbarui `cache/ImplementationPhase.md`.
 - Jika output/path/schema/keputusan modelling berubah, update `sessionHandoff.md` dan `ImplementationPhase.md` pada turn yang sama.
 - Sebelum melanjutkan implementasi, baca `sessionHandoff.md`, `ImplementationPhase.md`, `prd_energi_anomaly_powerbi.md`, dan `roadmap_improvement_energi_dashboard.md`.

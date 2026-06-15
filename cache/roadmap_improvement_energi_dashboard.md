@@ -11,7 +11,19 @@
 | Scope data prioritas | T1440 harian + metadata TTL |
 | Output akhir yang dituju | Dataset Power BI-ready, anomaly detection defensible, dashboard interaktif, insight dan rekomendasi |
 | Status dokumen | Roadmap implementasi lanjutan |
-| Tanggal | 2026-06-13 |
+| Tanggal | 2026-06-15 |
+
+---
+
+# Scope Alignment Note - 2026-06-15
+
+Roadmap ini dipertahankan sebagai cache planning artifact untuk repo pipeline dan dashboard readiness. Untuk scope kerja saat ini:
+
+1. Perubahan implementasi dibatasi ke repo pipeline/dashboard dan cache planning files.
+2. Final academic report/documentation, presentation, slide deck, video/demo, dan README berada di luar scope kecuali diminta eksplisit di task terpisah.
+3. PRD tetap menjadi source-of-truth produk analitik; roadmap ini hanya menyusun prioritas improvement.
+4. Notebook aktif harus formal seperti laporan analitis, tetapi hanya memuat bagian OSEMN yang sudah didukung output final.
+5. Klaim analisis harus dibatasi pada selected T1440 meter-level subset, terutama `Cheng_Yu_Tung_Building`, bukan keseluruhan kampus HKUST.
 
 ---
 
@@ -675,11 +687,11 @@ Deliverable:
 - screenshot dashboard untuk laporan
 - daftar measures
 
-## Milestone 5 - Final Report and Presentation
+## Milestone 5 - External Final Deliverables
 
 Tujuan:
 
-Mengunci hasil akhir untuk penilaian.
+Mengunci hasil akhir untuk penilaian jika scope laporan, presentasi, atau demo diminta pada task terpisah. Bagian ini bukan scope implementasi repo pipeline/dashboard saat ini.
 
 Task:
 
@@ -694,6 +706,12 @@ Deliverable:
 - laporan akhir OSEMN
 - slide akhir
 - script presentasi
+
+Scope status:
+
+- Out of scope untuk current cache-only alignment task.
+- Out of scope untuk repo pipeline/dashboard implementation kecuali user meminta eksplisit.
+- Tidak boleh menghalangi prioritas teknis: EDA final, model anomaly scenario, interpretation matrix, dan dashboard validation.
 
 ---
 

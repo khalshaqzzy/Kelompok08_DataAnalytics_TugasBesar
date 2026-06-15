@@ -1,6 +1,6 @@
 # Implementation Phase - OSEMN Finalization + Power BI Datamart
 
-Last updated: 2026-06-14, Asia/Jakarta
+Last updated: 2026-06-15, Asia/Jakarta
 
 Status markers used in this document:
 
@@ -18,6 +18,13 @@ Status markers used in this document:
 
 Dokumen ini adalah tracker implementasi utama untuk menyelesaikan pipeline dari kondisi saat ini menuju output final yang sesuai `cache/prd_energi_anomaly_powerbi.md` dan `cache/roadmap_improvement_energi_dashboard.md`.
 
+Current scope guard:
+
+- Perubahan pada alignment update 2026-06-15 dibatasi hanya ke file di `cache/`.
+- Tidak ada perubahan teknis ke `scripts/`, `notebooks/`, dataset, `outputs/`, Power BI file, final academic report, presentation, video/demo, atau README dalam task ini.
+- "Documentation out of scope" pada task ini berarti final academic documentation/reporting artifacts di luar `cache/`; cache planning/handoff files tetap boleh diubah karena menjadi target eksplisit task.
+- PRD tetap diperlakukan sebagai source-of-truth dan tidak diubah kecuali diminta eksplisit.
+
 Aturan wajib:
 
 1. Setiap perubahan penting pada pipeline, dataset, notebook, model, visual, atau output Power BI-ready harus memperbarui dokumen ini.
@@ -33,7 +40,8 @@ Aturan wajib:
 7. Logic pipeline utama harus berada di `/scripts`, bukan di notebook.
 8. Power BI Desktop boleh dibangun manual dari CSV final; automation `.pbix` tidak diwajibkan dalam fase ini.
 9. Branch dan commit message harus behavior-based, tidak boleh mengandung `/`, dan tidak boleh mereferensikan phase, milestone, sprint, atau nomor fase.
-10. Untuk task branch `feat-powerbi-datamart-foundation`, notebook aktif hanya wajib mencakup output yang sudah tersedia. Notebook harus ditulis formal seperti laporan analitis, dipisahkan berdasarkan OSEMN yang sudah siap, dan tidak boleh memakai bahasa development seperti phase, backlog, atau plan.
+10. Notebook aktif hanya wajib mencakup output OSEMN yang sudah tersedia dan terverifikasi. Notebook harus ditulis formal seperti laporan analitis, dipisahkan berdasarkan OSEMN yang sudah siap, dan tidak boleh memakai bahasa development seperti phase, backlog, atau plan.
+11. Progress teknis berikutnya harus mengevaluasi apakah notebook perlu diperbarui. Notebook hanya diperluas setelah output baru untuk EDA, model, atau interpretasi sudah tersedia dan layak ditulis secara formal.
 
 ---
 
@@ -56,7 +64,7 @@ Aturan wajib:
 | Current active branch | `feat-powerbi-datamart-foundation` |
 | Current planned commit message | `Build Power BI datamart foundation` |
 | Power BI scope | Manual `.pbix` build plan, CSV datamart, measures, relationships, page checklist |
-| Out of scope for this implementation | Final report writing, academic documentation, slide deck, presentation script |
+| Out of scope for current cache-only alignment task | Script changes, notebook changes, dataset/output regeneration, final academic report/documentation, slide deck, presentation script, video/demo, README |
 
 Notebook scope note:
 
@@ -141,6 +149,120 @@ Problematic T1440 meters to keep visible in data quality outputs:
 | Old notebook archive | Not Started | Need archive old notebooks |
 | Final EDA plots | Not Started | Need dashboard-aligned visuals |
 | Manual Power BI checklist | Not Started | Need `.pbix` build instructions |
+
+## 2.5 Alignment Audit Against PRD, Roadmap, and Grading Guide
+
+Audit ini mencatat kesesuaian kondisi saat ini terhadap PRD, roadmap improvement, dan panduan penilaian tugas besar. Scope audit adalah repo pipeline/dashboard readiness; final academic report, presentation, video/demo, dan README tidak dikerjakan pada task cache-only ini.
+
+### 2.5.1 Alignment Summary
+
+| Area | Alignment Status | Evidence | Improvement Needed |
+|---|---|---|---|
+| Problem framing | Mostly aligned | Topik energi dan efisiensi gedung/kampus sudah konsisten dengan PRD dan roadmap | Tegaskan scope sebagai selected meter/building-level HKUST case study, bukan full-campus generalization |
+| Obtain | Strong | HKUST sebagai primary source, HKO sebagai supporting source, TTL sebagai metadata entity, source manifest final tersedia | Perkuat analytical question matrix dan source-to-output traceability di cache tracker |
+| Scrub | Strong | Canonical datamart, quality flags, imputation flags, selected/excluded meter decisions, data dictionary | Tambahkan summary pembersihan yang langsung memetakan missing, duplicates, types, outliers, integration, feature engineering |
+| Explore | Partial | Notebook baru memuat EDA awal dan datamart readiness | Butuh final EDA visuals, summary table, interpretation per visual, dan notebook Explore expansion setelah output tersedia |
+| Model | Not yet implemented | Scenario definitions dan model acceptance sudah direncanakan | Butuh anomaly scenarios, baseline agreement, evaluation without labels, case review |
+| iNterpret | Not yet implemented | Insight/recommendation targets sudah ditulis sebagai rencana | Butuh insight-recommendation matrix berbasis evidence, target user, priority, limitation |
+| Power BI readiness | Strong foundation | Star schema, relationship plan, DAX draft, page checklist sudah tersedia | Butuh dashboard validation checklist final dan alignment dengan model/EDA outputs setelah dibuat |
+| Notebook policy | Aligned after correction | Notebook formal dan hanya memuat output tersedia | Jangan memaksa bagian Model/iNterpret sebelum output final tersedia |
+
+### 2.5.2 Rubric-Based Gap Analysis
+
+| Rubric Area | Current Readiness | Risk to Score | Cache-Recorded Improvement |
+|---|---|---|---|
+| Problem Framing and Relevance | Medium-High | Scope HKUST/Hong Kong bisa terlihat kurang relevan jika diklaim terlalu luas | Frame sebagai transferable campus/building energy analytics case study dan selected-building subset |
+| O - Obtain | High | Source documentation bisa tersebar antara PRD, roadmap, data dictionary, dan source manifest | Maintain `final_data_sources.md` as canonical source manifest and mirror key scope notes here |
+| S - Scrub | High | Treatment data quality kuat tetapi perlu ringkasan naratif untuk penilaian | Keep explicit quality treatment table and ensure future notebook/report text follows it |
+| E - Explore | Medium | Minimal visual requirement belum final pada current active notebook | Prioritize final EDA plots and notebook Explore expansion after outputs are generated |
+| M - Model | Low-Medium | Model final belum ada; tanpa model, rubrik Model berisiko besar | Prioritize scenario-based Isolation Forest, IQR/Z-score baseline, evaluation without labels |
+| N - iNterpret | Low-Medium | Insight/recommendation belum evidence-based dari final outputs | Build insight-recommendation matrix after EDA/model outputs |
+| System/Dashboard | Medium-High | Datamart siap, tetapi dashboard validation belum dilakukan | Add relationship, DAX, slicer, and screenshot validation checklist |
+| Report/Presentation/Demo | Out of scope for current task | Tetap dibutuhkan untuk final grading, tetapi tidak dikerjakan di task ini | Track as external/future deliverable only if requested later |
+| Teamwork/AI Ethics | Out of scope for current task | Belum dibahas pada implementation tracker teknis | Track as external/future deliverable only if requested later |
+
+### 2.5.3 Scope Correction Required
+
+The analysis must be described as:
+
+- selected T1440 daily meter-level analysis;
+- selected active meters primarily mapped to `Cheng_Yu_Tung_Building`;
+- HKO daily weather as contextual support, not a causal proof engine;
+- Power BI-ready analytical dataset for monitoring and decision support.
+
+The analysis must not be described as:
+
+- full-campus HKUST coverage;
+- complete building comparison across all HKUST buildings;
+- supervised anomaly detection with ground-truth labels;
+- production monitoring system;
+- final academic report/presentation/video deliverable within this cache-only task.
+
+### 2.5.4 Improvement Backlog to Preserve
+
+| Backlog Item | Priority | Output Target | Notebook Impact | Scope Note |
+|---|---|---|---|---|
+| EDA completeness | P0 | final EDA plots and `eda_summary.csv` | Expand formal Explore section after outputs exist | Repo pipeline/dashboard scope |
+| Feature engineering readiness | P0 | engineered feature table/columns and feature dictionary updates | Explain engineered variables only after they exist in outputs | Repo pipeline/model/dashboard scope |
+| Interpretation per visual | P0 | visual interpretation notes or summary table | Add concise interpretation under each EDA result | Repo pipeline/dashboard scope |
+| Model readiness | P0 | `fact_anomaly_scenarios.csv`, `model_evaluation_summary.csv` | Add Model section only after final model outputs exist | Repo pipeline/dashboard scope |
+| Baseline agreement | P0 | IQR/Z-score agreement fields and evaluation summary | Include method comparison in Model section | Repo pipeline/dashboard scope |
+| Anomaly case review | P0 | `anomaly_case_review.csv` | Add selected case review after output exists | Repo pipeline/dashboard scope |
+| Interpretation readiness | P0 | insight-recommendation matrix | Add iNterpret section only after evidence matrix exists | Repo pipeline/dashboard scope |
+| Dashboard validation | P1 | Power BI relationship, DAX, slicer, page checklist | Mention dashboard-ready structure only; no `.pbix` automation required | Repo dashboard scope |
+| Scope correction | P0 | updated cache tracker notes | Maintain limitations section in notebook | Required to avoid overclaiming |
+| Notebook policy | P0 | formal notebook updated incrementally | Never add incomplete OSEMN sections or development language | Required by user decision |
+
+### 2.5.5 Feature Improvement Candidates
+
+These are feature additions for future implementation work. They are recorded here only; this cache-only task does not implement them.
+
+| Feature Candidate | Value | Acceptance Target |
+|---|---|---|
+| Analytical question matrix | Makes PRD and rubric traceable to outputs | Each question maps to dataset table, visual/model output, and dashboard page |
+| Feature engineering layer | Makes EDA/model/dashboard more explainable | Feature groups are documented, validated, and reusable across EDA, model, and Power BI |
+| Final EDA summary dataset | Makes Explore evidence reusable | Summary table includes trend, contribution, weekday/weekend, weather, and quality observations |
+| Entity priority score | Converts analysis into actionable audit ranking | Score combines consumption contribution, anomaly rate, and quality status |
+| Anomaly stability flag | Improves model defensibility | Cases flagged in multiple scenarios are identifiable |
+| Weather context bands | Prevents weak causal claims | Dashboard distinguishes hot/rainy/contextual days from anomaly drivers |
+| Data quality methodology page | Makes limitations transparent | Dashboard includes excluded meters, imputed weather, and model eligibility counts |
+| Insight-recommendation matrix | Strengthens iNterpret scoring | At least 3 insights and 3 recommendations have evidence, target user, priority, and limitation |
+
+### 2.5.6 Feature Engineering Plan to Add to Implementation Phases
+
+Feature engineering must be treated as a traceable layer between Scrub, Explore, Model, and Power BI. It should not be hidden inside notebook cells or model code.
+
+| Feature Family | Example Fields | Main Use | Required Treatment |
+|---|---|---|---|
+| Consumption level | `daily_consumption`, `log_daily_consumption`, `consumption_per_selected_meter_day` | EDA, model, ranking | Preserve original `daily_consumption`; derived transforms must be clearly named |
+| Rolling consumption | `rolling_mean_7d`, `rolling_std_7d`, `deviation_from_rolling_mean_7d`, `pct_deviation_from_rolling_mean_7d` | Model, anomaly case review | Calculate per `entity_id`, ordered by `date`; avoid using future rows |
+| Lag consumption | `lag_1d_consumption`, `lag_7d_consumption`, `diff_from_lag_7d` | Model diagnostics, trend interpretation | Calculate per `entity_id`; first lag rows become non-eligible if required |
+| Calendar | `is_weekend`, `month`, `quarter`, `day_of_week_num`, `year_month`, `is_month_start`, `is_month_end` | EDA, slicers, model | Use `dim_date` as source of truth |
+| Weather raw/context | `mean_temperature_c`, `relative_humidity_pct`, `rainfall_mm`, `global_solar_radiation_mj_m2`, `mean_wind_speed_kmh` | EDA, dashboard context | Preserve raw values and completeness columns |
+| Weather model-safe | `rainfall_mm_model`, `global_solar_radiation_mj_m2_model`, weather imputation flags | Model | Use only imputed/model-safe fields for model features |
+| Weather engineered | `cooling_degree_day_24c`, `is_hot_day_28c`, `is_rainy_day`, `temperature_band`, `rainfall_band` | EDA, model, slicers | Define thresholds explicitly in data dictionary |
+| Entity contribution | `entity_total_consumption`, `entity_consumption_rank`, `entity_contribution_pct`, `entity_cumulative_contribution_pct` | EDA, ranking, recommendations | Compute from eligible selected fact and document denominator |
+| Quality and eligibility | `meter_quality_flag`, `data_quality_flag`, `is_model_eligible`, `feature_complete_flag` | Filtering, methodology page | Use for filtering/interpretation, not as primary model signal |
+| Scenario stability | `scenario_anomaly_count`, `is_stable_anomaly_candidate`, `baseline_agreement_count` | Interpretation, dashboard | Build after model outputs exist |
+
+Feature rules:
+
+1. All reusable feature logic belongs in `/scripts`, not notebook cells.
+2. Every engineered feature used in final outputs must be documented in `data_dictionary_energy_dashboard.csv`.
+3. Feature generation must preserve raw source fields where practical.
+4. Model features must be numeric and non-null for eligible rows.
+5. Quality flags can filter or explain model rows, but should not be used as primary anomaly detection features.
+6. Features that use future information are not allowed for anomaly detection.
+7. If a feature is dashboard-only, it should be labelled as interpretation/slicer support, not model input.
+8. Notebook may describe engineered features only after the corresponding columns or outputs exist.
+
+Feature acceptance criteria:
+
+1. Feature columns have stable names and documented definitions.
+2. Rolling and lag features are calculated within each `entity_id`.
+3. No model feature has missing values for `is_model_eligible = 1` rows.
+4. Raw weather fields and model-safe weather fields remain distinguishable.
+5. Feature dictionary or data dictionary identifies source, formula, intended use, and limitations.
 
 ---
 
@@ -342,7 +464,7 @@ Acceptance criteria:
 
 1. Old notebooks archived.
 2. Final notebook runs without errors.
-3. Final notebook covers all OSEMN stages.
+3. Final notebook covers only completed OSEMN sections supported by generated outputs.
 4. Final notebook references final datamart outputs.
 
 ---
@@ -476,6 +598,73 @@ Acceptance criteria:
 
 ---
 
+## Phase 3.5 - Feature Engineering Readiness
+
+Status: Not Started
+
+Goal:
+
+Create a reusable, documented feature layer that supports final EDA, scenario-based anomaly modelling, anomaly interpretation, and Power BI slicers without duplicating logic in the notebook.
+
+Deliverables:
+
+| Deliverable | Status | Purpose |
+|---|---|---|
+| Feature engineering logic in canonical scripts | Not Started | Generate reusable features outside notebook cells |
+| Updated `fact_energy_weather_daily.csv` feature columns, if needed | Not Started | Add dashboard/model-safe features at the daily entity grain |
+| Feature dictionary rows in `data_dictionary_energy_dashboard.csv` | Not Started | Document formulas, sources, use cases, and limitations |
+| Feature completeness checks | Not Started | Confirm model-eligible rows have complete numeric feature values |
+| Optional `feature_engineering_summary.csv` | Not Started | Summarize engineered feature coverage and missingness |
+
+Recommended feature groups:
+
+| Group | Candidate Features | Used By |
+|---|---|---|
+| Consumption transform | `log_daily_consumption`, `consumption_rank_within_entity`, `consumption_percentile_within_entity` | EDA, anomaly review |
+| Rolling window | `rolling_mean_7d`, `rolling_std_7d`, `deviation_from_rolling_mean_7d`, `pct_deviation_from_rolling_mean_7d` | Model, case review |
+| Lag comparison | `lag_1d_consumption`, `lag_7d_consumption`, `diff_from_lag_1d`, `diff_from_lag_7d` | Model diagnostics, trend interpretation |
+| Calendar | `is_weekend`, `month`, `quarter`, `day_of_week_num`, `year_month`, `is_month_start`, `is_month_end` | EDA, model, Power BI slicers |
+| Weather context | `cooling_degree_day_24c`, `is_hot_day_28c`, `is_rainy_day`, `temperature_band`, `rainfall_band` | EDA, model, dashboard |
+| Weather model-safe | `rainfall_mm_model`, `global_solar_radiation_mj_m2_model`, imputation flags | Model |
+| Entity contribution | `entity_contribution_pct`, `entity_cumulative_contribution_pct`, `entity_consumption_rank` | EDA, entity scorecard |
+| Quality/eligibility | `feature_complete_flag`, `is_model_eligible`, quality flag rollups | Filtering, methodology page |
+
+Subplan:
+
+1. Define feature ownership.
+   - Calendar features come from `dim_date`.
+   - Entity contribution features come from selected meter-level fact rows.
+   - Rolling and lag features are computed per `entity_id`, ordered by `date`.
+   - Weather model-safe features preserve original weather values and add separate imputed/model columns.
+2. Add formulas to data dictionary before or during implementation.
+3. Generate features in scripts, not notebook cells.
+4. Validate feature completeness for model-eligible rows.
+5. Separate feature usage:
+   - EDA features for explanation and visualization;
+   - model features for Isolation Forest;
+   - dashboard features for slicers, tooltips, and methodology page.
+6. Prevent leakage.
+   - Do not use future consumption values.
+   - Do not use anomaly labels or scenario outputs as model input.
+   - Do not use quality flags as primary anomaly model features.
+7. Keep raw and engineered fields side by side.
+   - Raw weather fields remain unchanged.
+   - Imputed/model-safe weather fields have explicit suffixes and flags.
+8. Update notebook only after feature outputs exist.
+   - Explain formulas and uses in formal analytical language.
+   - Avoid mentioning development phase, backlog, or implementation plan in the notebook.
+
+Acceptance criteria:
+
+1. All engineered features used by EDA, model, or dashboard are documented.
+2. Rolling and lag features are calculated within each `entity_id`.
+3. No future information is used for model features.
+4. Model-eligible rows have non-null numeric values for all selected model features.
+5. Dashboard-only features are not misrepresented as model inputs.
+6. `data_dictionary_energy_dashboard.csv` identifies each engineered feature's source, formula, use case, and limitation.
+
+---
+
 ## Phase 4 - Anomaly Modelling
 
 Status: Not Started
@@ -492,6 +681,10 @@ Deliverables:
 | `Data_Acquisition/dataset/processed/model_evaluation_summary.csv` | Not Started |
 | `Data_Acquisition/dataset/processed/anomaly_case_review.csv` | Not Started |
 | `Data_Acquisition/dataset/processed/entity_scorecard.csv` | Not Started |
+
+Prerequisite:
+
+Phase 3.5 feature engineering readiness should be completed before final Isolation Forest output is treated as dashboard-ready.
 
 Feature set:
 
@@ -1019,6 +1212,8 @@ Recommendation-ready targets:
 | 2026-06-14 | Datamart | Done | Generated `dim_date.csv`, `dim_entity.csv`, `dim_scenario.csv`, `fact_energy_weather_daily.csv`, `data_quality_summary.csv`, `data_dictionary_energy_dashboard.csv`, and `final_data_sources.md`. |
 | 2026-06-14 | Notebook | Done | Archived old notebooks and generated formal active notebook `notebooks/energy_analytics_osemn.ipynb` with O, S, E, Power BI readiness, and limitations only. |
 | 2026-06-14 | Verification | Done | Compile checks passed; notebook executed with 0 error outputs; datamart key checks passed. Fact table has 10,524 rows, 12 entities, no duplicate `date + entity_id`; `dim_entity` has 26 meters; rainfall missing 5 days and solar radiation missing 1 day remain documented. |
+| 2026-06-15 | Cache alignment | Done | Updated cache-only alignment analysis against PRD, roadmap, and grading guide. Added scope guard, rubric-based gap analysis, improvement backlog, notebook policy correction, and out-of-scope notes for final academic documentation, presentation, and video/demo. |
+| 2026-06-15 | Feature engineering planning | Done | Added Phase 3.5 feature engineering readiness with feature families, feature rules, leakage prevention, data dictionary requirements, notebook policy, and acceptance criteria before final anomaly modelling. |
 
 ---
 
@@ -1030,19 +1225,23 @@ Recommendation-ready targets:
 | 1 | Script Consolidation | Done |
 | 2 | Notebook Unification | Done |
 | 3 | Power BI Datamart | Done |
+| 3.5 | Feature Engineering Readiness | Not Started |
 | 4 | Anomaly Modelling | Not Started |
 | 5 | Final EDA and Dashboard Preparation | Not Started |
 | 6 | Verification and Handoff Update | Not Started |
 
 Backlog after this branch:
 
-1. Build scenario-based Isolation Forest output.
-2. Generate `fact_anomaly_scenarios.csv`.
-3. Generate `model_evaluation_summary.csv`.
-4. Generate `anomaly_case_review.csv`.
-5. Generate `entity_scorecard.csv`.
-6. Generate final EDA plots under `outputs/eda/final`.
-7. Build manual Power BI `.pbix` from final CSV outputs.
-8. Update `notebooks/energy_analytics_osemn.ipynb` after each substantive analysis output.
-9. Expand notebook EDA into a complete report-style section as final EDA outputs become available.
-10. Add formal Model and iNterpret sections to notebook only after the corresponding final outputs exist.
+1. Implement feature engineering readiness before final modelling.
+2. Document engineered feature formulas in the data dictionary.
+3. Validate feature completeness for model-eligible rows.
+4. Build scenario-based Isolation Forest output.
+5. Generate `fact_anomaly_scenarios.csv`.
+6. Generate `model_evaluation_summary.csv`.
+7. Generate `anomaly_case_review.csv`.
+8. Generate `entity_scorecard.csv`.
+9. Generate final EDA plots under `outputs/eda/final`.
+10. Build manual Power BI `.pbix` from final CSV outputs.
+11. Update `notebooks/energy_analytics_osemn.ipynb` after each substantive analysis output.
+12. Expand notebook EDA into a complete report-style section as final EDA outputs become available.
+13. Add formal Model and iNterpret sections to notebook only after the corresponding final outputs exist.
