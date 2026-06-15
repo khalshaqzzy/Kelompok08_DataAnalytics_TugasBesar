@@ -67,8 +67,8 @@ Aturan wajib:
 | Notebook policy | Only one active notebook in `/notebooks` |
 | Old notebook policy | Archive old notebooks to `cache/archive/notebooks` |
 | Current active branch | `feat-energy-dashboard-evidence` |
-| Current planned commit message | `Remove notebook builder scripts` |
-| Power BI scope | Manual `.pbix` build plan, CSV datamart, measures, relationships, page checklist |
+| Current planned commit message | `Add Power BI manual build guide` |
+| Power BI scope | Manual `.pbix` build guide, CSV datamart, measures, relationships, page checklist |
 | Out of scope for current branch | Final academic report/documentation, slide deck, presentation script, video/demo, README, and automated Power BI Desktop manipulation |
 
 Notebook scope note:
@@ -947,6 +947,16 @@ If multiple flags apply, use a semicolon-delimited string in a stable order.
 
 # 7. Power BI Manual Build Plan
 
+Detailed manual build guide:
+
+`cache/powerbi_manual_build_guide.md`
+
+Guide status: Done.
+
+Recommended `.pbix` output:
+
+`outputs/powerbi/energy_anomaly_dashboard.pbix`
+
 ## 7.1 Import CSV Files
 
 Import these tables into Power BI Desktop:
@@ -1261,6 +1271,7 @@ Recommendation-ready targets:
 | 2026-06-15 | Notebook Explore and iNterpret sections | Done | Updated active notebook with formal E - Explore visuals and N - iNterpret section based on verified evidence outputs. Notebook execution completed with 0 error outputs and markdown contains no development wording: phase, backlog, development, or plan. |
 | 2026-06-15 | Final EDA verification and handoff | Done | Verified final EDA PNG files are non-empty, evidence tables have required columns, insight/recommendation count is 4/3, fact/model keys remain unique, and cache trackers were updated. |
 | 2026-06-15 | Notebook builder cleanup | Done | Removed `scripts/build_osemn_notebook.py` and `scripts/build_exploration_notebook.py` because the final notebook now exists as the active artifact. Updated runbook and handoff notes so future validation does not call removed builder scripts. |
+| 2026-06-15 | Power BI manual build guide | Done | Added `cache/powerbi_manual_build_guide.md` with concrete import steps, data type checks, relationship model, DAX measures, dashboard design system, six-page layout, slicer/tooltip guidance, validation checklist, screenshot checklist, and `.pbix` naming convention. |
 
 ---
 
@@ -1279,6 +1290,6 @@ Recommendation-ready targets:
 
 Backlog after this branch:
 
-1. Build manual Power BI `.pbix` from final CSV outputs.
+1. Build manual Power BI `.pbix` from final CSV outputs by following `cache/powerbi_manual_build_guide.md`.
 2. Validate Power BI relationship, DAX, slicer, page, tooltip/cross-filter, and screenshot checklist in Power BI Desktop.
 3. Final academic report/documentation, presentation, slide deck, and video/demo remain out of scope unless requested explicitly.

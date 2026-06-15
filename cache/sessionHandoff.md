@@ -2,6 +2,29 @@
 
 Last updated: 2026-06-15, Asia/Jakarta
 
+Update 2026-06-15 - Power BI manual build guide:
+
+- Branch kerja aktif: `feat-energy-dashboard-evidence`.
+- Commit message yang disiapkan: `Add Power BI manual build guide`.
+- Menambahkan panduan build manual dashboard:
+  - `cache/powerbi_manual_build_guide.md`
+- Guide ini berisi:
+  - prerequisite dan folder sumber CSV;
+  - daftar tabel import;
+  - tipe data yang harus dicek;
+  - relationship model;
+  - DAX measures siap copy-paste;
+  - best practice data modelling Power BI;
+  - design system dashboard;
+  - layout 6 halaman dashboard;
+  - slicer, tooltip, interaction, validation, screenshot, dan save checklist.
+- Next action user:
+  - buka Power BI Desktop;
+  - ikuti `cache/powerbi_manual_build_guide.md`;
+  - save `.pbix` ke `outputs/powerbi/energy_anomaly_dashboard.pbix`.
+- Scope tetap cache-only untuk task ini. Tidak ada perubahan ke scripts, datasets, notebook, outputs, atau `.pbix`.
+- Final academic report/documentation, presentation, slide deck, video/demo, dan README tetap di luar scope.
+
 Update 2026-06-15 - Notebook builder scripts removed:
 
 - Branch kerja aktif: `feat-energy-dashboard-evidence`.
