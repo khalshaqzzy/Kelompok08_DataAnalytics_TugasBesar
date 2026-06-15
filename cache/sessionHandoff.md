@@ -2,6 +2,34 @@
 
 Last updated: 2026-06-15, Asia/Jakarta
 
+Update 2026-06-15 - Desktop React dashboard polish:
+
+- Branch kerja aktif: `feat-energy-react-dashboard`.
+- Commit message yang disiapkan: `Polish energy dashboard experience`.
+- Scope polish mengikuti instruksi terbaru: fokus desktop; mobile polish ditunda.
+- Perubahan dashboard:
+  - mengganti visible copy `React dashboard target` menjadi `Energy analytics dashboard`;
+  - menambahkan KPI `Average Daily Consumption` pada Executive Overview;
+  - menambahkan anomaly marker pada daily consumption trend;
+  - menambahkan matrix `Month by weekday average consumption`;
+  - menambahkan `Anomaly count by month`;
+  - menambahkan full `Anomaly detail` table dengan score, temperature, rainfall, rolling deviation, baseline agreement, dan quality flag;
+  - menambahkan rainfall scatter context dan hot/rainy anomaly day table;
+  - menambahkan entity-by-month consumption matrix dan quality flag table pada Meter Ranking;
+  - menambahkan Data Quality Issue Rows, Model Eligible Rows, dan Missing Weather Days KPI;
+  - memperbaiki formatter untuk score, contamination/rate, temperature, rainfall, dan consumption.
+- Validasi yang sudah dilakukan:
+  - `npm run build:web` berhasil;
+  - `npm audit --omit=dev` menghasilkan 0 vulnerabilities;
+  - production preview `npm run preview:web -- --port 4173`;
+  - desktop browser verification di 1440x900 untuk semua 6 page;
+  - production preview console: 0 errors, 0 warnings;
+  - desktop overflow: false untuk semua page;
+  - filter scenario/entity pada Anomaly Explorer berubah dari 521 ke 313 ke 7, sehingga filter terbukti aktif.
+- Catatan:
+  - Vite dev server dapat memunculkan React dev instrumentation `DataCloneError` saat data besar dirender ulang, tetapi error tersebut tidak muncul di production preview/Vercel-style build.
+  - Build masih memberi chunk-size warning karena charting dependencies dan data-heavy dashboard; gzip JS sekitar 192 KB dan masih dapat diterima untuk dashboard statis ini.
+
 Update 2026-06-15 - React dashboard target:
 
 - Branch kerja aktif: `feat-energy-react-dashboard`.

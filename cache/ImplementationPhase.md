@@ -1375,6 +1375,7 @@ Recommendation-ready targets:
 | 2026-06-15 | Notebook builder cleanup | Done | Removed `scripts/build_osemn_notebook.py` and `scripts/build_exploration_notebook.py` because the final notebook now exists as the active artifact. Updated runbook and handoff notes so future validation does not call removed builder scripts. |
 | 2026-06-15 | Power BI manual build guide | Done | Added `cache/powerbi_manual_build_guide.md` with concrete import steps, data type checks, relationship model, DAX measures, dashboard design system, six-page layout, slicer/tooltip guidance, validation checklist, screenshot checklist, and `.pbix` naming convention. |
 | 2026-06-15 | React dashboard implementation | Done | Created branch `feat-energy-react-dashboard`; added Vite React TypeScript app in `web/`, Vercel config, JSON data packaging script, static dashboard JSON outputs, six responsive dashboard pages, React/Vercel guide, and cache/PRD/roadmap updates that supersede Power BI as the primary visualization target. Vercel CLI deploy was not run because the local token is invalid. |
+| 2026-06-15 | Desktop React dashboard polish | Done | Polished desktop dashboard completeness against the original Power BI page plan: added average daily KPI, trend anomaly markers, month-weekday matrix, anomaly-by-month chart, anomaly detail table, rainfall scatter, hot/rainy anomaly table, entity-month ranking matrix, quality flag table, data quality/model eligibility/weather missing KPIs, analyst-facing copy, and precise formatting for model/weather metrics. Mobile polish is deferred by user instruction. |
 
 ---
 
@@ -1398,4 +1399,5 @@ Backlog after this branch:
 2. Validate the deployed URL for desktop/mobile layout, data load, filters, and all six dashboard pages.
 3. Manual Power BI `.pbix` build remains optional/historical by following `cache/powerbi_manual_build_guide.md`.
 4. Final academic report/documentation, presentation, slide deck, and video/demo remain out of scope unless requested explicitly.
+5. Optional future polish: route-level/code splitting for chart bundles and mobile-specific overflow cleanup.
 3. Final academic report/documentation, presentation, slide deck, and video/demo remain out of scope unless requested explicitly.

@@ -249,7 +249,7 @@ button {
 .kpi-strip {
   grid-column: 1 / -1;
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 12px;
 }
 
@@ -385,6 +385,10 @@ table {
   min-width: 760px;
 }
 
+.matrix-table {
+  min-width: 860px;
+}
+
 th,
 td {
   padding: 10px 12px;
@@ -414,6 +418,31 @@ th button {
 
 td {
   color: #475569;
+}
+
+.matrix-scroll {
+  overflow-x: auto;
+}
+
+.matrix-table th,
+.matrix-table td {
+  text-align: center;
+  white-space: nowrap;
+}
+
+.matrix-table th:first-child,
+.matrix-table td:first-child {
+  text-align: left;
+  width: 130px;
+}
+
+.matrix-cell {
+  display: block;
+  border-radius: 6px;
+  padding: 8px 10px;
+  color: #0f172a;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
 }
 
 .chart-tooltip {
