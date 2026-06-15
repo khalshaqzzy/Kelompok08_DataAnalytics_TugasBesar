@@ -2,6 +2,20 @@
 
 Last updated: 2026-06-15, Asia/Jakarta
 
+Update 2026-06-15 - Notebook builder scripts removed:
+
+- Branch kerja aktif: `feat-energy-dashboard-evidence`.
+- Commit message yang disiapkan: `Remove notebook builder scripts`.
+- Sesuai keputusan terbaru, notebook aktif `notebooks/energy_analytics_osemn.ipynb` dipertahankan sebagai artefak final saat ini dan tidak lagi diregenerate melalui script builder.
+- Script notebook builder yang dihapus:
+  - `scripts/build_osemn_notebook.py`
+  - `scripts/build_exploration_notebook.py`
+- Dampak runbook:
+  - jangan lagi menjalankan `python scripts\build_osemn_notebook.py --execute`;
+  - jangan lagi menjalankan `python scripts\build_exploration_notebook.py`;
+  - validasi notebook berikutnya dilakukan dengan membuka/mengeksekusi notebook langsung dari environment notebook, atau dengan pemeriksaan programatik `nbformat` jika hanya perlu memastikan tidak ada error output tersimpan.
+- Scope tetap repo pipeline/dashboard. Final academic report/documentation, presentation, slide deck, video/demo, dan README tetap di luar scope.
+
 Update 2026-06-15 - Final EDA, interpretation evidence, and dashboard readiness:
 
 - Branch kerja aktif: `feat-energy-dashboard-evidence`.
@@ -35,9 +49,9 @@ Update 2026-06-15 - Final EDA, interpretation evidence, and dashboard readiness:
   - N - iNterpret dengan insight/recommendation matrix;
   - Power BI readiness dan limitation notes.
 - Validasi yang sudah dilakukan:
-  - compile `scripts/config.py`, `scripts/build_final_eda.py`, dan `scripts/build_osemn_notebook.py`;
+  - historical before cleanup: compile `scripts/config.py`, `scripts/build_final_eda.py`, dan `scripts/build_osemn_notebook.py`;
   - run `python scripts\build_final_eda.py`;
-  - run `python scripts\build_osemn_notebook.py --execute`;
+  - historical before cleanup: run `python scripts\build_osemn_notebook.py --execute`;
   - 7 final EDA PNG files exist dan non-empty;
   - required columns ada untuk `eda_summary.csv`, `visual_interpretation_summary.csv`, `insight_recommendation_matrix.csv`, dan `dashboard_validation_checklist.csv`;
   - key uniqueness tetap passed untuk `fact_energy_weather_daily(date, entity_id)` dan `fact_anomaly_scenarios(date, entity_id, scenario)`;
@@ -85,11 +99,11 @@ Update 2026-06-15 - Feature engineering and anomaly evidence outputs:
   - limitations.
 - Notebook tetap tidak memuat iNterpret final karena insight-recommendation matrix belum dibuat.
 - Validasi yang sudah dilakukan:
-  - compile `scripts/feature_engineering.py`, `scripts/model_anomaly_scenarios.py`, dan `scripts/build_osemn_notebook.py`;
+  - historical before cleanup: compile `scripts/feature_engineering.py`, `scripts/model_anomaly_scenarios.py`, dan `scripts/build_osemn_notebook.py`;
   - run `python scripts\build_powerbi_datamart.py`;
   - run `python scripts\feature_engineering.py`;
   - run `python scripts\model_anomaly_scenarios.py`;
-  - run `python scripts\build_osemn_notebook.py --execute`;
+  - historical before cleanup: run `python scripts\build_osemn_notebook.py --execute`;
   - key uniqueness passed for `fact_energy_weather_daily(date, entity_id)` and `fact_anomaly_scenarios(date, entity_id, scenario)`;
   - notebook executed with 0 error outputs;
   - notebook markdown checked clean from development wording: `phase`, `backlog`, `development`, `plan`.
@@ -152,7 +166,7 @@ Update 2026-06-14 - Power BI datamart foundation:
   - `scripts/hkust_t1440.py`
   - `scripts/ttl_entity_mapping.py`
   - `scripts/build_powerbi_datamart.py`
-  - `scripts/build_osemn_notebook.py`
+  - historical: `scripts/build_osemn_notebook.py` pernah dipakai untuk membuat notebook final, tetapi sudah dihapus setelah notebook final tersedia.
 - Output Power BI datamart foundation baru:
   - `Data_Acquisition/dataset/processed/dim_date.csv`
   - `Data_Acquisition/dataset/processed/dim_entity.csv`
@@ -167,11 +181,11 @@ Update 2026-06-14 - Power BI datamart foundation:
   - `cache/archive/notebooks/01_explore_and_select_subset.ipynb`
 - Notebook aktif ditulis dengan gaya laporan formal: O - Obtain, S - Scrub, E - Explore awal, Kesiapan Data Power BI, dan Catatan Keterbatasan. Notebook tidak memakai bahasa development seperti phase/backlog/plan dan tidak memaksakan bagian model/interpretasi final yang belum memiliki output.
 - Validasi yang sudah dilakukan:
-  - `python -m py_compile scripts\config.py scripts\io_utils.py scripts\hko_weather.py scripts\ttl_entity_mapping.py scripts\hkust_t1440.py scripts\build_powerbi_datamart.py scripts\build_osemn_notebook.py`
+  - historical before cleanup: `python -m py_compile scripts\config.py scripts\io_utils.py scripts\hko_weather.py scripts\ttl_entity_mapping.py scripts\hkust_t1440.py scripts\build_powerbi_datamart.py scripts\build_osemn_notebook.py`
   - `python scripts\hkust_t1440.py`
   - `python scripts\hko_weather.py`
   - `python scripts\build_powerbi_datamart.py`
-  - `python scripts\build_osemn_notebook.py --execute`
+  - historical before cleanup: `python scripts\build_osemn_notebook.py --execute`
 - Hasil validasi datamart:
   - `dim_date`: 878 baris, key `date` unik.
   - `dim_entity`: 26 baris, key `entity_id` unik.
@@ -515,7 +529,7 @@ Script:
 | `download_hko_open_data.py` | Download 7 dataset HKO ke `dataset/hko_open_data/raw/` dan membuat manifest |
 | `profile_datasets.py` | Profil file HKUST dan HKO: inventory, shape, periode, missing, sample rows |
 | `explore_energy_weather.py` | Membuat dataset gabungan harian, EDA plots, anomaly baseline, baseline regression |
-| `build_exploration_notebook.py` | Membuat dan mengeksekusi notebook eksplorasi `notebooks/eksplorasi_hkust_hko.ipynb` |
+| `build_exploration_notebook.py` | Historical; sudah dihapus setelah notebook eksplorasi lama diarsipkan |
 
 Cara menjalankan ulang workflow:
 
@@ -523,7 +537,6 @@ Cara menjalankan ulang workflow:
 python scripts\download_hko_open_data.py
 python scripts\profile_datasets.py
 python scripts\explore_energy_weather.py
-python scripts\build_exploration_notebook.py
 ```
 
 Dependency Python yang dipakai:
@@ -895,7 +908,6 @@ Script:
 
 ```powershell
 python -m py_compile scripts\download_hko_open_data.py scripts\profile_datasets.py scripts\explore_energy_weather.py
-python -m py_compile scripts\build_exploration_notebook.py
 ```
 
 Notebook:

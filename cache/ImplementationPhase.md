@@ -27,7 +27,7 @@ Current scope guard:
 
 Implementation update 2026-06-15:
 
-- Scope teknis saat ini mencakup final EDA visuals, evidence tables, insight-recommendation matrix, dashboard validation checklist, formal notebook Explore/iNterpret sections, processed CSV outputs, dan cache tracker.
+- Scope teknis saat ini mencakup final EDA visuals, evidence tables, insight-recommendation matrix, dashboard validation checklist, formal notebook Explore/iNterpret sections, processed CSV outputs, cache tracker, dan penghapusan notebook builder scripts yang sudah tidak diperlukan.
 - Final academic report, presentation, slide deck, video/demo, dan README tetap di luar scope.
 
 Aturan wajib:
@@ -67,7 +67,7 @@ Aturan wajib:
 | Notebook policy | Only one active notebook in `/notebooks` |
 | Old notebook policy | Archive old notebooks to `cache/archive/notebooks` |
 | Current active branch | `feat-energy-dashboard-evidence` |
-| Current planned commit message | `Build energy dashboard evidence outputs` |
+| Current planned commit message | `Remove notebook builder scripts` |
 | Power BI scope | Manual `.pbix` build plan, CSV datamart, measures, relationships, page checklist |
 | Out of scope for current branch | Final academic report/documentation, slide deck, presentation script, video/demo, README, and automated Power BI Desktop manipulation |
 
@@ -75,6 +75,8 @@ Notebook scope note:
 
 - Notebook aktif `notebooks/energy_analytics_osemn.ipynb` saat ini berisi O - Obtain, S - Scrub, E - Explore lengkap berbasis final EDA visuals, M - Model, N - iNterpret, Kesiapan Data Power BI, dan Catatan Keterbatasan.
 - Notebook memuat iNterpret setelah `insight_recommendation_matrix.csv` tersedia dan terverifikasi.
+- Notebook builder scripts sudah dihapus setelah notebook final tersedia: `scripts/build_osemn_notebook.py` dan `scripts/build_exploration_notebook.py`.
+- Notebook tidak lagi diregenerate melalui script. Validasi notebook berikutnya dilakukan langsung pada file notebook atau dengan pemeriksaan programatik `nbformat`.
 - Notebook tidak boleh menyebut istilah development seperti phase, backlog, atau implementation plan.
 - Setiap progress analisis berikutnya harus mengevaluasi dan memperbarui notebook aktif jika ada output baru yang relevan untuk O, S, E, M, atau N.
 - EDA di notebook harus diperluas secara bertahap sampai lengkap: trend harian, tren bulanan, weekday/weekend, kontribusi/Pareto meter, konteks cuaca, kualitas data, dan interpretasi singkat per visual setelah output final tersedia.
@@ -295,7 +297,6 @@ scripts/
   feature_engineering.py
   model_anomaly_scenarios.py
   build_final_eda.py
-  build_osemn_notebook.py
 
 Data_Acquisition/
   dataset/
@@ -890,20 +891,21 @@ python scripts\build_powerbi_datamart.py
 python scripts\feature_engineering.py
 python scripts\model_anomaly_scenarios.py
 python scripts\build_final_eda.py
-python scripts\build_osemn_notebook.py
 ```
 
 Validation commands:
 
 ```powershell
-python -m py_compile scripts\config.py scripts\io_utils.py scripts\hko_weather.py scripts\hkust_t1440.py scripts\ttl_entity_mapping.py scripts\build_powerbi_datamart.py scripts\feature_engineering.py scripts\model_anomaly_scenarios.py scripts\build_final_eda.py scripts\build_osemn_notebook.py
+python -m py_compile scripts\config.py scripts\io_utils.py scripts\hko_weather.py scripts\hkust_t1440.py scripts\ttl_entity_mapping.py scripts\build_powerbi_datamart.py scripts\feature_engineering.py scripts\model_anomaly_scenarios.py scripts\build_final_eda.py
 ```
 
 Notebook validation:
 
 ```powershell
-python scripts\build_osemn_notebook.py --execute
+python -c "import nbformat; nb=nbformat.read('notebooks/energy_analytics_osemn.ipynb', as_version=4); print(len(nb.cells))"
 ```
+
+Notebook builder scripts have been removed after the final notebook was generated. Do not attempt to regenerate the notebook from `/scripts`.
 
 Expected final output checks:
 
@@ -1246,7 +1248,7 @@ Recommendation-ready targets:
 |---|---|---|---|
 | 2026-06-14 | Phase 0 | In Progress | Created initial `ImplementationPhase.md` with full implementation plan, phase checklist, datamart spec, model spec, Power BI manual build plan, and verification plan. |
 | 2026-06-14 | Governance | Done | Created branch `feat-powerbi-datamart-foundation`, added behavior-based branch/commit naming rule, and updated `sessionHandoff.md` with dual-update requirements. |
-| 2026-06-14 | Scripts | Done | Added canonical scripts: `config.py`, `io_utils.py`, `hko_weather.py`, `hkust_t1440.py`, `ttl_entity_mapping.py`, `build_powerbi_datamart.py`, and `build_osemn_notebook.py`. |
+| 2026-06-14 | Scripts | Done | Added canonical scripts: `config.py`, `io_utils.py`, `hko_weather.py`, `hkust_t1440.py`, `ttl_entity_mapping.py`, and `build_powerbi_datamart.py`. Notebook builder script existed historically but was removed after the final notebook was generated. |
 | 2026-06-14 | Datamart | Done | Generated `dim_date.csv`, `dim_entity.csv`, `dim_scenario.csv`, `fact_energy_weather_daily.csv`, `data_quality_summary.csv`, `data_dictionary_energy_dashboard.csv`, and `final_data_sources.md`. |
 | 2026-06-14 | Notebook | Done | Archived old notebooks and generated formal active notebook `notebooks/energy_analytics_osemn.ipynb` with O, S, E, Power BI readiness, and limitations only. |
 | 2026-06-14 | Verification | Done | Compile checks passed; notebook executed with 0 error outputs; datamart key checks passed. Fact table has 10,524 rows, 12 entities, no duplicate `date + entity_id`; `dim_entity` has 26 meters; rainfall missing 5 days and solar radiation missing 1 day remain documented. |
@@ -1258,6 +1260,7 @@ Recommendation-ready targets:
 | 2026-06-15 | Final EDA evidence implementation | Done | Added `scripts/build_final_eda.py`; generated 7 final EDA visuals under `outputs/eda/final` and evidence tables `eda_summary.csv`, `visual_interpretation_summary.csv`, `insight_recommendation_matrix.csv`, and `dashboard_validation_checklist.csv`. |
 | 2026-06-15 | Notebook Explore and iNterpret sections | Done | Updated active notebook with formal E - Explore visuals and N - iNterpret section based on verified evidence outputs. Notebook execution completed with 0 error outputs and markdown contains no development wording: phase, backlog, development, or plan. |
 | 2026-06-15 | Final EDA verification and handoff | Done | Verified final EDA PNG files are non-empty, evidence tables have required columns, insight/recommendation count is 4/3, fact/model keys remain unique, and cache trackers were updated. |
+| 2026-06-15 | Notebook builder cleanup | Done | Removed `scripts/build_osemn_notebook.py` and `scripts/build_exploration_notebook.py` because the final notebook now exists as the active artifact. Updated runbook and handoff notes so future validation does not call removed builder scripts. |
 
 ---
 
