@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Energy Anomaly Analytics Business Deck</title>
+  <title>Deck Analitik Anomali Energi</title>
   <style>
     :root {
       --ink: #17202a;
@@ -415,23 +415,23 @@
     <section class="slide cover">
       <div class="cover-content">
         <div>
-          <div class="eyebrow">Business Deck | Energy Analytics</div>
+          <div class="eyebrow">Deck Bisnis | Analitik Energi</div>
           <h1>Analisis Konsumsi Energi & Deteksi Anomali Smart Meter HKUST</h1>
-          <p class="subtitle">Studi kasus selected T1440 daily meter-level dengan konteks cuaca HKO dan rancangan dashboard Power BI.</p>
+          <p class="subtitle">Studi kasus meter harian T1440 terpilih dengan konteks cuaca HKO dan rancangan dashboard analitik.</p>
           <div class="tag-row">
             <span class="tag">OSEMN</span>
             <span class="tag green">Isolation Forest</span>
-            <span class="tag gold">Power BI-ready</span>
-            <span class="tag">2022-01-02 to 2024-05-27</span>
+            <span class="tag gold">Siap dashboard</span>
+            <span class="tag">2022-01-02 hingga 2024-05-27</span>
           </div>
         </div>
         <div class="agenda">
           <h3 style="color:#fff;">Peran anggota</h3>
           <ul>
-            <li>Anggota 1: Data Engineer</li>
-            <li>Anggota 2: Data Preprocessing Lead</li>
-            <li>Anggota 3: Data Analyst / Modeler</li>
-            <li>Anggota 4: Visualization, Dashboard, Documentation</li>
+            <li>Anggota 1: Rekayasa data</li>
+            <li>Anggota 2: Prapemrosesan data</li>
+            <li>Anggota 3: Analisis data dan pemodelan</li>
+            <li>Anggota 4: Visualisasi, dashboard, dan dokumentasi</li>
           </ul>
         </div>
       </div>
@@ -445,28 +445,28 @@
       </div>
       <div class="content">
         <div class="grid-4">
-          <div class="kpi"><span class="value">26</span><span class="label">T1440 meters</span><p class="note">Daily inventory</p></div>
-          <div class="kpi teal"><span class="value">12</span><span class="label">Selected meters</span><p class="note">Main model subset</p></div>
-          <div class="kpi gold"><span class="value">10.524</span><span class="label">Fact rows</span><p class="note">Date x entity</p></div>
-          <div class="kpi red"><span class="value">521</span><span class="label">Balanced anomalies</span><p class="note">5% scenario</p></div>
+          <div class="kpi"><span class="value">26</span><span class="label">Meter T1440</span><p class="note">Inventaris harian</p></div>
+          <div class="kpi teal"><span class="value">12</span><span class="label">Meter terpilih</span><p class="note">Subset model utama</p></div>
+          <div class="kpi gold"><span class="value">10.524</span><span class="label">Baris fakta</span><p class="note">Tanggal x entitas</p></div>
+          <div class="kpi red"><span class="value">521</span><span class="label">Anomali balanced</span><p class="note">Skenario 5%</p></div>
         </div>
         <div class="flow">
-          <div class="step"><strong>O - Obtain</strong><span>HKUST T1440, TTL metadata, and HKO daily weather.</span></div>
-          <div class="step"><strong>S - Scrub</strong><span>Daily consumption, weather treatment, quality flags, datamart.</span></div>
-          <div class="step"><strong>E - Explore</strong><span>Trend, contribution, calendar, weather, and quality evidence.</span></div>
-          <div class="step"><strong>M - Model</strong><span>IQR, Z-score, and Isolation Forest scenarios.</span></div>
-          <div class="step"><strong>N - Interpret</strong><span>Insight matrix, recommendations, Power BI structure.</span></div>
+          <div class="step"><strong>O - Obtain</strong><span>Data T1440 HKUST, metadata TTL, dan cuaca harian HKO.</span></div>
+          <div class="step"><strong>S - Scrub</strong><span>Konsumsi harian, perlakuan data cuaca, penanda kualitas, dan datamart.</span></div>
+          <div class="step"><strong>E - Explore</strong><span>Tren, kontribusi, kalender, cuaca, dan bukti kualitas data.</span></div>
+          <div class="step"><strong>M - Model</strong><span>Skenario IQR, Z-score, dan Isolation Forest.</span></div>
+          <div class="step"><strong>N - Interpret</strong><span>Matriks insight, rekomendasi, dan struktur dashboard.</span></div>
         </div>
         <div class="grid-main">
           <div class="panel white">
-            <h3>Business framing</h3>
+            <h3>Kerangka bisnis</h3>
             <ul>
-              <li>Use the result as a screening tool for targeted energy review, not as confirmed operational fault evidence.</li>
-              <li>Primary claim is selected daily meter-level analysis for Cheng_Yu_Tung_Building context, not full-campus coverage.</li>
-              <li>Power BI can be built manually from prepared CSV fact and dimension tables.</li>
+              <li>Hasil digunakan sebagai alat penyaringan untuk peninjauan energi terarah, bukan sebagai bukti final gangguan operasional.</li>
+              <li>Klaim utama dibatasi pada analisis meter harian terpilih dalam konteks Cheng_Yu_Tung_Building, bukan seluruh kampus.</li>
+              <li>Dashboard dapat dibangun dari tabel fakta dan dimensi CSV yang sudah disiapkan.</li>
             </ul>
           </div>
-          <div class="callout">Top action: begin review from high-priority entities, especially D0849, while checking anomaly stability and data quality.</div>
+          <div class="callout">Aksi utama: mulai peninjauan dari entitas prioritas tinggi, terutama D0849, sambil memeriksa stabilitas anomali dan kualitas data.</div>
         </div>
       </div>
       <div class="footer"><span>Konteks masalah</span><span>Urgensi masalah dan pengguna sasaran</span></div>
@@ -484,16 +484,16 @@
             <ol>
               <li>Bagaimana memperoleh dan menyeleksi data smart meter HKUST serta data cuaca HKO secara konsisten?</li>
               <li>Bagaimana membersihkan data energi dan cuaca menjadi dataset harian yang valid?</li>
-              <li>Bagaimana pola konsumsi harian, kontribusi meter, weekday-weekend, dan konteks cuaca?</li>
+              <li>Bagaimana pola konsumsi harian, kontribusi meter, hari kerja-akhir pekan, dan konteks cuaca?</li>
               <li>Bagaimana mendeteksi kandidat anomali konsumsi energi tanpa label ground truth?</li>
               <li>Bagaimana hasil analisis diterjemahkan menjadi insight, rekomendasi, dan rancangan dashboard?</li>
             </ol>
           </div>
           <div class="panel blue">
-            <h3>Mapping OSEMN</h3>
+            <h3>Pemetaan OSEMN</h3>
             <ul>
               <li><strong>Obtain</strong>: sumber, periode, format, subset meter.</li>
-              <li><strong>Scrub</strong>: quality issue, preprocessing, integrasi, fitur.</li>
+              <li><strong>Scrub</strong>: isu kualitas, preprocessing, integrasi, fitur.</li>
               <li><strong>Explore</strong>: statistik, pola awal, visual utama.</li>
               <li><strong>Model</strong>: metode, input-output, evaluasi.</li>
               <li><strong>Interpret</strong>: insight, rekomendasi, demo, arsitektur.</li>
@@ -501,9 +501,9 @@
           </div>
         </div>
         <div class="grid-3">
-          <div class="panel green"><h3>Unit analisis</h3><p class="small">Date x entity_id pada granularitas harian.</p></div>
+          <div class="panel green"><h3>Unit analisis</h3><p class="small">Tanggal x entity_id pada granularitas harian.</p></div>
           <div class="panel gold"><h3>Model utama</h3><p class="small">Isolation Forest tanpa label, dibandingkan dengan baseline statistik.</p></div>
-          <div class="panel blue"><h3>Output akhir</h3><p class="small">Dataset siap dashboard, matrix insight-rekomendasi, dan prioritas audit.</p></div>
+          <div class="panel blue"><h3>Output akhir</h3><p class="small">Dataset siap dashboard, matriks insight-rekomendasi, dan prioritas audit.</p></div>
         </div>
       </div>
       <div class="footer"><span>Pertanyaan analitik</span><span>Pertanyaan yang dijawab sistem</span></div>
@@ -517,76 +517,76 @@
       <div class="content">
         <div class="grid-side">
           <div class="panel blue">
-            <h3>Source portfolio</h3>
+            <h3>Portofolio sumber data</h3>
             <ul>
-              <li><strong>HKUST smart meter</strong>: primary energy source.</li>
-              <li><strong>TTL metadata</strong>: meter, building, floor, room/equipment context.</li>
-              <li><strong>HKO weather</strong>: daily external context.</li>
+              <li><strong>Smart meter HKUST</strong>: sumber utama data energi.</li>
+              <li><strong>Metadata TTL</strong>: konteks meter, gedung, lantai, ruang, dan peralatan.</li>
+              <li><strong>Cuaca HKO</strong>: konteks eksternal harian.</li>
             </ul>
             <div class="tag-row">
-              <span class="tag">.xlsx</span><span class="tag">.ttl</span><span class="tag">.csv</span><span class="tag green">Daily join</span>
+              <span class="tag">.xlsx</span><span class="tag">.ttl</span><span class="tag">.csv</span><span class="tag green">Join harian</span>
             </div>
           </div>
           <table>
-            <tr><th>Dataset</th><th>Role</th><th>Treatment</th><th>Limitation</th></tr>
-            <tr><td>HKUST T1440</td><td>Main consumption data</td><td>Meter reading converted to daily consumption</td><td>Only 26 daily meters in inventory</td></tr>
-            <tr><td>HKUST TTL</td><td>Entity context</td><td>Mapped to building, floor, and equipment where available</td><td>Some fields remain unknown</td></tr>
-            <tr><td>HKO Weather</td><td>Context data</td><td>Daily weather joined by date</td><td>Not indoor/building-specific weather</td></tr>
+            <tr><th>Dataset</th><th>Peran</th><th>Perlakuan</th><th>Batasan</th></tr>
+            <tr><td>HKUST T1440</td><td>Data konsumsi utama</td><td>Pembacaan meter diubah menjadi konsumsi harian</td><td>Inventaris hanya memuat 26 meter harian</td></tr>
+            <tr><td>HKUST TTL</td><td>Konteks entitas</td><td>Dipetakan ke gedung, lantai, dan peralatan jika tersedia</td><td>Sebagian field masih tidak diketahui</td></tr>
+            <tr><td>Cuaca HKO</td><td>Data konteks</td><td>Data cuaca harian digabung berdasarkan tanggal</td><td>Bukan cuaca indoor atau spesifik gedung</td></tr>
           </table>
         </div>
         <div class="grid-4">
-          <div class="kpi"><span class="value">878</span><span class="label">Calendar days</span><p class="note">dim_date</p></div>
-          <div class="kpi teal"><span class="value">7</span><span class="label">Weather variables</span><p class="note">Temperature, humidity, rain, solar, wind</p></div>
-          <div class="kpi gold"><span class="value">5</span><span class="label">Rainfall missing</span><p class="note">Model-safe field created</p></div>
-          <div class="kpi red"><span class="value">1</span><span class="label">Solar missing</span><p class="note">Monthly median imputation</p></div>
+          <div class="kpi"><span class="value">878</span><span class="label">Hari kalender</span><p class="note">dim_date</p></div>
+          <div class="kpi teal"><span class="value">7</span><span class="label">Variabel cuaca</span><p class="note">Suhu, kelembapan, hujan, solar, angin</p></div>
+          <div class="kpi gold"><span class="value">5</span><span class="label">Rainfall hilang</span><p class="note">Field aman model dibuat</p></div>
+          <div class="kpi red"><span class="value">1</span><span class="label">Solar hilang</span><p class="note">Imputasi median bulanan</p></div>
         </div>
         <div class="grid-main">
           <table>
-            <tr><th>Selection category</th><th class="num">Count</th><th>Model treatment</th><th>Reason</th></tr>
-            <tr><td>Selected main subset</td><td class="num">12</td><td>Included</td><td>Active, full coverage, primary building context</td></tr>
-            <tr><td>Comparison / secondary</td><td class="num">4</td><td>Not in main model</td><td>Useful context, not final subset</td></tr>
-            <tr><td>Excluded from main model</td><td class="num">10</td><td>Excluded</td><td>Zero constant, near-zero, short coverage, or outside scope</td></tr>
+            <tr><th>Kategori seleksi</th><th class="num">Jumlah</th><th>Perlakuan model</th><th>Alasan</th></tr>
+            <tr><td>Subset utama terpilih</td><td class="num">12</td><td>Disertakan</td><td>Aktif, cakupan penuh, konteks gedung utama</td></tr>
+            <tr><td>Pembanding / sekunder</td><td class="num">4</td><td>Tidak masuk model utama</td><td>Berguna sebagai konteks, tetapi bukan subset final</td></tr>
+            <tr><td>Dikeluarkan dari model utama</td><td class="num">10</td><td>Dikeluarkan</td><td>Nol konstan, hampir nol, cakupan pendek, atau di luar scope</td></tr>
           </table>
           <div class="panel gold">
-            <h3>Selected meters</h3>
+            <h3>Meter terpilih</h3>
             <p class="small">D0849, D0848, D0854, D0853, D0862, D0857, D0851, D0861, D0852, D0860, D0850, D0865.</p>
           </div>
         </div>
       </div>
-      <div class="footer"><span>Obtain stage</span><span>Dataset, sumber, periode, format</span></div>
+      <div class="footer"><span>Tahap Obtain</span><span>Dataset, sumber, periode, format</span></div>
     </section>
 
     <section class="slide">
       <div class="header">
-        <div><div class="section-label">S - Scrub</div><h2>Data dibersihkan dengan quality flag, field model-safe, dan kontrol interpretasi</h2></div>
+        <div><div class="section-label">S - Scrub</div><h2>Data dibersihkan dengan penanda kualitas, field aman model, dan kontrol interpretasi</h2></div>
         <div class="slide-num">05</div>
       </div>
       <div class="content">
         <div class="grid-main">
           <table>
-            <tr><th>Table</th><th>Grain</th><th class="num">Rows</th><th>Business use</th></tr>
-            <tr><td>fact_energy_weather_daily</td><td>Date x entity</td><td class="num">10.524</td><td>KPI, trend, weather, quality flag, model features</td></tr>
-            <tr><td>fact_anomaly_scenarios</td><td>Date x entity x scenario</td><td class="num">31.260</td><td>Anomaly score, flag, ranking, baseline agreement</td></tr>
-            <tr><td>dim_date</td><td>Date</td><td class="num">878</td><td>Calendar filters</td></tr>
-            <tr><td>dim_entity</td><td>Meter/entity</td><td class="num">26</td><td>Metadata, selection, quality status</td></tr>
-            <tr><td>dim_scenario</td><td>Scenario</td><td class="num">3</td><td>Strict, balanced, sensitive</td></tr>
-            <tr><td>entity_scorecard</td><td>Entity</td><td class="num">12</td><td>Audit priority ranking</td></tr>
+            <tr><th>Tabel</th><th>Grain</th><th class="num">Baris</th><th>Kegunaan bisnis</th></tr>
+            <tr><td>fact_energy_weather_daily</td><td>Tanggal x entitas</td><td class="num">10.524</td><td>KPI, tren, cuaca, penanda kualitas, fitur model</td></tr>
+            <tr><td>fact_anomaly_scenarios</td><td>Tanggal x entitas x skenario</td><td class="num">31.260</td><td>Skor anomali, flag, ranking, dan kesesuaian baseline</td></tr>
+            <tr><td>dim_date</td><td>Tanggal</td><td class="num">878</td><td>Filter kalender</td></tr>
+            <tr><td>dim_entity</td><td>Meter/entitas</td><td class="num">26</td><td>Metadata, seleksi, status kualitas</td></tr>
+            <tr><td>dim_scenario</td><td>Skenario</td><td class="num">3</td><td>Strict, balanced, sensitive</td></tr>
+            <tr><td>entity_scorecard</td><td>Entitas</td><td class="num">12</td><td>Ranking prioritas audit</td></tr>
           </table>
           <div class="dense-flow">
-            <div class="kpi green"><span class="value">10.420</span><span class="label">Model-ready rows</span><p class="note">Complete features after rolling/lag</p></div>
-            <div class="kpi teal"><span class="value">29</span><span class="label">Tracked features</span><p class="note">Feature summary</p></div>
-            <div class="panel green"><h3>Energy treatment</h3><p class="small">Meter reading is differenced per meter to create daily_consumption.</p></div>
-            <div class="panel gold"><h3>Weather treatment</h3><p class="small">Original and model-safe weather fields are kept separately.</p></div>
+            <div class="kpi green"><span class="value">10.420</span><span class="label">Baris siap model</span><p class="note">Fitur lengkap setelah rolling/lag</p></div>
+            <div class="kpi teal"><span class="value">29</span><span class="label">Fitur terlacak</span><p class="note">Ringkasan fitur</p></div>
+            <div class="panel green"><h3>Perlakuan energi</h3><p class="small">Pembacaan meter dihitung selisihnya per meter untuk membentuk daily_consumption.</p></div>
+            <div class="panel gold"><h3>Perlakuan cuaca</h3><p class="small">Field cuaca asli dan field aman model disimpan terpisah.</p></div>
           </div>
         </div>
         <table>
-          <tr><th>Feature family</th><th>Representative fields</th><th>Primary use</th><th>Control</th></tr>
-          <tr><td>Consumption</td><td>daily_consumption, log, rank, percentile</td><td>EDA, ranking, model base signal</td><td>Original value preserved</td></tr>
-          <tr><td>Rolling and lag</td><td>rolling_mean_7d, deviation, lag_1d, lag_7d</td><td>Recent-pattern anomaly context</td><td>Past-only by entity</td></tr>
-          <tr><td>Calendar and weather</td><td>is_weekend, month, temperature, rainfall, hot/rainy flags</td><td>Model context and dashboard slicers</td><td>No causal overclaim</td></tr>
+          <tr><th>Keluarga fitur</th><th>Field representatif</th><th>Kegunaan utama</th><th>Kontrol</th></tr>
+          <tr><td>Konsumsi</td><td>daily_consumption, log, rank, percentile</td><td>EDA, ranking, sinyal dasar model</td><td>Nilai asli tetap dipertahankan</td></tr>
+          <tr><td>Rolling dan lag</td><td>rolling_mean_7d, deviation, lag_1d, lag_7d</td><td>Konteks anomali terhadap pola terbaru</td><td>Hanya memakai masa lalu per entitas</td></tr>
+          <tr><td>Kalender dan cuaca</td><td>is_weekend, month, temperature, rainfall, hot/rainy flags</td><td>Konteks model dan slicer dashboard</td><td>Tidak membuat klaim kausal berlebihan</td></tr>
         </table>
       </div>
-      <div class="footer"><span>Scrub stage</span><span>Masalah kualitas data dan preprocessing</span></div>
+      <div class="footer"><span>Tahap Scrub</span><span>Masalah kualitas data dan preprocessing</span></div>
     </section>
 
     <section class="slide">
@@ -596,21 +596,21 @@
       </div>
       <div class="content">
         <div class="flow">
-          <div class="step"><strong>Raw data</strong><span>HKUST T1440 .xlsx, TTL metadata, dan HKO weather CSV.</span></div>
-          <div class="step"><strong>Normalize</strong><span>Timestamp ke date dan reading kumulatif ke daily_consumption.</span></div>
-          <div class="step"><strong>Join</strong><span>Energi dan cuaca digabung pada granularitas harian.</span></div>
-          <div class="step"><strong>Feature</strong><span>Calendar, weather band, rolling mean, lag, deviation.</span></div>
-          <div class="step"><strong>Dashboard</strong><span>Fact dan dimension table siap impor Power BI.</span></div>
+          <div class="step"><strong>Data mentah</strong><span>HKUST T1440 .xlsx, metadata TTL, dan CSV cuaca HKO.</span></div>
+          <div class="step"><strong>Normalisasi</strong><span>Timestamp menjadi tanggal dan pembacaan kumulatif menjadi daily_consumption.</span></div>
+          <div class="step"><strong>Penggabungan</strong><span>Energi dan cuaca digabung pada granularitas harian.</span></div>
+          <div class="step"><strong>Fitur</strong><span>Kalender, kelompok cuaca, rolling mean, lag, dan deviation.</span></div>
+          <div class="step"><strong>Dashboard</strong><span>Tabel fakta dan dimensi siap digunakan untuk visualisasi.</span></div>
         </div>
         <table>
-          <tr><th>Feature family</th><th>Representative fields</th><th>Primary use</th><th>Control</th></tr>
-          <tr><td>Consumption</td><td>daily_consumption, log, rank, percentile</td><td>EDA, ranking, model base signal</td><td>Original value preserved</td></tr>
-          <tr><td>Rolling and lag</td><td>rolling_mean_7d, deviation, lag_1d, lag_7d</td><td>Recent-pattern anomaly context</td><td>Past-only by entity</td></tr>
-          <tr><td>Calendar and weather</td><td>is_weekend, month, temperature, rainfall, hot/rainy flags</td><td>Model context and dashboard slicers</td><td>No causal overclaim</td></tr>
+          <tr><th>Keluarga fitur</th><th>Field representatif</th><th>Kegunaan utama</th><th>Kontrol</th></tr>
+          <tr><td>Konsumsi</td><td>daily_consumption, log, rank, percentile</td><td>EDA, ranking, sinyal dasar model</td><td>Nilai asli tetap dipertahankan</td></tr>
+          <tr><td>Rolling dan lag</td><td>rolling_mean_7d, deviation, lag_1d, lag_7d</td><td>Konteks anomali terhadap pola terbaru</td><td>Hanya memakai masa lalu per entitas</td></tr>
+          <tr><td>Kalender dan cuaca</td><td>is_weekend, month, temperature, rainfall, hot/rainy flags</td><td>Konteks model dan slicer dashboard</td><td>Tidak membuat klaim kausal berlebihan</td></tr>
         </table>
         <div class="callout">Integrasi menjaga raw data tetap terpisah dari processed output sehingga pipeline dapat ditelusuri ulang.</div>
       </div>
-      <div class="footer"><span>Scrub stage</span><span>Penggabungan data dan fitur baru</span></div>
+      <div class="footer"><span>Tahap Scrub</span><span>Penggabungan data dan fitur baru</span></div>
     </section>
 
     <section class="slide">
@@ -620,18 +620,18 @@
       </div>
       <div class="content">
         <div class="grid-2">
-          <div class="chart-box"><img src="outputs/eda/final/daily_consumption_trend.png" alt="Daily consumption trend"><div class="chart-caption">Daily selected-meter consumption with balanced anomaly markers</div></div>
-          <div class="chart-box"><img src="outputs/eda/final/monthly_consumption_trend.png" alt="Monthly consumption trend"><div class="chart-caption">Monthly total and average meter-day consumption</div></div>
+          <div class="chart-box"><img src="outputs/eda/final/daily_consumption_trend.png" alt="Tren konsumsi harian"><div class="chart-caption">Konsumsi harian meter terpilih dengan penanda anomali balanced</div></div>
+          <div class="chart-box"><img src="outputs/eda/final/monthly_consumption_trend.png" alt="Tren konsumsi bulanan"><div class="chart-caption">Total bulanan dan rata-rata konsumsi per meter-hari</div></div>
         </div>
         <div class="grid-4">
-          <div class="kpi"><span class="value">15.606</span><span class="label">Avg daily total</span><p class="note">Selected meters</p></div>
-          <div class="kpi teal"><span class="value">12.640</span><span class="label">Min daily total</span><p class="note">Observed range floor</p></div>
-          <div class="kpi gold"><span class="value">17.400</span><span class="label">Max daily total</span><p class="note">Observed range ceiling</p></div>
-          <div class="kpi red"><span class="value">2022-05</span><span class="label">Peak month</span><p class="note">499.975 total</p></div>
+          <div class="kpi"><span class="value">15.606</span><span class="label">Rata-rata total harian</span><p class="note">Meter terpilih</p></div>
+          <div class="kpi teal"><span class="value">12.640</span><span class="label">Total harian minimum</span><p class="note">Batas bawah teramati</p></div>
+          <div class="kpi gold"><span class="value">17.400</span><span class="label">Total harian maksimum</span><p class="note">Batas atas teramati</p></div>
+          <div class="kpi red"><span class="value">2022-05</span><span class="label">Bulan puncak</span><p class="note">Total 499.975</p></div>
         </div>
-        <div class="callout">Interpretation: aggregate trend is stable enough for monitoring, but anomaly review must drill into entity-specific history and scenario score.</div>
+        <div class="callout">Interpretasi: tren agregat cukup stabil untuk monitoring, tetapi review anomali tetap perlu menelusuri riwayat entitas dan skor skenario.</div>
       </div>
-      <div class="footer"><span>Explore stage</span><span>Statistik dan pola awal</span></div>
+      <div class="footer"><span>Tahap Explore</span><span>Statistik dan pola awal</span></div>
     </section>
 
     <section class="slide">
@@ -641,12 +641,12 @@
       </div>
       <div class="content">
         <div class="grid-2">
-          <div class="chart-box"><img src="outputs/eda/final/weekday_weekend_consumption.png" alt="Weekday weekend consumption"><div class="chart-caption">Weekday vs weekend total daily consumption</div></div>
-          <div class="chart-box"><img src="outputs/eda/final/top_meter_contribution_pareto.png" alt="Top meter contribution pareto"><div class="chart-caption">Selected-meter contribution and Pareto pattern</div></div>
+          <div class="chart-box"><img src="outputs/eda/final/weekday_weekend_consumption.png" alt="Konsumsi hari kerja dan akhir pekan"><div class="chart-caption">Total konsumsi harian hari kerja dibanding akhir pekan</div></div>
+          <div class="chart-box"><img src="outputs/eda/final/top_meter_contribution_pareto.png" alt="Pareto kontribusi meter teratas"><div class="chart-caption">Kontribusi meter terpilih dan pola Pareto</div></div>
         </div>
         <div class="grid-main">
           <div class="rank panel white">
-            <h3>Top contribution ranking</h3>
+            <h3>Ranking kontribusi teratas</h3>
             <div class="rank-row"><strong>D0849</strong><div class="bar"><span style="width:100%"></span></div><span>20,62%</span></div>
             <div class="rank-row"><strong>D0848</strong><div class="bar"><span style="width:73%"></span></div><span>15,00%</span></div>
             <div class="rank-row"><strong>D0854</strong><div class="bar"><span style="width:66%"></span></div><span>13,64%</span></div>
@@ -654,16 +654,16 @@
             <div class="rank-row"><strong>D0862</strong><div class="bar"><span style="width:32%"></span></div><span>6,57%</span></div>
           </div>
           <div class="panel gold">
-            <h3>Business implications</h3>
+            <h3>Implikasi bisnis</h3>
             <ul>
-              <li>Weekday average is <strong>169,973</strong> above weekend.</li>
-              <li>Top 5 meters contribute <strong>68,79%</strong> of selected-meter consumption.</li>
-              <li>High contribution is not automatically inefficiency; combine with anomaly rate and quality flags.</li>
+              <li>Rata-rata hari kerja lebih tinggi <strong>169,973</strong> daripada akhir pekan.</li>
+              <li>Top 5 meter menyumbang <strong>68,79%</strong> konsumsi meter terpilih.</li>
+              <li>Kontribusi tinggi tidak otomatis berarti tidak efisien; perlu digabung dengan anomaly rate dan penanda kualitas.</li>
             </ul>
           </div>
         </div>
       </div>
-      <div class="footer"><span>Explore stage</span><span>Grafik/peta utama dan interpretasi</span></div>
+      <div class="footer"><span>Tahap Explore</span><span>Grafik/peta utama dan interpretasi</span></div>
     </section>
 
     <section class="slide">
@@ -674,30 +674,30 @@
       <div class="content">
         <div class="grid-main">
           <table>
-            <tr><th>Scenario</th><th class="num">Contamination</th><th class="num">Anomaly count</th><th class="num">Anomaly rate</th><th>Use case</th></tr>
-            <tr><td>Strict</td><td class="num">0,03</td><td class="num">313</td><td class="num">0,030038</td><td>Only strongest candidates</td></tr>
-            <tr><td>Balanced</td><td class="num">0,05</td><td class="num">521</td><td class="num">0,050000</td><td>Default dashboard scenario</td></tr>
-            <tr><td>Sensitive</td><td class="num">0,10</td><td class="num">1.042</td><td class="num">0,100000</td><td>Wider exploratory review</td></tr>
+            <tr><th>Skenario</th><th class="num">Contamination</th><th class="num">Jumlah anomali</th><th class="num">Anomaly rate</th><th>Kegunaan</th></tr>
+            <tr><td>Strict</td><td class="num">0,03</td><td class="num">313</td><td class="num">0,030038</td><td>Hanya kandidat terkuat</td></tr>
+            <tr><td>Balanced</td><td class="num">0,05</td><td class="num">521</td><td class="num">0,050000</td><td>Skenario default dashboard</td></tr>
+            <tr><td>Sensitive</td><td class="num">0,10</td><td class="num">1.042</td><td class="num">0,100000</td><td>Peninjauan eksploratif yang lebih luas</td></tr>
           </table>
           <div class="panel blue">
-            <h3>Model framing</h3>
+            <h3>Kerangka model</h3>
             <ul>
-              <li>Problem type: unsupervised anomaly detection.</li>
-              <li>Unit: daily observation per meter entity.</li>
-              <li>Output: anomaly_score, anomaly_flag, rank, baseline agreement.</li>
-              <li>Interpretation: candidate review, not confirmed fault.</li>
+              <li>Jenis masalah: deteksi anomali tanpa label.</li>
+              <li>Unit: observasi harian per entitas meter.</li>
+              <li>Output: anomaly_score, anomaly_flag, rank, dan kesesuaian baseline.</li>
+              <li>Interpretasi: kandidat peninjauan, bukan gangguan yang sudah terkonfirmasi.</li>
             </ul>
           </div>
         </div>
         <table>
-          <tr><th>Evaluation lens</th><th>Why it matters</th><th>Observed result</th></tr>
-          <tr><td>Contamination sanity</td><td>Checks model volume against scenario design</td><td>Balanced exactly 5%; sensitive exactly 10%; strict approximately 3%</td></tr>
-          <tr><td>IQR and Z-score agreement</td><td>Compares multivariate model with simple statistical outliers</td><td>Agreement is low, suggesting model captures broader patterns than absolute consumption only</td></tr>
-          <tr><td>Scenario stability</td><td>Prioritizes candidates appearing across scenarios</td><td>313 strict candidates remain stable within broader scenarios</td></tr>
-          <tr><td>Case review</td><td>Supports narrative inspection without labels</td><td>Top 20 balanced candidates prepared for review</td></tr>
+          <tr><th>Lensa evaluasi</th><th>Mengapa penting</th><th>Hasil teramati</th></tr>
+          <tr><td>Sanity check contamination</td><td>Memastikan volume model sesuai desain skenario</td><td>Balanced tepat 5%; sensitive tepat 10%; strict sekitar 3%</td></tr>
+          <tr><td>Kesesuaian IQR dan Z-score</td><td>Membandingkan model multivariat dengan outlier statistik sederhana</td><td>Agreement rendah, menunjukkan model menangkap pola yang lebih luas dari konsumsi absolut saja</td></tr>
+          <tr><td>Stabilitas skenario</td><td>Memprioritaskan kandidat yang muncul di berbagai skenario</td><td>313 kandidat strict tetap stabil dalam skenario yang lebih luas</td></tr>
+          <tr><td>Peninjauan kasus</td><td>Mendukung inspeksi naratif tanpa label</td><td>Top 20 kandidat balanced disiapkan untuk peninjauan</td></tr>
         </table>
       </div>
-      <div class="footer"><span>Model stage</span><span>Metode, input-output, alasan pemilihan</span></div>
+      <div class="footer"><span>Tahap Model</span><span>Metode, input-output, alasan pemilihan</span></div>
     </section>
 
     <section class="slide">
@@ -707,50 +707,50 @@
       </div>
       <div class="content">
         <div class="grid-main">
-          <div class="chart-box"><img src="outputs/eda/final/anomaly_case_review.png" alt="Anomaly case review"><div class="chart-caption">Top balanced anomaly cases by deviation from recent pattern</div></div>
+          <div class="chart-box"><img src="outputs/eda/final/anomaly_case_review.png" alt="Review kasus anomali"><div class="chart-caption">Kasus anomali balanced teratas berdasarkan deviasi dari pola terbaru</div></div>
           <div class="panel white">
-            <h3>Entity priority scorecard</h3>
+            <h3>Scorecard prioritas entitas</h3>
             <table>
-              <tr><th>Rank</th><th>Entity</th><th class="num">Balanced count</th><th class="num">Score</th></tr>
+              <tr><th>Rank</th><th>Entitas</th><th class="num">Jumlah balanced</th><th class="num">Skor</th></tr>
               <tr><td>1</td><td>D0849</td><td class="num">396</td><td class="num">100,00</td></tr>
               <tr><td>2</td><td>D0848</td><td class="num">59</td><td class="num">52,57</td></tr>
               <tr><td>3</td><td>D0854</td><td class="num">12</td><td class="num">46,15</td></tr>
               <tr><td>4</td><td>D0853</td><td class="num">8</td><td class="num">43,07</td></tr>
               <tr><td>5</td><td>D0862</td><td class="num">2</td><td class="num">17,75</td></tr>
             </table>
-            <div class="callout" style="margin-top:9px;">D0849 combines high consumption contribution, high anomaly count, and high peak load.</div>
+            <div class="callout" style="margin-top:9px;">D0849 menggabungkan kontribusi konsumsi tinggi, jumlah anomali tinggi, dan peak load tinggi.</div>
           </div>
         </div>
         <div class="grid-3">
-          <div class="panel green"><h3>Review priority</h3><p class="small">Start with D0849, then review top scorecard entities by anomaly rate and contribution.</p></div>
-          <div class="panel gold"><h3>Validation need</h3><p class="small">Confirm whether unusual dates align with equipment function or operations schedule.</p></div>
-          <div class="panel red"><h3>Interpretation guard</h3><p class="small">Anomaly candidate does not automatically mean fault, waste, or inefficiency.</p></div>
+          <div class="panel green"><h3>Prioritas peninjauan</h3><p class="small">Mulai dari D0849, lalu tinjau entitas scorecard teratas berdasarkan anomaly rate dan kontribusi.</p></div>
+          <div class="panel gold"><h3>Kebutuhan validasi</h3><p class="small">Pastikan apakah tanggal yang tidak biasa sesuai dengan fungsi peralatan atau jadwal operasional.</p></div>
+          <div class="panel red"><h3>Batas interpretasi</h3><p class="small">Kandidat anomali tidak otomatis berarti gangguan, pemborosan, atau inefisiensi.</p></div>
         </div>
       </div>
-      <div class="footer"><span>Model stage</span><span>Metrik/hasil model dan keterbatasan</span></div>
+      <div class="footer"><span>Tahap Model</span><span>Metrik/hasil model dan keterbatasan</span></div>
     </section>
 
     <section class="slide">
       <div class="header">
-        <div><div class="section-label">N - Insight</div><h2>Insight-to-action matrix mengubah bukti analitis menjadi prioritas review</h2></div>
+        <div><div class="section-label">N - Insight</div><h2>Matriks insight-to-action mengubah bukti analitis menjadi prioritas peninjauan</h2></div>
         <div class="slide-num">11</div>
       </div>
       <div class="content">
         <table>
-          <tr><th>Insight</th><th>Evidence</th><th>Recommended action</th><th>Owner</th></tr>
-          <tr><td>Consumption is concentrated in a small number of selected meters.</td><td>Top 5 contribution = 68,79%</td><td>Start audit prioritization from high-contribution entities, but check anomaly and quality context.</td><td>Building manager</td></tr>
-          <tr><td>Weekday average is higher than weekend.</td><td>Weekday gap = 169,973</td><td>Use weekday/weekend filters to review abnormal high consumption outside expected operations.</td><td>Facilities team</td></tr>
-          <tr><td>Balanced scenario produces controlled anomaly candidate volume.</td><td>Balanced anomaly rate = 5%</td><td>Use balanced as default; compare strict and sensitive for confidence.</td><td>Data analyst</td></tr>
-          <tr><td>Weather helps context but does not prove causality.</td><td>Temperature corr. 0,236; rainfall corr. 0,138</td><td>Use weather as tooltip/filter context when reviewing anomaly dates.</td><td>Sustainability team</td></tr>
+          <tr><th>Insight</th><th>Bukti</th><th>Aksi yang disarankan</th><th>Pemilik</th></tr>
+          <tr><td>Konsumsi terkonsentrasi pada sedikit meter terpilih.</td><td>Kontribusi top 5 = 68,79%</td><td>Mulai prioritas audit dari entitas berkontribusi tinggi, tetapi tetap cek konteks anomali dan kualitas data.</td><td>Pengelola gedung</td></tr>
+          <tr><td>Rata-rata hari kerja lebih tinggi daripada akhir pekan.</td><td>Gap hari kerja = 169,973</td><td>Gunakan filter hari kerja/akhir pekan untuk meninjau konsumsi tinggi di luar operasi yang diharapkan.</td><td>Tim fasilitas</td></tr>
+          <tr><td>Skenario balanced menghasilkan volume kandidat anomali yang terkendali.</td><td>Anomaly rate balanced = 5%</td><td>Gunakan balanced sebagai default; bandingkan dengan strict dan sensitive untuk menambah keyakinan.</td><td>Data analyst</td></tr>
+          <tr><td>Cuaca membantu konteks, tetapi tidak membuktikan kausalitas.</td><td>Korelasi suhu 0,236; rainfall 0,138</td><td>Gunakan cuaca sebagai konteks tooltip/filter saat meninjau tanggal anomali.</td><td>Tim sustainability</td></tr>
         </table>
         <div class="grid-3">
-          <div class="panel green"><h3>P0: Audit focus</h3><p class="small">Audit D0849 and other high-priority scorecard entities first.</p></div>
-          <div class="panel blue"><h3>P0: Dashboard default</h3><p class="small">Use balanced scenario as default for management review and presentation.</p></div>
-          <div class="panel gold"><h3>P1: Review logic</h3><p class="small">Prioritize stable anomaly candidates before acting on sensitive-only cases.</p></div>
+          <div class="panel green"><h3>P0: Fokus audit</h3><p class="small">Audit D0849 dan entitas scorecard prioritas tinggi lainnya lebih dulu.</p></div>
+          <div class="panel blue"><h3>P0: Default dashboard</h3><p class="small">Gunakan skenario balanced sebagai default untuk peninjauan manajemen dan presentasi.</p></div>
+          <div class="panel gold"><h3>P1: Logika review</h3><p class="small">Prioritaskan kandidat anomali stabil sebelum menindaklanjuti kasus yang hanya muncul pada skenario sensitive.</p></div>
         </div>
-        <div class="callout">Decision rule: do not read any single metric alone; combine contribution, anomaly score, scenario stability, weather context, and quality flags.</div>
+        <div class="callout">Aturan keputusan: jangan membaca satu metrik secara terpisah; gabungkan kontribusi, skor anomali, stabilitas skenario, konteks cuaca, dan penanda kualitas.</div>
       </div>
-      <div class="footer"><span>Interpret stage</span><span>Minimal 3 insight</span></div>
+      <div class="footer"><span>Tahap Interpret</span><span>Minimal 3 insight</span></div>
     </section>
 
     <section class="slide">
@@ -760,20 +760,20 @@
       </div>
       <div class="content">
         <table>
-          <tr><th>Rekomendasi</th><th>Owner</th><th>Prioritas</th><th>Alasan</th></tr>
-          <tr><td>Audit D0849 dan entity scorecard teratas lebih dulu.</td><td>Building manager / facilities</td><td>P0</td><td>D0849 memiliki konsumsi, anomaly count, dan scorecard tertinggi.</td></tr>
-          <tr><td>Gunakan balanced scenario sebagai default dashboard.</td><td>Data analyst</td><td>P0</td><td>Volume kandidat 5% cukup terkendali untuk review manajemen.</td></tr>
-          <tr><td>Bandingkan strict, balanced, dan sensitive sebelum membuat tindakan.</td><td>Data analyst</td><td>P1</td><td>Scenario stability membantu membedakan kandidat kuat dari kandidat eksploratif.</td></tr>
-          <tr><td>Tampilkan quality flag dan konteks cuaca dalam dashboard.</td><td>Dashboard developer</td><td>P1</td><td>Mengurangi risiko salah tafsir akibat imputasi atau konteks eksternal.</td></tr>
+          <tr><th>Rekomendasi</th><th>Pemilik</th><th>Prioritas</th><th>Alasan</th></tr>
+          <tr><td>Audit D0849 dan entity scorecard teratas lebih dulu.</td><td>Pengelola gedung / fasilitas</td><td>P0</td><td>D0849 memiliki konsumsi, anomaly count, dan scorecard tertinggi.</td></tr>
+          <tr><td>Gunakan skenario balanced sebagai default dashboard.</td><td>Data analyst</td><td>P0</td><td>Volume kandidat 5% cukup terkendali untuk peninjauan manajemen.</td></tr>
+          <tr><td>Bandingkan strict, balanced, dan sensitive sebelum membuat tindakan.</td><td>Data analyst</td><td>P1</td><td>Stabilitas skenario membantu membedakan kandidat kuat dari kandidat eksploratif.</td></tr>
+          <tr><td>Tampilkan penanda kualitas dan konteks cuaca dalam dashboard.</td><td>Pengembang dashboard</td><td>P1</td><td>Mengurangi risiko salah tafsir akibat imputasi atau konteks eksternal.</td></tr>
         </table>
         <div class="grid-3">
           <div class="panel green"><h3>Review operasional</h3><p class="small">Cek jadwal operasi, peralatan, dan catatan gedung pada tanggal kandidat anomali.</p></div>
-          <div class="panel blue"><h3>Review analitis</h3><p class="small">Gunakan anomaly_score, rank, baseline agreement, dan scenario filter bersamaan.</p></div>
+          <div class="panel blue"><h3>Peninjauan analitis</h3><p class="small">Gunakan anomaly_score, rank, kesesuaian baseline, dan filter skenario secara bersamaan.</p></div>
           <div class="panel gold"><h3>Pengembangan</h3><p class="small">Perluas ke T60/intraday jika ingin membaca pola jam puncak dan beban malam.</p></div>
         </div>
         <div class="callout">Minimal 3 rekomendasi terpenuhi: audit prioritas, default skenario, dan validasi lintas konteks.</div>
       </div>
-      <div class="footer"><span>Interpret stage</span><span>Minimal 3 rekomendasi</span></div>
+      <div class="footer"><span>Tahap Interpret</span><span>Minimal 3 rekomendasi</span></div>
     </section>
 
     <section class="slide">
@@ -783,39 +783,39 @@
       </div>
       <div class="content">
         <div class="grid-3">
-          <div class="panel blue"><h3>Executive Overview</h3><p class="small">KPI cards, trend, top entities, top anomaly days.</p></div>
-          <div class="panel blue"><h3>Consumption Trend</h3><p class="small">Daily/monthly trend, weekday/weekend, calendar filters.</p></div>
-          <div class="panel blue"><h3>Anomaly Explorer</h3><p class="small">Score scatter, candidate table, anomaly by entity and scenario.</p></div>
-          <div class="panel green"><h3>Weather Impact</h3><p class="small">Consumption vs temperature/rainfall, hot/rainy filters.</p></div>
-          <div class="panel green"><h3>Meter Ranking</h3><p class="small">Contribution, anomaly rate, entity scorecard priority.</p></div>
-          <div class="panel green"><h3>Data Quality</h3><p class="small">Excluded meters, imputed weather, source and method transparency.</p></div>
+          <div class="panel blue"><h3>Ringkasan Eksekutif</h3><p class="small">Kartu KPI, tren, entitas teratas, dan hari anomali utama.</p></div>
+          <div class="panel blue"><h3>Tren Konsumsi</h3><p class="small">Tren harian/bulanan, weekday/weekend, dan filter kalender.</p></div>
+          <div class="panel blue"><h3>Eksplorasi Anomali</h3><p class="small">Sebaran skor, tabel kandidat, anomali per entitas dan skenario.</p></div>
+          <div class="panel green"><h3>Dampak Cuaca</h3><p class="small">Konsumsi dibanding suhu/rainfall, filter hot/rainy.</p></div>
+          <div class="panel green"><h3>Ranking Meter</h3><p class="small">Kontribusi, anomaly rate, dan prioritas entity scorecard.</p></div>
+          <div class="panel green"><h3>Kualitas Data</h3><p class="small">Meter yang dikeluarkan, cuaca yang diimputasi, sumber, dan transparansi metode.</p></div>
         </div>
         <div class="grid-main">
           <div class="panel white">
             <h3>Alur penggunaan</h3>
             <ol>
-              <li>Pilih date range dan scenario.</li>
-              <li>Lihat KPI total consumption, anomaly count, dan top entities.</li>
-              <li>Drill-down ke Anomaly Explorer untuk entity/date kandidat.</li>
-              <li>Cek weather, weekday/weekend, dan quality flag.</li>
+              <li>Pilih rentang tanggal dan skenario.</li>
+              <li>Lihat KPI total konsumsi, jumlah anomali, dan entitas teratas.</li>
+              <li>Drill-down ke Eksplorasi Anomali untuk entitas/tanggal kandidat.</li>
+              <li>Cek cuaca, weekday/weekend, dan quality flag.</li>
               <li>Catat kandidat untuk validasi operasional.</li>
             </ol>
           </div>
           <div class="panel white">
-            <h3>Required slicers</h3>
+            <h3>Slicer yang diperlukan</h3>
             <div class="tag-row">
-              <span class="tag">Date range</span>
-              <span class="tag">Scenario</span>
-              <span class="tag">Anomaly flag</span>
-              <span class="tag">Entity</span>
+              <span class="tag">Rentang tanggal</span>
+              <span class="tag">Skenario</span>
+              <span class="tag">Flag anomali</span>
+              <span class="tag">Entitas</span>
               <span class="tag">Weekday/weekend</span>
-              <span class="tag">Hot/rainy day</span>
-              <span class="tag">Quality flag</span>
+              <span class="tag">Hari panas/hujan</span>
+              <span class="tag">Penanda kualitas</span>
             </div>
           </div>
           <div class="panel gold">
-            <h3>Measures</h3>
-            <p class="small">Total consumption, average daily consumption, peak consumption, anomaly count, anomaly rate, average anomaly score, quality issue count, rainy day count, hot day count.</p>
+            <h3>Measure</h3>
+            <p class="small">Total konsumsi, rata-rata konsumsi harian, konsumsi puncak, jumlah anomali, anomaly rate, rata-rata skor anomali, jumlah isu kualitas, jumlah hari hujan, dan jumlah hari panas.</p>
           </div>
         </div>
       </div>
@@ -824,33 +824,33 @@
 
     <section class="slide">
       <div class="header">
-        <div><div class="section-label">Arsitektur Sistem</div><h2>Pipeline sederhana menjaga raw data, processed data, model, dan dashboard tetap terlacak</h2></div>
+        <div><div class="section-label">Arsitektur Sistem</div><h2>Pipeline sederhana menjaga data mentah, data terproses, model, dan dashboard tetap terlacak</h2></div>
         <div class="slide-num">14</div>
       </div>
       <div class="content">
         <div class="flow">
-          <div class="step"><strong>Raw sources</strong><span>HKUST T1440 .xlsx, TTL metadata, HKO weather CSV.</span></div>
-          <div class="step"><strong>Processing</strong><span>Python scripts untuk profiling, cleaning, feature engineering.</span></div>
-          <div class="step"><strong>Processed</strong><span>Fact, dimension, data dictionary, quality summary.</span></div>
-          <div class="step"><strong>Model</strong><span>Isolation Forest scenarios dan statistical baselines.</span></div>
-          <div class="step"><strong>Dashboard</strong><span>Manual Power BI build dari CSV star schema.</span></div>
+          <div class="step"><strong>Sumber mentah</strong><span>HKUST T1440 .xlsx, metadata TTL, CSV cuaca HKO.</span></div>
+          <div class="step"><strong>Pemrosesan</strong><span>Script Python untuk profiling, cleaning, dan feature engineering.</span></div>
+          <div class="step"><strong>Data terproses</strong><span>Tabel fakta, dimensi, kamus data, dan ringkasan kualitas.</span></div>
+          <div class="step"><strong>Model</strong><span>Skenario Isolation Forest dan baseline statistik.</span></div>
+          <div class="step"><strong>Dashboard</strong><span>Visualisasi dibangun dari CSV star schema.</span></div>
         </div>
         <div class="grid-main">
           <table>
-            <tr><th>Relationship</th><th>Cardinality</th><th>Recommended direction</th></tr>
-            <tr><td>dim_date to both fact tables on date</td><td>Many-to-one</td><td>Single direction from dimension</td></tr>
-            <tr><td>dim_entity to both fact tables on entity_id</td><td>Many-to-one</td><td>Single direction from dimension</td></tr>
-            <tr><td>dim_scenario to fact_anomaly_scenarios on scenario</td><td>Many-to-one</td><td>Single direction from dimension</td></tr>
+            <tr><th>Relasi</th><th>Kardinalitas</th><th>Arah yang disarankan</th></tr>
+            <tr><td>dim_date ke kedua tabel fakta melalui date</td><td>Many-to-one</td><td>Satu arah dari dimensi</td></tr>
+            <tr><td>dim_entity ke kedua tabel fakta melalui entity_id</td><td>Many-to-one</td><td>Satu arah dari dimensi</td></tr>
+            <tr><td>dim_scenario ke fact_anomaly_scenarios melalui scenario</td><td>Many-to-one</td><td>Satu arah dari dimensi</td></tr>
           </table>
           <div class="panel gold">
             <h3>Kakas</h3>
-            <p class="small">Python untuk pipeline data dan model, CSV sebagai layer pertukaran data, Power BI untuk visualisasi dan interaksi pengguna.</p>
+            <p class="small">Python untuk pipeline data dan model, CSV sebagai layer pertukaran data, serta dashboard untuk visualisasi dan interaksi pengguna.</p>
             <div class="tag-row">
-              <span class="tag">Python</span><span class="tag">pandas</span><span class="tag">scikit-learn</span><span class="tag gold">Power BI</span>
+              <span class="tag">Python</span><span class="tag">pandas</span><span class="tag">scikit-learn</span><span class="tag gold">Dashboard</span>
             </div>
           </div>
         </div>
-        <div class="callout">Struktur proses mendukung reproducibility: raw data tidak dicampur dengan processed output dan semua tabel akhir siap diimpor ke dashboard.</div>
+        <div class="callout">Struktur proses mendukung reproducibility: data mentah tidak dicampur dengan output terproses dan semua tabel akhir siap digunakan dashboard.</div>
       </div>
       <div class="footer"><span>Arsitektur sistem</span><span>Pipeline, kakas, struktur proses</span></div>
     </section>
@@ -866,17 +866,17 @@
             <h3>Kesimpulan akhir</h3>
             <ul>
               <li>Pipeline OSEMN selesai dari kesiapan data, bukti EDA, pemodelan anomali, hingga matrix interpretasi.</li>
-              <li>Sinyal bisnis terkuat adalah konsentrasi konsumsi dan kandidat anomali pada sedikit selected meters.</li>
+              <li>Sinyal bisnis terkuat adalah konsentrasi konsumsi dan kandidat anomali pada sedikit meter terpilih.</li>
               <li>D0849 menjadi kandidat audit pertama, tetapi validasi operasional tetap diperlukan.</li>
-              <li>Power BI dapat dibangun dari CSV star schema yang sudah disiapkan dan divalidasi per halaman.</li>
+              <li>Dashboard dapat dibangun dari CSV star schema yang sudah disiapkan dan divalidasi per halaman.</li>
             </ul>
           </div>
           <div class="panel green">
             <h3>Arah pengembangan</h3>
             <ol>
-              <li>Bangun file Power BI `.pbix` dari output CSV final.</li>
-              <li>Validasi relationship, measure, slicer, tooltip, dan screenshot dashboard.</li>
-              <li>Review D0849 dan kandidat anomali stabil dengan konteks operasional.</li>
+              <li>Bangun dashboard dari output CSV final.</li>
+              <li>Validasi relasi, measure, slicer, tooltip, dan screenshot dashboard.</li>
+              <li>Review D0849 dan kandidat anomali yang stabil dengan konteks operasional.</li>
               <li>Perluas di luar T1440 jika ingin membuat klaim cakupan kampus yang lebih luas.</li>
             </ol>
           </div>
