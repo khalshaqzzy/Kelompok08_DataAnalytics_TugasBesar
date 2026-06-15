@@ -44,9 +44,9 @@ def build_notebook() -> nbf.NotebookNode:
             """
             # Analisis Fondasi Data Energi HKUST dan Cuaca HKO
 
-            Notebook ini menyajikan analisis data untuk topik konsumsi energi kampus menggunakan smart meter HKUST dan data cuaca Hong Kong Observatory. Struktur notebook mengikuti alur OSEMN pada bagian yang sudah memiliki data final: Obtain, Scrub, Explore awal, dan Model.
+            Notebook ini menyajikan analisis data untuk topik konsumsi energi kampus menggunakan smart meter HKUST dan data cuaca Hong Kong Observatory. Struktur notebook mengikuti alur OSEMN: Obtain, Scrub, Explore, Model, dan iNterpret.
 
-            Fokus analisis saat ini adalah dataset harian T1440 yang bersih, terdokumentasi, memiliki konteks metadata, memiliki fitur turunan untuk analisis, dan menghasilkan deteksi anomali yang siap digunakan sebagai sumber Power BI. Interpretasi rekomendasi akhir tidak disajikan karena membutuhkan matriks insight dan rekomendasi berbasis bukti yang terpisah.
+            Fokus analisis adalah dataset harian T1440 yang bersih, terdokumentasi, memiliki konteks metadata, memiliki fitur turunan untuk analisis, menghasilkan deteksi anomali, dan menyediakan bukti untuk dashboard Power BI serta rekomendasi efisiensi berbasis data.
             """
         ),
         md(
@@ -66,7 +66,9 @@ def build_notebook() -> nbf.NotebookNode:
             if str(ROOT / "scripts") not in sys.path:
                 sys.path.insert(0, str(ROOT / "scripts"))
 
-            from config import PROCESSED_DIR, PROFILE_DIR, TARGET_BUILDING, SELECTED_METERS
+            from IPython.display import Image, display
+
+            from config import FINAL_EDA_DIR, PROCESSED_DIR, PROFILE_DIR, TARGET_BUILDING, SELECTED_METERS
             """
         ),
         md(
@@ -149,9 +151,9 @@ def build_notebook() -> nbf.NotebookNode:
         ),
         md(
             """
-            ## E - Explore: Ringkasan Awal Konsumsi dan Kualitas Data
+            ## E - Explore: Pola Konsumsi, Kontribusi, Cuaca, dan Kualitas Data
 
-            Eksplorasi awal dilakukan untuk membaca skala konsumsi, kontribusi meter, dan status kualitas data. Hasil pada bagian ini belum dimaksudkan sebagai interpretasi akhir, tetapi memberikan dasar yang kuat untuk visualisasi dan modelling berikutnya.
+            Eksplorasi dilakukan untuk membaca pola konsumsi harian dan bulanan, perbedaan weekday dan weekend, konsentrasi kontribusi antar meter, hubungan konsumsi dengan konteks cuaca, serta transparansi kualitas data. Bagian ini juga menunjukkan bagaimana kandidat anomali muncul pada pola konsumsi yang sudah digabungkan dengan konteks waktu dan cuaca.
             """
         ),
         code(
@@ -171,7 +173,30 @@ def build_notebook() -> nbf.NotebookNode:
         ),
         md(
             """
-            Ringkasan kualitas data menunjukkan bahwa meter bermasalah tetap terdokumentasi dalam dimensi entity, sedangkan fact utama hanya berisi meter aktif terpilih. Nilai cuaca yang hilang dipertahankan pada kolom asli dan disediakan kolom model-safe untuk kebutuhan analisis lanjutan.
+            Tabel ringkasan berikut merangkum area eksplorasi utama. Setiap baris menghubungkan metrik, interpretasi, visual pendukung, halaman dashboard yang relevan, dan batasan pembacaan.
+            """
+        ),
+        code(
+            """
+            eda_summary = pd.read_csv(PROCESSED_DIR / "eda_summary.csv")
+            visual_summary = pd.read_csv(PROCESSED_DIR / "visual_interpretation_summary.csv")
+            display(eda_summary)
+            """
+        ),
+        md(
+            """
+            Visual berikut memperlihatkan pola eksplorasi utama: tren konsumsi, pola bulanan, perbedaan weekday dan weekend, kontribusi meter, konteks cuaca, kualitas data, serta contoh kandidat anomali.
+            """
+        ),
+        code(
+            """
+            for visual_file in visual_summary["visual_file"]:
+                display(Image(filename=str(FINAL_EDA_DIR / visual_file)))
+            """
+        ),
+        md(
+            """
+            Ringkasan kualitas data menunjukkan bahwa meter bermasalah tetap terdokumentasi dalam dimensi entity, sedangkan fact utama hanya berisi meter aktif terpilih. Nilai cuaca yang hilang dipertahankan pada kolom asli dan disediakan kolom model-safe untuk kebutuhan analisis.
             """
         ),
         code(
@@ -309,6 +334,25 @@ def build_notebook() -> nbf.NotebookNode:
         ),
         md(
             """
+            ## N - iNterpret: Insight dan Rekomendasi Berbasis Bukti
+
+            Interpretasi menghubungkan hasil eksplorasi, model anomali, kualitas data, dan kebutuhan pengguna dashboard. Insight dan rekomendasi berikut dibaca sebagai arahan analitis untuk prioritas review energi, bukan sebagai bukti tunggal adanya kegagalan teknis.
+            """
+        ),
+        code(
+            """
+            insight_matrix = pd.read_csv(PROCESSED_DIR / "insight_recommendation_matrix.csv")
+            display(insight_matrix[insight_matrix["item_type"].eq("insight")])
+            display(insight_matrix[insight_matrix["item_type"].eq("recommendation")])
+            """
+        ),
+        md(
+            """
+            Rekomendasi utama adalah memulai review dari entity dengan kontribusi dan tingkat anomali tinggi, tetap memisahkan isu kualitas data dari kandidat anomali konsumsi, serta menggunakan skenario balanced sebagai tampilan default dashboard. Cuaca digunakan sebagai konteks tambahan, bukan sebagai klaim penyebab tunggal.
+            """
+        ),
+        md(
+            """
             ## Kesiapan Data untuk Power BI
 
             Tabel berikut merupakan dataset yang dapat diimpor ke Power BI Desktop. Relasi utama menghubungkan fact table ke `dim_date`, `dim_entity`, dan `dim_scenario`.
@@ -323,6 +367,10 @@ def build_notebook() -> nbf.NotebookNode:
                 "dim_entity.csv",
                 "dim_scenario.csv",
                 "feature_engineering_summary.csv",
+                "eda_summary.csv",
+                "visual_interpretation_summary.csv",
+                "insight_recommendation_matrix.csv",
+                "dashboard_validation_checklist.csv",
                 "model_evaluation_summary.csv",
                 "anomaly_case_review.csv",
                 "entity_scorecard.csv",
@@ -334,6 +382,17 @@ def build_notebook() -> nbf.NotebookNode:
                 "exists": [(PROCESSED_DIR / name).exists() for name in outputs],
                 "path": [str(PROCESSED_DIR / name) for name in outputs],
             })
+            """
+        ),
+        md(
+            """
+            Checklist validasi dashboard merangkum relasi, measure, slicer, halaman, interaksi, dan tangkapan layar yang perlu dicek ketika dataset dimuat ke Power BI Desktop.
+            """
+        ),
+        code(
+            """
+            dashboard_checks = pd.read_csv(PROCESSED_DIR / "dashboard_validation_checklist.csv")
+            display(dashboard_checks)
             """
         ),
         md(

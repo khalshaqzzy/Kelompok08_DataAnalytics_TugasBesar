@@ -16,6 +16,7 @@ HKO_RAW_DIR = DATA_ROOT / "weather_raw_data"
 PROCESSED_DIR = DATA_ROOT / "processed"
 PROFILE_DIR = DATA_ROOT / "profile_hkust_hko"
 OUTPUT_DIR = ROOT / "outputs"
+FINAL_EDA_DIR = OUTPUT_DIR / "eda" / "final"
 
 PROJECT_START = pd.Timestamp("2022-01-01")
 PROJECT_END = pd.Timestamp("2024-05-27")
@@ -66,4 +67,3 @@ HKO_VARIABLES = {
     "ksc_global_solar_radiation": "global_solar_radiation_mj_m2",
     "skg_mean_wind_speed": "mean_wind_speed_kmh",
 }
-

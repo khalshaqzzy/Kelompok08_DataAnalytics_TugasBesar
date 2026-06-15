@@ -2,6 +2,52 @@
 
 Last updated: 2026-06-15, Asia/Jakarta
 
+Update 2026-06-15 - Final EDA, interpretation evidence, and dashboard readiness:
+
+- Branch kerja aktif: `feat-energy-dashboard-evidence`.
+- Commit message yang disiapkan: `Build energy dashboard evidence outputs`.
+- Scope implementasi terbaru mencakup scripts, processed CSV outputs, final EDA visuals, notebook aktif, dan cache trackers. Final academic report/documentation, presentation, slide deck, video/demo, dan README tetap di luar scope.
+- Script canonical baru:
+  - `scripts/build_final_eda.py`
+- Config path baru:
+  - `FINAL_EDA_DIR = outputs/eda/final`
+- Output final EDA visuals baru:
+  - `outputs/eda/final/daily_consumption_trend.png`
+  - `outputs/eda/final/monthly_consumption_trend.png`
+  - `outputs/eda/final/weekday_weekend_consumption.png`
+  - `outputs/eda/final/top_meter_contribution_pareto.png`
+  - `outputs/eda/final/weather_consumption_context.png`
+  - `outputs/eda/final/data_quality_flags.png`
+  - `outputs/eda/final/anomaly_case_review.png`
+- Output evidence/dashboard readiness baru:
+  - `Data_Acquisition/dataset/processed/eda_summary.csv`
+  - `Data_Acquisition/dataset/processed/visual_interpretation_summary.csv`
+  - `Data_Acquisition/dataset/processed/insight_recommendation_matrix.csv`
+  - `Data_Acquisition/dataset/processed/dashboard_validation_checklist.csv`
+  - `Data_Acquisition/dataset/processed/data_dictionary_energy_dashboard.csv`
+- `insight_recommendation_matrix.csv`: 4 insight rows dan 3 recommendation rows.
+- `dashboard_validation_checklist.csv`: 12 checklist rows untuk import, relationship, DAX measures, slicers, pages, interaction, dan screenshot validation.
+- Notebook aktif `notebooks/energy_analytics_osemn.ipynb` diperbarui menjadi formal OSEMN lengkap berbasis output yang tersedia:
+  - O - Obtain;
+  - S - Scrub;
+  - E - Explore dengan final EDA visuals dan interpretation summary;
+  - M - Model;
+  - N - iNterpret dengan insight/recommendation matrix;
+  - Power BI readiness dan limitation notes.
+- Validasi yang sudah dilakukan:
+  - compile `scripts/config.py`, `scripts/build_final_eda.py`, dan `scripts/build_osemn_notebook.py`;
+  - run `python scripts\build_final_eda.py`;
+  - run `python scripts\build_osemn_notebook.py --execute`;
+  - 7 final EDA PNG files exist dan non-empty;
+  - required columns ada untuk `eda_summary.csv`, `visual_interpretation_summary.csv`, `insight_recommendation_matrix.csv`, dan `dashboard_validation_checklist.csv`;
+  - key uniqueness tetap passed untuk `fact_energy_weather_daily(date, entity_id)` dan `fact_anomaly_scenarios(date, entity_id, scenario)`;
+  - notebook executed with 0 error outputs;
+  - notebook markdown checked clean from development wording: `phase`, `backlog`, `development`, `plan`.
+- Backlog berikutnya:
+  - manual Power BI `.pbix` build dari final CSV outputs;
+  - validasi manual relationship, DAX, slicer, page, tooltip/cross-filter, dan screenshot checklist di Power BI Desktop;
+  - final academic report/documentation, presentation, slide deck, dan video/demo hanya dikerjakan jika diminta eksplisit.
+
 Update 2026-06-15 - Feature engineering and anomaly evidence outputs:
 
 - Branch kerja aktif: `feat-energy-anomaly-features`.

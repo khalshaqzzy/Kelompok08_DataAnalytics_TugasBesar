@@ -20,14 +20,14 @@ Dokumen ini adalah tracker implementasi utama untuk menyelesaikan pipeline dari 
 
 Current scope guard:
 
-- Perubahan pada alignment update 2026-06-15 dibatasi hanya ke file di `cache/`.
-- Tidak ada perubahan teknis ke `scripts/`, `notebooks/`, dataset, `outputs/`, Power BI file, final academic report, presentation, video/demo, atau README dalam task ini.
-- "Documentation out of scope" pada task ini berarti final academic documentation/reporting artifacts di luar `cache/`; cache planning/handoff files tetap boleh diubah karena menjadi target eksplisit task.
+- Perubahan teknis terbaru boleh menyentuh `scripts/`, `outputs/`, `Data_Acquisition/dataset/processed`, `notebooks/`, dan `cache/` sesuai instruksi user untuk final EDA, evidence matrix, notebook interpretation, dan dashboard readiness.
+- Final academic report, presentation, slide deck, video/demo, README, Power BI `.pbix` automation, dan Power BI Service deployment tetap di luar scope kecuali diminta eksplisit.
+- "Documentation out of scope" berarti final academic documentation/reporting artifacts di luar `cache/`; cache planning/handoff files tetap wajib diperbarui.
 - PRD tetap diperlakukan sebagai source-of-truth dan tidak diubah kecuali diminta eksplisit.
 
 Implementation update 2026-06-15:
 
-- Scope teknis saat ini mencakup feature engineering readiness, anomaly modelling outputs, formal notebook Model section, processed CSV outputs, dan cache tracker.
+- Scope teknis saat ini mencakup final EDA visuals, evidence tables, insight-recommendation matrix, dashboard validation checklist, formal notebook Explore/iNterpret sections, processed CSV outputs, dan cache tracker.
 - Final academic report, presentation, slide deck, video/demo, dan README tetap di luar scope.
 
 Aturan wajib:
@@ -66,15 +66,15 @@ Aturan wajib:
 | Default dashboard scenario | `balanced` |
 | Notebook policy | Only one active notebook in `/notebooks` |
 | Old notebook policy | Archive old notebooks to `cache/archive/notebooks` |
-| Current active branch | `feat-energy-anomaly-features` |
-| Current planned commit message | `Build energy anomaly feature outputs` |
+| Current active branch | `feat-energy-dashboard-evidence` |
+| Current planned commit message | `Build energy dashboard evidence outputs` |
 | Power BI scope | Manual `.pbix` build plan, CSV datamart, measures, relationships, page checklist |
-| Out of scope for current cache-only alignment task | Script changes, notebook changes, dataset/output regeneration, final academic report/documentation, slide deck, presentation script, video/demo, README |
+| Out of scope for current branch | Final academic report/documentation, slide deck, presentation script, video/demo, README, and automated Power BI Desktop manipulation |
 
 Notebook scope note:
 
-- Notebook aktif `notebooks/energy_analytics_osemn.ipynb` saat ini berisi O - Obtain, S - Scrub, E - Explore awal, Kesiapan Data Power BI, dan Catatan Keterbatasan.
-- Notebook tidak memuat bagian Model dan iNterpret final karena output model final, anomaly case review, dan entity scorecard belum dibuat.
+- Notebook aktif `notebooks/energy_analytics_osemn.ipynb` saat ini berisi O - Obtain, S - Scrub, E - Explore lengkap berbasis final EDA visuals, M - Model, N - iNterpret, Kesiapan Data Power BI, dan Catatan Keterbatasan.
+- Notebook memuat iNterpret setelah `insight_recommendation_matrix.csv` tersedia dan terverifikasi.
 - Notebook tidak boleh menyebut istilah development seperti phase, backlog, atau implementation plan.
 - Setiap progress analisis berikutnya harus mengevaluasi dan memperbarui notebook aktif jika ada output baru yang relevan untuk O, S, E, M, atau N.
 - EDA di notebook harus diperluas secara bertahap sampai lengkap: trend harian, tren bulanan, weekday/weekend, kontribusi/Pareto meter, konteks cuaca, kualitas data, dan interpretasi singkat per visual setelah output final tersedia.
@@ -139,21 +139,21 @@ Problematic T1440 meters to keep visible in data quality outputs:
 
 | Required Output / Capability | Current Status | Gap |
 |---|---|---|
-| `fact_energy_weather_daily.csv` | Not Started | Need final Date x Entity fact table |
-| `fact_anomaly_scenarios.csv` | Not Started | Need scenario-based Isolation Forest output |
-| `dim_date.csv` | Not Started | Need Power BI date dimension |
-| `dim_entity.csv` | In Progress | Need final schema and all 26 T1440 meters |
-| `dim_scenario.csv` | Not Started | Need scenario dimension |
-| `data_quality_summary.csv` | Not Started | Need quality summary table |
-| `data_dictionary_energy_dashboard.csv` | Not Started | Need schema dictionary |
-| `final_data_sources.md` | Not Started | Need canonical source manifest |
-| `model_evaluation_summary.csv` | Not Started | Need model evaluation without labels |
-| `anomaly_case_review.csv` | Not Started | Need top anomaly case review |
-| `entity_scorecard.csv` | Not Started | Need audit-priority scorecard |
-| Final OSEMN notebook | Not Started | Need one active notebook in `/notebooks` |
-| Old notebook archive | Not Started | Need archive old notebooks |
-| Final EDA plots | Not Started | Need dashboard-aligned visuals |
-| Manual Power BI checklist | Not Started | Need `.pbix` build instructions |
+| `fact_energy_weather_daily.csv` | Done | No gap; final Date x Entity fact table exists and is key-unique |
+| `fact_anomaly_scenarios.csv` | Done | No gap; scenario-based Isolation Forest output exists |
+| `dim_date.csv` | Done | No gap; Power BI date dimension exists |
+| `dim_entity.csv` | Done | No gap; includes all 26 T1440 meters with selection and quality fields |
+| `dim_scenario.csv` | Done | No gap; strict, balanced, and sensitive scenarios exist |
+| `data_quality_summary.csv` | Done | No gap; quality summary table exists |
+| `data_dictionary_energy_dashboard.csv` | Done | No gap; schema dictionary includes final datamart, model, EDA, and dashboard evidence tables |
+| `final_data_sources.md` | Done | No gap; canonical source manifest exists |
+| `model_evaluation_summary.csv` | Done | No gap; evaluation without labels exists |
+| `anomaly_case_review.csv` | Done | No gap; top anomaly case review exists |
+| `entity_scorecard.csv` | Done | No gap; audit-priority scorecard exists |
+| Final OSEMN notebook | Done | No gap; one active notebook in `/notebooks` with O, S, E, M, and N sections |
+| Old notebook archive | Done | No gap; old notebooks archived under `cache/archive/notebooks` |
+| Final EDA plots | Done | No gap; dashboard-aligned visuals exist under `outputs/eda/final` |
+| Manual Power BI checklist | Done | No gap for checklist; actual `.pbix` build remains manual outside Python automation |
 
 ## 2.5 Alignment Audit Against PRD, Roadmap, and Grading Guide
 
@@ -166,10 +166,10 @@ Audit ini mencatat kesesuaian kondisi saat ini terhadap PRD, roadmap improvement
 | Problem framing | Mostly aligned | Topik energi dan efisiensi gedung/kampus sudah konsisten dengan PRD dan roadmap | Tegaskan scope sebagai selected meter/building-level HKUST case study, bukan full-campus generalization |
 | Obtain | Strong | HKUST sebagai primary source, HKO sebagai supporting source, TTL sebagai metadata entity, source manifest final tersedia | Perkuat analytical question matrix dan source-to-output traceability di cache tracker |
 | Scrub | Strong | Canonical datamart, quality flags, imputation flags, selected/excluded meter decisions, data dictionary | Tambahkan summary pembersihan yang langsung memetakan missing, duplicates, types, outliers, integration, feature engineering |
-| Explore | Partial | Notebook baru memuat EDA awal dan datamart readiness | Butuh final EDA visuals, summary table, interpretation per visual, dan notebook Explore expansion setelah output tersedia |
-| Model | Not yet implemented | Scenario definitions dan model acceptance sudah direncanakan | Butuh anomaly scenarios, baseline agreement, evaluation without labels, case review |
-| iNterpret | Not yet implemented | Insight/recommendation targets sudah ditulis sebagai rencana | Butuh insight-recommendation matrix berbasis evidence, target user, priority, limitation |
-| Power BI readiness | Strong foundation | Star schema, relationship plan, DAX draft, page checklist sudah tersedia | Butuh dashboard validation checklist final dan alignment dengan model/EDA outputs setelah dibuat |
+| Explore | Aligned | Final EDA visuals, `eda_summary.csv`, `visual_interpretation_summary.csv`, and notebook Explore expansion are complete | Actual Power BI visual validation remains manual |
+| Model | Aligned | Scenario outputs, baseline agreement, evaluation without labels, and case review are complete | No supervised labels are available |
+| iNterpret | Aligned | `insight_recommendation_matrix.csv` provides evidence, target user, priority, action, and limitation fields | Final academic narrative remains out of scope |
+| Power BI readiness | Aligned for repo outputs | Star schema, model outputs, EDA evidence, relationship plan, DAX draft, page checklist, and validation checklist are available | Manual `.pbix` build remains the next external step |
 | Notebook policy | Aligned after correction | Notebook formal dan hanya memuat output tersedia | Jangan memaksa bagian Model/iNterpret sebelum output final tersedia |
 
 ### 2.5.2 Rubric-Based Gap Analysis
@@ -179,10 +179,10 @@ Audit ini mencatat kesesuaian kondisi saat ini terhadap PRD, roadmap improvement
 | Problem Framing and Relevance | Medium-High | Scope HKUST/Hong Kong bisa terlihat kurang relevan jika diklaim terlalu luas | Frame sebagai transferable campus/building energy analytics case study dan selected-building subset |
 | O - Obtain | High | Source documentation bisa tersebar antara PRD, roadmap, data dictionary, dan source manifest | Maintain `final_data_sources.md` as canonical source manifest and mirror key scope notes here |
 | S - Scrub | High | Treatment data quality kuat tetapi perlu ringkasan naratif untuk penilaian | Keep explicit quality treatment table and ensure future notebook/report text follows it |
-| E - Explore | Medium | Minimal visual requirement belum final pada current active notebook | Prioritize final EDA plots and notebook Explore expansion after outputs are generated |
-| M - Model | Low-Medium | Model final belum ada; tanpa model, rubrik Model berisiko besar | Prioritize scenario-based Isolation Forest, IQR/Z-score baseline, evaluation without labels |
-| N - iNterpret | Low-Medium | Insight/recommendation belum evidence-based dari final outputs | Build insight-recommendation matrix after EDA/model outputs |
-| System/Dashboard | Medium-High | Datamart siap, tetapi dashboard validation belum dilakukan | Add relationship, DAX, slicer, and screenshot validation checklist |
+| E - Explore | High | Final visual evidence and notebook Explore section are complete | Maintain visual interpretation table for Power BI and notebook traceability |
+| M - Model | High | Scenario-based Isolation Forest, IQR/Z-score baseline, evaluation without labels, and case review are complete | Keep no-ground-truth limitation explicit |
+| N - iNterpret | High | Insight/recommendation matrix exists and is evidence-backed | Final academic narrative remains separate and out of scope |
+| System/Dashboard | High for repo readiness | Datamart, model, EDA evidence, and dashboard validation checklist are ready | Manual Power BI Desktop build and screenshot validation remain next |
 | Report/Presentation/Demo | Out of scope for current task | Tetap dibutuhkan untuk final grading, tetapi tidak dikerjakan di task ini | Track as external/future deliverable only if requested later |
 | Teamwork/AI Ethics | Out of scope for current task | Belum dibahas pada implementation tracker teknis | Track as external/future deliverable only if requested later |
 
@@ -779,7 +779,7 @@ Acceptance criteria:
 
 ## Phase 5 - Final EDA and Dashboard Preparation
 
-Status: Not Started
+Status: Done
 
 Goal:
 
@@ -789,14 +789,18 @@ Deliverables:
 
 | Deliverable | Status |
 |---|---|
-| `outputs/eda/final/daily_consumption_trend.png` | Not Started |
-| `outputs/eda/final/monthly_consumption_trend.png` | Not Started |
-| `outputs/eda/final/weekday_weekend_consumption.png` | Not Started |
-| `outputs/eda/final/top_meter_contribution_pareto.png` | Not Started |
-| `outputs/eda/final/weather_consumption_context.png` | Not Started |
-| `outputs/eda/final/data_quality_flags.png` | Not Started |
-| `outputs/eda/final/anomaly_case_review.png` | Not Started |
-| Power BI manual build section in this document | In Progress |
+| `outputs/eda/final/daily_consumption_trend.png` | Done |
+| `outputs/eda/final/monthly_consumption_trend.png` | Done |
+| `outputs/eda/final/weekday_weekend_consumption.png` | Done |
+| `outputs/eda/final/top_meter_contribution_pareto.png` | Done |
+| `outputs/eda/final/weather_consumption_context.png` | Done |
+| `outputs/eda/final/data_quality_flags.png` | Done |
+| `outputs/eda/final/anomaly_case_review.png` | Done |
+| `Data_Acquisition/dataset/processed/eda_summary.csv` | Done |
+| `Data_Acquisition/dataset/processed/visual_interpretation_summary.csv` | Done |
+| `Data_Acquisition/dataset/processed/insight_recommendation_matrix.csv` | Done |
+| `Data_Acquisition/dataset/processed/dashboard_validation_checklist.csv` | Done |
+| Power BI manual build section in this document | Done |
 
 Subplan:
 
@@ -825,16 +829,16 @@ Subplan:
 
 Acceptance criteria:
 
-1. Final EDA plots exist under `outputs/eda/final`.
-2. Visuals align with dashboard pages.
-3. Visuals support at least 3 insight-ready and 3 recommendation-ready findings.
-4. Power BI manual checklist is complete enough to build `.pbix` without additional decisions.
+1. Final EDA plots exist under `outputs/eda/final`. Done: 7 PNG files exist and are non-empty.
+2. Visuals align with dashboard pages. Done: visual summary maps each figure to a Power BI page.
+3. Visuals support at least 3 insight-ready and 3 recommendation-ready findings. Done: `insight_recommendation_matrix.csv` has 4 insight rows and 3 recommendation rows.
+4. Power BI manual checklist is complete enough to build `.pbix` without additional decisions. Done: `dashboard_validation_checklist.csv` covers imports, relationships, DAX, slicers, pages, interactions, and screenshots.
 
 ---
 
 ## Phase 6 - Verification and Handoff Update
 
-Status: Not Started
+Status: Done
 
 Goal:
 
@@ -844,9 +848,9 @@ Deliverables:
 
 | Deliverable | Status |
 |---|---|
-| Updated `cache/sessionHandoff.md` | Not Started |
-| Updated `cache/ImplementationPhase.md` | In Progress |
-| Verification command output reviewed | Not Started |
+| Updated `cache/sessionHandoff.md` | Done |
+| Updated `cache/ImplementationPhase.md` | Done |
+| Verification command output reviewed | Done |
 
 Subplan:
 
@@ -861,10 +865,10 @@ Subplan:
 
 Acceptance criteria:
 
-1. `sessionHandoff.md` reflects latest outputs and decisions.
-2. This document marks completed phases accurately.
-3. Known limitations are explicitly recorded.
-4. No undocumented generated final output remains.
+1. `sessionHandoff.md` reflects latest outputs and decisions. Done.
+2. This document marks completed phases accurately. Done.
+3. Known limitations are explicitly recorded. Done: subset scope, no supervised labels, weather context, and manual Power BI validation remain explicit.
+4. No undocumented generated final output remains. Done: final EDA visuals and evidence CSVs are listed here and in `sessionHandoff.md`.
 
 ---
 
@@ -1251,6 +1255,9 @@ Recommendation-ready targets:
 | 2026-06-15 | Feature engineering implementation | Done | Added `scripts/feature_engineering.py`; generated feature-ready `fact_energy_weather_daily.csv`, `feature_engineering_summary.csv`, and updated data dictionary. Feature-complete model rows: 10,420. |
 | 2026-06-15 | Anomaly modelling implementation | Done | Added `scripts/model_anomaly_scenarios.py`; generated `fact_anomaly_scenarios.csv`, `model_evaluation_summary.csv`, `anomaly_case_review.csv`, and `entity_scorecard.csv`. Strict/balanced/sensitive anomaly rates: 0.030038 / 0.050000 / 0.100000. |
 | 2026-06-15 | Notebook Model section | Done | Updated active notebook with formal M - Model section using generated model outputs only. Notebook execution completed with 0 error outputs and markdown contains no development wording: phase, backlog, development, or plan. |
+| 2026-06-15 | Final EDA evidence implementation | Done | Added `scripts/build_final_eda.py`; generated 7 final EDA visuals under `outputs/eda/final` and evidence tables `eda_summary.csv`, `visual_interpretation_summary.csv`, `insight_recommendation_matrix.csv`, and `dashboard_validation_checklist.csv`. |
+| 2026-06-15 | Notebook Explore and iNterpret sections | Done | Updated active notebook with formal E - Explore visuals and N - iNterpret section based on verified evidence outputs. Notebook execution completed with 0 error outputs and markdown contains no development wording: phase, backlog, development, or plan. |
+| 2026-06-15 | Final EDA verification and handoff | Done | Verified final EDA PNG files are non-empty, evidence tables have required columns, insight/recommendation count is 4/3, fact/model keys remain unique, and cache trackers were updated. |
 
 ---
 
@@ -1264,15 +1271,11 @@ Recommendation-ready targets:
 | 3 | Power BI Datamart | Done |
 | 3.5 | Feature Engineering Readiness | Done |
 | 4 | Anomaly Modelling | Done |
-| 5 | Final EDA and Dashboard Preparation | Not Started |
-| 6 | Verification and Handoff Update | Not Started |
+| 5 | Final EDA and Dashboard Preparation | Done |
+| 6 | Verification and Handoff Update | Done |
 
 Backlog after this branch:
 
-1. Generate final EDA plots under `outputs/eda/final`.
-2. Build `eda_summary.csv` and interpretation-per-visual support table.
-3. Expand notebook EDA into a complete report-style section after final EDA outputs are available.
-4. Build insight-recommendation matrix after EDA/model evidence is consolidated.
-5. Add formal iNterpret section to notebook only after insight and recommendation evidence exists.
-6. Build manual Power BI `.pbix` from final CSV outputs.
-7. Validate Power BI relationship, DAX, slicer, page, and screenshot checklist.
+1. Build manual Power BI `.pbix` from final CSV outputs.
+2. Validate Power BI relationship, DAX, slicer, page, tooltip/cross-filter, and screenshot checklist in Power BI Desktop.
+3. Final academic report/documentation, presentation, slide deck, and video/demo remain out of scope unless requested explicitly.
