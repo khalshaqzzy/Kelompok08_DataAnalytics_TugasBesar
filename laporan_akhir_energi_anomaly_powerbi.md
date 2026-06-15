@@ -47,7 +47,7 @@ Konsumsi energi pada lingkungan kampus dipengaruhi oleh aktivitas akademik, oper
 
 Analisis ini menggunakan data smart meter kampus Hong Kong University of Science and Technology (HKUST) sebagai dataset utama dan data cuaca harian Hong Kong Observatory (HKO) sebagai dataset pendukung. Data energi digunakan untuk melihat pola konsumsi, kontribusi meter, dan kandidat anomali. Data cuaca digunakan sebagai konteks pembacaan, terutama suhu, kelembapan, curah hujan, radiasi matahari, dan kecepatan angin.
 
-Fokus analisis diarahkan pada data harian T1440 karena granularitas tersebut sesuai dengan data cuaca harian. Hasil akhir analisis bukan hanya ringkasan statistik, tetapi juga dataset analitis yang siap digunakan untuk rancangan dashboard Power BI dan deteksi anomali berbasis Isolation Forest.
+Fokus analisis diarahkan pada data harian T1440 karena granularitas tersebut sesuai dengan data cuaca harian. Hasil akhir analisis bukan hanya ringkasan statistik, tetapi juga dataset analitis yang siap digunakan untuk dashboard Vite React dan deteksi anomali berbasis Isolation Forest.
 
 ![Placeholder alur analisis OSEMN energi dan anomali](assets/laporan/gambar_01_alur_osemn_energi_anomali.png)
 
@@ -61,7 +61,7 @@ Rumusan masalah dalam analisis ini adalah sebagai berikut:
 2. Bagaimana membersihkan data energi dan cuaca sehingga terbentuk dataset harian yang valid, terdokumentasi, dan siap digunakan?
 3. Bagaimana pola konsumsi listrik harian pada subset meter terpilih, termasuk tren waktu, perbedaan weekday dan weekend, kontribusi meter, serta konteks cuaca?
 4. Bagaimana mendeteksi kandidat anomali konsumsi energi tanpa label ground truth?
-5. Bagaimana hasil analisis dapat diterjemahkan menjadi insight, rekomendasi, dan rancangan struktur dashboard Power BI?
+5. Bagaimana hasil analisis dapat diterjemahkan menjadi insight, rekomendasi, dan dashboard Vite React interaktif?
 
 ### 1.3 Tujuan Analisis
 
@@ -72,7 +72,7 @@ Tujuan analisis ini adalah:
 3. Melakukan pembersihan, validasi, dan feature engineering untuk mendukung eksplorasi serta pemodelan.
 4. Menjalankan deteksi anomali konsumsi listrik dengan baseline statistik dan Isolation Forest.
 5. Menyusun insight dan rekomendasi berbasis bukti data.
-6. Menyiapkan struktur data dan rancangan visualisasi untuk dashboard Power BI.
+6. Menyiapkan struktur data, data JSON statis, dan dashboard Vite React untuk visualisasi interaktif.
 
 ### 1.4 Ruang Lingkup dan Batasan
 
@@ -85,7 +85,7 @@ Analisis ini merupakan studi kasus selected daily meter-level, bukan klaim cakup
 | Periode analisis | 2022-01-02 sampai 2024-05-27 untuk fact energi-cuaca setelah differencing |
 | Unit analisis utama | Date x entity_id, dengan entity_id berupa meter |
 | Model utama | Isolation Forest anomaly detection tanpa label |
-| Dashboard | Struktur data dan rancangan Power BI, bukan file `.pbix` final |
+| Dashboard | Vite React dashboard di `web/` dengan data statis dari `web/public/data/*.json` |
 
 Batasan utama:
 
@@ -93,7 +93,7 @@ Batasan utama:
 2. Subset model utama memakai 12 meter aktif dari satu konteks gedung utama.
 3. Data cuaca bersifat kontekstual, bukan bukti kausal tunggal terhadap konsumsi energi.
 4. Tidak tersedia label anomali resmi, sehingga evaluasi model dilakukan dengan pendekatan tanpa ground truth.
-5. Dashboard Power BI belum dibuat sebagai file `.pbix`; laporan ini menyiapkan struktur, rancangan halaman, dan data model yang dapat dibangun manual.
+5. Dashboard bersifat statis dan membaca prebuilt JSON; deployment produksi ke Vercel belum dilakukan dari CLI karena autentikasi Vercel lokal tidak valid.
 
 ### 1.5 Pembagian Peran
 
@@ -294,7 +294,7 @@ Nilai rainfall yang hilang diisi dengan 0 pada field model-safe, sedangkan solar
 
 ### 3.5 Pembentukan Star Schema untuk Analisis
 
-Dataset disiapkan dalam struktur star schema sederhana agar dapat digunakan di Power BI.
+Dataset disiapkan dalam struktur star schema sederhana sebagai output analitis utama. Struktur CSV ini menjadi sumber kanonik yang kemudian dikemas menjadi JSON statis untuk dashboard Vite React.
 
 | Tabel | Grain | Jumlah Baris | Fungsi |
 |---|---:|---:|---|
@@ -315,9 +315,9 @@ Relasi yang dirancang:
 | fact_anomaly_scenarios | entity_id | dim_entity | entity_id | Many-to-one |
 | fact_anomaly_scenarios | scenario | dim_scenario | scenario | Many-to-one |
 
-![Placeholder star schema Power BI](assets/laporan/gambar_06_star_schema_powerbi.png)
+![Placeholder star schema analitis](assets/laporan/gambar_06_star_schema_dashboard.png)
 
-*Gambar 6. Placeholder rancangan star schema untuk Power BI, dengan fact table energi-cuaca dan fact table anomali.*
+*Gambar 6. Placeholder rancangan star schema analitis, dengan fact table energi-cuaca dan fact table anomali sebagai sumber data dashboard.*
 
 ### 3.6 Validasi Kualitas Data
 
@@ -386,7 +386,7 @@ Catatan kritis tahap Scrub:
 
 ### 4.1 Tujuan Tahap Explore
 
-Tahap Explore bertujuan memahami pola konsumsi energi, variasi waktu, kontribusi meter, kualitas data, dan konteks cuaca sebelum hasil model diinterpretasikan. Eksplorasi juga dipakai untuk menentukan visual yang relevan bagi rancangan dashboard Power BI.
+Tahap Explore bertujuan memahami pola konsumsi energi, variasi waktu, kontribusi meter, kualitas data, dan konteks cuaca sebelum hasil model diinterpretasikan. Eksplorasi juga dipakai untuk menentukan visual yang relevan bagi dashboard Vite React.
 
 ### 4.2 Statistik Deskriptif Utama
 
@@ -477,14 +477,14 @@ Pada baris fact utama terdapat 72 baris dengan isu kualitas karena imputasi cuac
 
 ### 4.10 Kesiapan Visual untuk Dashboard
 
-Visual EDA yang sudah tersedia dapat dipetakan langsung ke rancangan halaman Power BI:
+Visual EDA yang sudah tersedia dapat dipetakan langsung ke halaman dashboard Vite React:
 
-| Visual | Halaman Power BI yang Didukung |
+| Visual | Halaman Dashboard yang Didukung |
 |---|---|
 | `daily_consumption_trend.png` | Consumption Trend |
 | `monthly_consumption_trend.png` | Consumption Trend |
 | `weekday_weekend_consumption.png` | Consumption Trend |
-| `top_meter_contribution_pareto.png` | Meter / Building Ranking |
+| `top_meter_contribution_pareto.png` | Meter Ranking |
 | `weather_consumption_context.png` | Weather Impact |
 | `data_quality_flags.png` | Data Quality and Methodology |
 | `anomaly_case_review.png` | Anomaly Explorer |
@@ -660,67 +660,116 @@ Prinsip interpretasi yang digunakan:
 | 4 | Prioritaskan kandidat yang stabil lintas skenario atau didukung baseline | Manajemen kampus | P1 | Stabilitas skenario meningkatkan keyakinan screening |
 | 5 | Gunakan cuaca sebagai konteks pembacaan, bukan penyebab tunggal | Tim sustainability | P1 | Korelasi cuaca sederhana masih terbatas |
 
-### 6.5 Rancangan Data Model Power BI
+### 6.5 Arsitektur Dashboard Vite React
 
-Power BI belum dibuat sebagai file `.pbix`, tetapi struktur data sudah disiapkan agar dashboard dapat dibangun manual. Model data yang direkomendasikan adalah star schema dengan dua fact table utama.
+Target visualisasi final terbaru adalah dashboard Vite React di folder `web/`. Dashboard ini tidak membaca CSV secara langsung di browser, tetapi menggunakan JSON statis yang dibangun dari output CSV final.
 
-| Tabel | Peran |
+| Komponen | Peran |
 |---|---|
-| `fact_energy_weather_daily` | Sumber KPI konsumsi, tren, cuaca, kalender, dan quality flag |
-| `fact_anomaly_scenarios` | Sumber skor anomali, flag, ranking, baseline agreement, dan stabilitas skenario |
-| `dim_date` | Filter tanggal, bulan, kuartal, weekday/weekend |
-| `dim_entity` | Filter meter, gedung, lantai, equipment, dan quality flag |
-| `dim_scenario` | Filter strict, balanced, sensitive |
-| `entity_scorecard` | Ranking prioritas audit |
-| `data_quality_summary` | Ringkasan kualitas data |
-| `model_evaluation_summary` | Ringkasan evaluasi model |
-| `anomaly_case_review` | Daftar kandidat anomali untuk narasi review |
+| `Data_Acquisition/dataset/processed/*.csv` | Sumber analitis kanonik hasil pipeline OSEMN |
+| `scripts/build_react_dashboard_data.py` | Script packaging yang mengubah CSV final menjadi JSON ringkas |
+| `web/public/data/*.json` | Data delivery statis untuk dashboard React |
+| `web/src/main.tsx` | Implementasi enam halaman dashboard dan logika filter |
+| `web/src/styles.css` | Styling dashboard responsif |
+| `vercel.json` | Konfigurasi build dan output directory untuk Vercel |
 
-Relasi dimensi ke fakta disarankan satu arah dari dimension table ke fact table agar filter dashboard stabil.
+JSON yang digunakan dashboard adalah:
 
-![Placeholder rancangan model data Power BI](assets/laporan/gambar_18_rancangan_model_data_powerbi.png)
+| File JSON | Fungsi |
+|---|---|
+| `manifest.json` | Metadata dashboard, default scenario, dan ringkasan entity |
+| `daily_trend.json` | Tren konsumsi harian dan marker anomali |
+| `monthly_trend.json` | Agregasi konsumsi bulanan |
+| `entity_daily.json` | Observasi harian per entity untuk drill-down |
+| `anomalies.json` | Kandidat anomali per skenario |
+| `dimensions.json` | Dimensi tanggal, entity, dan scenario |
+| `entity_scorecard.json` | Ranking prioritas audit entity |
+| `anomaly_case_review.json` | Kandidat anomali utama untuk review naratif |
+| `data_quality_summary.json` | Ringkasan kualitas data |
+| `model_evaluation_summary.json` | Ringkasan evaluasi model |
+| `eda_summary.json` | Ringkasan hasil eksplorasi |
+| `insight_recommendation_matrix.json` | Insight dan rekomendasi |
 
-*Gambar 18. Placeholder tampilan model relationship Power BI setelah tabel CSV diimpor.*
+![Placeholder arsitektur dashboard Vite React](assets/laporan/gambar_18_arsitektur_dashboard_vite_react.png)
 
-### 6.6 Rancangan Halaman Dashboard Power BI
+*Gambar 18. Placeholder alur CSV processed, packaging JSON, Vite React dashboard, dan deployment Vercel.*
+
+### 6.6 Halaman Dashboard Vite React
 
 | Halaman | Tujuan | Visual Utama |
 |---|---|---|
 | Executive Overview | Menampilkan ringkasan konsumsi dan anomali | KPI total consumption, average daily consumption, anomaly count, trend, top entity |
-| Consumption Trend | Membaca pola waktu | Line chart harian, bar bulanan, weekday/weekend, month-weekday matrix |
-| Anomaly Explorer | Menelusuri kandidat anomali | Scatter score, tabel anomali, anomaly count by entity, scenario comparison |
-| Weather Impact | Membaca konteks cuaca | Scatter konsumsi vs suhu/hujan, hot/rainy filter, tabel hari anomali bercuaca tertentu |
-| Meter / Building Ranking | Menentukan prioritas audit | Ranking konsumsi, anomaly rate, entity scorecard |
+| Consumption Trend | Membaca pola waktu | Line chart harian, bar bulanan, weekday/weekend, dan filter waktu |
+| Anomaly Explorer | Menelusuri kandidat anomali | Score view, tabel kandidat, anomaly count by entity, scenario comparison |
+| Weather Impact | Membaca konteks cuaca | Konsumsi vs suhu/hujan, hot/rainy filter, tabel hari anomali bercuaca tertentu |
+| Meter Ranking | Menentukan prioritas audit | Ranking konsumsi, anomaly rate, entity scorecard |
 | Data Quality and Methodology | Menjelaskan batasan data dan metode | Quality flag counts, excluded meter list, source summary, method summary |
+
+Global filter yang disediakan dashboard:
+
+1. Date start.
+2. Date end.
+3. Scenario.
+4. Entity.
+5. Anomaly flag.
+6. Day type.
+7. Weather.
+8. Data quality flag.
 
 ![Placeholder dashboard executive overview](assets/laporan/gambar_19_dashboard_executive_overview.png)
 
-*Gambar 19. Placeholder screenshot halaman Executive Overview Power BI.*
+*Gambar 19. Placeholder screenshot halaman Executive Overview pada dashboard Vite React.*
 
 ![Placeholder dashboard anomaly explorer](assets/laporan/gambar_20_dashboard_anomaly_explorer.png)
 
-*Gambar 20. Placeholder screenshot halaman Anomaly Explorer Power BI.*
+*Gambar 20. Placeholder screenshot halaman Anomaly Explorer pada dashboard Vite React.*
 
 ![Placeholder dashboard data quality methodology](assets/laporan/gambar_21_dashboard_data_quality_methodology.png)
 
-*Gambar 21. Placeholder screenshot halaman Data Quality and Methodology Power BI.*
+*Gambar 21. Placeholder screenshot halaman Data Quality and Methodology pada dashboard Vite React.*
 
-### 6.7 Rancangan Measure Power BI
+### 6.7 Runbook dan Validasi Dashboard
 
-Measure yang disarankan:
+Perintah lokal dari root repo:
 
-| Measure | Definisi Naratif |
+```powershell
+npm install
+npm run build:web-data
+npm run dev:web
+```
+
+Dashboard lokal dibuka melalui:
+
+```text
+http://127.0.0.1:5173
+```
+
+Validasi produksi:
+
+```powershell
+npm run build:web
+npm run preview:web
+```
+
+Konfigurasi Vercel:
+
+| Setting | Nilai |
 |---|---|
-| Total Consumption | Jumlah `daily_consumption` |
-| Average Daily Consumption | Rata-rata `daily_consumption` |
-| Peak Daily Consumption | Nilai maksimum `daily_consumption` |
-| Active Entity Count | Jumlah entity aktif pada konteks filter |
-| Anomaly Count | Jumlah baris dengan `anomaly_flag = 1` |
-| Anomaly Rate | Anomaly Count dibagi jumlah observasi skenario |
-| Average Anomaly Score | Rata-rata skor anomali |
-| Data Quality Issue Count | Jumlah baris dengan quality flag selain `valid` |
-| Rainy Day Count | Jumlah tanggal dengan `is_rainy_day = 1` |
-| Hot Day Count | Jumlah tanggal dengan `is_hot_day_28c = 1` |
+| Framework Preset | Vite |
+| Install Command | `npm install` |
+| Build Command | `npm run build:web` |
+| Output Directory | `web/dist` |
+| Root Directory | repo root |
+
+Validasi yang sudah dicatat pada cache proyek:
+
+1. `python -m py_compile scripts\build_react_dashboard_data.py`.
+2. `python scripts\build_react_dashboard_data.py`.
+3. `npm install`.
+4. `npm audit --omit=dev` menghasilkan 0 vulnerabilities setelah upgrade Vite.
+5. `npm run build:web` berhasil.
+6. Browser verification pada desktop dan mobile viewport.
+7. Enam halaman dashboard dapat dinavigasi tanpa console warning/error.
 
 ### 6.8 Batasan Interpretasi
 
@@ -730,15 +779,16 @@ Batasan interpretasi:
 2. Kandidat anomali adalah hasil model tanpa label, sehingga tidak boleh langsung disebut fault.
 3. Konsumsi tinggi dapat mencerminkan fungsi equipment yang memang intensif energi.
 4. Weather context tidak menggantikan data aktivitas gedung.
-5. Hasil dashboard nantinya harus divalidasi manual setelah file Power BI dibuat.
+5. Dashboard bersifat statis dan memakai prebuilt JSON; model tidak dilatih ulang di browser.
+6. Production deploy ke Vercel belum dilakukan dari CLI karena token lokal tidak valid.
 
 ### 6.9 Tindak Lanjut
 
 Tindak lanjut yang direkomendasikan:
 
-1. Bangun file Power BI dari CSV star schema yang sudah tersedia.
-2. Validasi relationship, slicer, tooltip, cross-filter, dan measure.
-3. Ambil screenshot setiap halaman dashboard untuk laporan presentasi.
+1. Publish dashboard Vite React ke Vercel menggunakan `cache/react_dashboard_vercel_guide.md`.
+2. Validasi URL produksi untuk desktop/mobile layout, data load, filter, dan seluruh enam halaman.
+3. Ambil screenshot setiap halaman dashboard Vite React untuk laporan presentasi.
 4. Lakukan review manual terhadap kandidat anomali utama, terutama D0849.
 5. Perluas analisis ke interval lebih kecil atau lebih banyak meter jika ingin membuat klaim kampus yang lebih luas.
 
@@ -752,7 +802,7 @@ Tahap Scrub menghasilkan fact table `date x entity_id` sebanyak 10.524 baris. Fe
 
 Tahap Model menggunakan Isolation Forest dengan tiga skenario. Skenario balanced menghasilkan 521 kandidat anomali atau 5% dari 10.420 baris eligible. Entity D0849 menjadi prioritas utama berdasarkan kontribusi konsumsi, anomaly count, peak load, dan priority score.
 
-Tahap iNterpret menghasilkan insight dan rekomendasi yang dapat digunakan untuk rancangan dashboard Power BI. Dashboard belum dibuat sebagai `.pbix`, tetapi struktur data, relasi, measure, halaman, dan checklist validasi sudah disiapkan.
+Tahap iNterpret menghasilkan insight dan rekomendasi yang digunakan pada dashboard Vite React. Dashboard membaca JSON statis dari `web/public/data`, sementara CSV processed tetap menjadi sumber analitis kanonik.
 
 ### 7.2 Rekomendasi Akhir
 
@@ -760,7 +810,7 @@ Tahap iNterpret menghasilkan insight dan rekomendasi yang dapat digunakan untuk 
 2. Gunakan skenario balanced sebagai default analisis dashboard, dengan strict dan sensitive sebagai pembanding.
 3. Jangan menghapus meter bermasalah dari dokumentasi; tampilkan pada halaman Data Quality agar batasan analisis transparan.
 4. Baca anomali bersama rolling deviation, baseline agreement, cuaca, dan konteks weekday/weekend.
-5. Bangun Power BI secara manual dari star schema yang sudah tersedia, lalu lakukan validasi visual sebelum digunakan untuk presentasi final.
+5. Publish dashboard Vite React ke Vercel, lalu lakukan validasi visual desktop/mobile sebelum digunakan untuk presentasi final.
 
 ## 8. Lampiran
 
@@ -778,7 +828,12 @@ Tahap iNterpret menghasilkan insight dan rekomendasi yang dapat digunakan untuk 
 | `Data_Acquisition/dataset/processed/anomaly_case_review.csv` | Review kandidat anomali |
 | `Data_Acquisition/dataset/processed/eda_summary.csv` | Ringkasan eksplorasi |
 | `Data_Acquisition/dataset/processed/insight_recommendation_matrix.csv` | Insight dan rekomendasi |
-| `Data_Acquisition/dataset/processed/dashboard_validation_checklist.csv` | Checklist validasi manual Power BI |
+| `Data_Acquisition/dataset/processed/dashboard_validation_checklist.csv` | Checklist validasi dashboard |
+| `scripts/build_react_dashboard_data.py` | Script packaging CSV processed menjadi JSON dashboard |
+| `web/public/data/*.json` | Data statis yang dibaca dashboard Vite React |
+| `web/src/main.tsx` | Implementasi halaman dan interaksi dashboard React |
+| `web/src/styles.css` | Styling responsif dashboard |
+| `vercel.json` | Konfigurasi deployment Vercel |
 
 ### 8.2 Daftar Output Visual
 
@@ -801,7 +856,7 @@ Tahap iNterpret menghasilkan insight dan rekomendasi yang dapat digunakan untuk 
 | `assets/laporan/gambar_03_struktur_folder_data.png` | Struktur folder raw, processed, dan output |
 | `assets/laporan/gambar_04_seleksi_subset_meter_t1440.png` | Alur seleksi 26 meter menjadi 12 meter utama |
 | `assets/laporan/gambar_05_transformasi_konsumsi_harian.png` | Ilustrasi differencing meter reading menjadi konsumsi harian |
-| `assets/laporan/gambar_06_star_schema_powerbi.png` | Star schema Power BI |
+| `assets/laporan/gambar_06_star_schema_dashboard.png` | Star schema analitis untuk dashboard |
 | `assets/laporan/gambar_07_feature_engineering_energi_cuaca.png` | Ringkasan feature engineering |
 | `assets/laporan/gambar_08_tren_konsumsi_harian.png` | Salinan/versi final `outputs/eda/final/daily_consumption_trend.png` |
 | `assets/laporan/gambar_09_tren_konsumsi_bulanan.png` | Salinan/versi final `outputs/eda/final/monthly_consumption_trend.png` |
@@ -813,10 +868,10 @@ Tahap iNterpret menghasilkan insight dan rekomendasi yang dapat digunakan untuk 
 | `assets/laporan/gambar_15_evaluasi_skenario_model.png` | Grafik jumlah anomali dan baseline agreement per skenario |
 | `assets/laporan/gambar_16_anomaly_case_review.png` | Salinan/versi final `outputs/eda/final/anomaly_case_review.png` |
 | `assets/laporan/gambar_17_entity_scorecard_prioritas_audit.png` | Visual ranking prioritas audit dari entity scorecard |
-| `assets/laporan/gambar_18_rancangan_model_data_powerbi.png` | Screenshot model relationship Power BI |
-| `assets/laporan/gambar_19_dashboard_executive_overview.png` | Screenshot halaman Executive Overview |
-| `assets/laporan/gambar_20_dashboard_anomaly_explorer.png` | Screenshot halaman Anomaly Explorer |
-| `assets/laporan/gambar_21_dashboard_data_quality_methodology.png` | Screenshot halaman Data Quality and Methodology |
+| `assets/laporan/gambar_18_arsitektur_dashboard_vite_react.png` | Arsitektur CSV processed, JSON delivery, Vite React, dan Vercel |
+| `assets/laporan/gambar_19_dashboard_executive_overview.png` | Screenshot halaman Executive Overview dashboard Vite React |
+| `assets/laporan/gambar_20_dashboard_anomaly_explorer.png` | Screenshot halaman Anomaly Explorer dashboard Vite React |
+| `assets/laporan/gambar_21_dashboard_data_quality_methodology.png` | Screenshot halaman Data Quality and Methodology dashboard Vite React |
 
 ### 8.4 Ringkasan Sumber
 
@@ -828,4 +883,4 @@ Tahap iNterpret menghasilkan insight dan rekomendasi yang dapat digunakan untuk 
 
 ### 8.5 Catatan Penggunaan Laporan
 
-Laporan ini dapat digunakan sebagai dasar narasi tugas besar, bahan presentasi, dan panduan membangun dashboard Power BI. Bagian dashboard harus diperlakukan sebagai rancangan siap-bangun sampai file `.pbix` dibuat dan divalidasi di Power BI Desktop.
+Laporan ini dapat digunakan sebagai dasar narasi tugas besar, bahan presentasi, dan panduan menjalankan dashboard Vite React. Bagian dashboard harus diperlakukan sebagai dashboard statis berbasis prebuilt JSON sampai URL produksi Vercel dipublish dan divalidasi.
