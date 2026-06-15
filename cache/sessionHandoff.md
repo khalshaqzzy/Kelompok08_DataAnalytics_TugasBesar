@@ -54,6 +54,10 @@ Update 2026-06-15 - React dashboard target:
   - `npm run build:web` berhasil;
   - browser verification di `http://127.0.0.1:5173` untuk desktop dan mobile;
   - semua halaman dashboard bisa dinavigasi tanpa console warning/error.
+- Vercel deployment status:
+  - `npx --yes vercel whoami` gagal karena token lokal tidak valid;
+  - production deploy belum dilakukan dari CLI;
+  - lanjutkan dengan `vercel login` atau import repo dari Vercel dashboard.
 - Next action:
   - publish ke Vercel dari branch ini dengan setting di `cache/react_dashboard_vercel_guide.md`;
   - jika Vercel CLI sudah authenticated, gunakan `npx vercel --prod`; jika belum, import repo melalui Vercel dashboard.

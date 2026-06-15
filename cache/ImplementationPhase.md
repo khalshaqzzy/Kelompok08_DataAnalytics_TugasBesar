@@ -1038,10 +1038,12 @@ Completed checks:
 5. `npm run build:web`
 6. Browser verification on desktop and mobile viewport.
 7. All six dashboard pages navigate without console warning/error.
+8. `npx --yes vercel whoami` was checked and failed because the local Vercel token is invalid.
 
 Known note:
 
 - Build emits a chunk-size warning because charting dependencies are bundled in the main app. Gzipped JS is about 191 KB and acceptable for this static dashboard. If app scope grows, add route-level code splitting.
+- Production deploy was not run from CLI because Vercel authentication is invalid locally. Use `vercel login` or Vercel web import with `cache/react_dashboard_vercel_guide.md`.
 
 ---
 
@@ -1372,7 +1374,7 @@ Recommendation-ready targets:
 | 2026-06-15 | Final EDA verification and handoff | Done | Verified final EDA PNG files are non-empty, evidence tables have required columns, insight/recommendation count is 4/3, fact/model keys remain unique, and cache trackers were updated. |
 | 2026-06-15 | Notebook builder cleanup | Done | Removed `scripts/build_osemn_notebook.py` and `scripts/build_exploration_notebook.py` because the final notebook now exists as the active artifact. Updated runbook and handoff notes so future validation does not call removed builder scripts. |
 | 2026-06-15 | Power BI manual build guide | Done | Added `cache/powerbi_manual_build_guide.md` with concrete import steps, data type checks, relationship model, DAX measures, dashboard design system, six-page layout, slicer/tooltip guidance, validation checklist, screenshot checklist, and `.pbix` naming convention. |
-| 2026-06-15 | React dashboard implementation | Done | Created branch `feat-energy-react-dashboard`; added Vite React TypeScript app in `web/`, Vercel config, JSON data packaging script, static dashboard JSON outputs, six responsive dashboard pages, React/Vercel guide, and cache/PRD/roadmap updates that supersede Power BI as the primary visualization target. |
+| 2026-06-15 | React dashboard implementation | Done | Created branch `feat-energy-react-dashboard`; added Vite React TypeScript app in `web/`, Vercel config, JSON data packaging script, static dashboard JSON outputs, six responsive dashboard pages, React/Vercel guide, and cache/PRD/roadmap updates that supersede Power BI as the primary visualization target. Vercel CLI deploy was not run because the local token is invalid. |
 
 ---
 
